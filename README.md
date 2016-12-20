@@ -25,7 +25,7 @@ WIP
 
 ## Examples
 
-WIP
+See [examples](examples) directory.
 
 
 ## Design
