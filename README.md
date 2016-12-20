@@ -1,5 +1,8 @@
 # qnd.tf
 
+[![Build Status](https://travis-ci.org/raviqqe/qnd.tf.svg?branch=master)](https://travis-ci.org/raviqqe/qnd.tf)
+[![License](https://img.shields.io/badge/license-unlicense-lightgray.svg)](https://unlicense.org)
+
 Quick and Distributed TensorFlow command framework
 
 qnd.tf is a framework to create commands to experiment models
