@@ -3,8 +3,8 @@ from gargparse import ARGS
 
 from . import flag
 from .estimator import def_estimator
-from .inputs import def_train_input_fn
-from .inputs import def_eval_input_fn
+from .inputs import def_def_train_input_fn
+from .inputs import def_def_eval_input_fn
 
 
 
@@ -23,14 +23,14 @@ def def_experiment():
   adder.add_flag("min_eval_frequency", type=int, default=1, help=train_help)
 
   estimator = def_estimator()
-  train_input_fn = def_train_input_fn()
-  eval_input_fn = def_eval_input_fn()
+  def_train_input_fn = def_def_train_input_fn()
+  def_eval_input_fn = def_def_eval_input_fn()
 
   def experiment(model_fn, file_reader):
     return tf.contrib.learn.Experiment(
         estimator(model_fn),
-        train_input_fn(file_reader),
-        eval_input_fn(file_reader),
+        def_train_input_fn(file_reader),
+        def_eval_input_fn(file_reader),
         **{arg: getattr(ARGS, arg) for arg in adder.flags})
 
   return experiment

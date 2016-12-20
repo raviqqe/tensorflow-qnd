@@ -5,8 +5,9 @@ import gargparse
 _FLAGS = set()
 
 def add_flag(name, *args, **kwargs):
+  global _FLAGS
+
   if name not in _FLAGS:
-    global _FLAGS
     _FLAGS.add(name)
     gargparse.add_argument("--" + name, *args, **kwargs)
 

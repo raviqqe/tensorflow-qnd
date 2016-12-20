@@ -15,22 +15,25 @@ def add_file_flag(use):
   return flag_name
 
 
-def def_def_input_fn(use):
-  def def_input_fn():
+def def_def_def_input_fn(use):
+  def def_def_input_fn():
     file_flag = add_file_flag(use)
     read_files = def_read_files()
 
-    @util.func_scope
-    def input_fn(user_input_fn):
-      return read_files(getattr(ARGS, file_flag), user_input_fn)
+    def def_input_fn(user_input_fn):
+      @util.func_scope
+      def input_fn():
+        return read_files(getattr(ARGS, file_flag), user_input_fn)
 
-    return input_fn
+      return input_fn
 
-  return def_input_fn
+    return def_input_fn
+
+  return def_def_input_fn
 
 
-def_train_input_fn = def_def_input_fn("train")
-def_eval_input_fn = def_def_input_fn("eval")
+def_def_train_input_fn = def_def_def_input_fn("train")
+def_def_eval_input_fn = def_def_def_input_fn("eval")
 
 
 def def_read_files():

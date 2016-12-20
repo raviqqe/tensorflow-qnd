@@ -12,6 +12,9 @@ from .flag import add_required_flag
 
 
 
+_JOBS = {"ps", "worker"}
+
+
 def def_config():
   # ClusterConfig flags
 
@@ -22,7 +25,7 @@ def def_config():
   add_hosts_flag("ps_hosts")
   add_hosts_flag("worker_hosts")
 
-  add_required_flag("task_type", help="'ps' or 'worker' (aka job)")
+  add_required_flag("task_type", help="Must be in {} (aka job)".format(_JOBS))
   add_required_flag("task_index", type=int)
 
   # RunConfig flags
@@ -43,12 +46,16 @@ def def_config():
                       "cluster configuration, {} is discarded."
                       .format(config_env))
 
+    if ARGS.task_type not in _JOBS:
+      raise ValueError("Specified task type (job) {} is not in available "
+                       "task types {}".format(ARGS.task_type, _JOBS))
+
     os.environ[config_env] = json.dumps({
       "cluster": {
         "ps": ARGS.ps_hosts,
         "worker": ARGS.worker_hosts,
       },
-      "task_id": {
+      "task": {
         "type": ARGS.task_type,
         "index": ARGS.task_index,
       },

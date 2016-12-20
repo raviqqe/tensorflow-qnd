@@ -1,4 +1,5 @@
 import functools
+import inspect
 
 import tensorflow as tf
 from gargparse import ARGS
@@ -23,17 +24,26 @@ def def_estimator():
   return estimator
 
 
-def _wrap_model_fn(model_fn):
+def _wrap_model_fn(original_model_fn):
   @util.func_scope
   def wrapped_model(features, targets, mode):
-    model_fn = functools.partial(model_fn, **features, **targets)
+    are_args = functools.partial(util.are_instances, [features, targets])
+    def_model_fn = functools.partial(functools.partial, original_model_fn)
+
+    if are_args(tf.Tensor):
+      model_fn = def_model_fn(features, targets)
+    elif are_args(dict):
+      model_fn = def_model_fn(**features, **targets)
+    else:
+      raise ValueError("features and targets should be both tf.Tensor or "
+                       "dict.")
 
     predictions, loss, train_op, *eval_metric_ops = (
         model_fn(mode=mode)
-        if "mode" in inspect.signature(model_fn).keys() else
+        if "mode" in inspect.signature(model_fn).parameters.keys() else
         model_fn())
 
-    return tf.contirb.learn.ModelFnOps(
+    return tf.contrib.learn.estimators.model_fn.ModelFnOps(
         mode=mode,
         predictions=predictions,
         loss=loss,
