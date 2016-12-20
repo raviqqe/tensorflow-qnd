@@ -11,3 +11,6 @@ install:
 
 script:
   - test/test.sh
+  - python3 setup.py install
+  - pip3 uninstall -y tensorflow-qnd
+  - pip3 install tensorflow-qnd
