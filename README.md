@@ -30,14 +30,13 @@ WIP
 
 ## Design
 
-All users need to do is to define model and file decoder functions.
+All users need to do is to define model and input functions.
 
 - Model function : features and labels... -> predictions, loss, train op, eval metrics (if any)
-- File decoder function : filename queue -> features, labels
+- Input function : filename queue -> features, labels
   - Features and labels can be a `dict` of `str` to `tf.Tensor` or a single `tf.Tensor`.
   - Features and labels should be batched.
-  - Its input is a filename queue.
-    - To let users use [Readers](https://www.tensorflow.org/api_docs/python/io_ops/readers#FixedLengthRecordReader).
+  - Its input is a filename queue so that users can use [Readers](https://www.tensorflow.org/api_docs/python/io_ops/readers#FixedLengthRecordReader).
 
 
 ## License
