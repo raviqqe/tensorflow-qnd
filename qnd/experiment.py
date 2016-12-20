@@ -14,10 +14,13 @@ from .inputs import def_eval_input_fn
 
 def def_experiment():
   adder = flag.FlagAdder()
-  adder.add_flag("train_steps", type=int)
-  adder.add_flag("eval_steps", type=int, help="Works only for qnd.evaluate()")
-  adder.add_flag("min_eval_frequency", type=int, default=1,
-                 help="Works only for qnd.train_and_evaluate()")
+
+  works_with = lambda name: "Works only with {}".format(name)
+  train_help = works_with("qnd.train_and_evaluate()")
+
+  adder.add_flag("train_steps", type=int, help=train_help)
+  adder.add_flag("eval_steps", type=int, help=works_with("qnd.evaluate()"))
+  adder.add_flag("min_eval_frequency", type=int, default=1, help=train_help)
 
   estimator = def_estimator()
   train_input_fn = def_train_input_fn()
