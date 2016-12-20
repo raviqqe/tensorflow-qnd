@@ -3,7 +3,7 @@ import unittest
 import tensorflow as tf
 
 from . import test
-from . import config_test
+from .config_test import append_argv
 from .estimator import *
 
 
@@ -15,5 +15,5 @@ class EstimatorTest(unittest.TestCase):
 
 
 if __name__ == "__main__":
-  config_test.append_argv()
+  append_argv()
   test.main()
