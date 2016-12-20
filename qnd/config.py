@@ -7,6 +7,7 @@ import tensorflow as tf
 from gargparse import ARGS
 
 from . import util
+from . import flag
 from .flag import add_required_flag
 
 
@@ -15,8 +16,8 @@ def def_config():
   # ClusterConfig flags
 
   add_hosts_flag = functools.partial(
-      flag.add_required_flag,
-      type=str_list,
+      add_required_flag,
+      type=flag.str_list,
       help="Comma-separated list of hostname:port pairs")
   add_hosts_flag("ps_hosts")
   add_hosts_flag("worker_hosts")
@@ -31,13 +32,13 @@ def def_config():
   adder.add_flag("num_cores", type=int, default=0)
   adder.add_flag("log_device_placement", action="store_true")
   adder.add_flag("save_summary_steps", type=int, default=100)
-  adder.add_flag("save_checkpoint_steps", type=int)
+  adder.add_flag("save_checkpoints_steps", type=int)
 
   @util.func_scope
   def config():
     config_env = "TF_CONFIG"
 
-    if config_env in os.environ or os.environ[config_env]:
+    if config_env in os.environ and os.environ[config_env]:
       logging.warning("A value of the environment variable of TensorFlow "
                       "cluster configuration, {} is discarded."
                       .format(config_env))
