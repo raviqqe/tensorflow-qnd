@@ -3,8 +3,8 @@ from gargparse import ARGS
 
 from . import flag
 from .estimator import def_estimator
-from .input import def_train_input_fn
-from .input import def_eval_input_fn
+from .inputs import def_train_input_fn
+from .inputs import def_eval_input_fn
 
 
 
@@ -15,9 +15,9 @@ from .input import def_eval_input_fn
 def def_experiment():
   adder = flag.FlagAdder()
   adder.add_flag("train_steps", type=int)
-  adder.add_flag("eval_steps", type=int, "Works only for qnd.evaluate()")
+  adder.add_flag("eval_steps", type=int, help="Works only for qnd.evaluate()")
   adder.add_flag("min_eval_frequency", type=int, default=1,
-                 "Works only for qnd.train_and_evaluate()")
+                 help="Works only for qnd.train_and_evaluate()")
 
   estimator = def_estimator()
   train_input_fn = def_train_input_fn()

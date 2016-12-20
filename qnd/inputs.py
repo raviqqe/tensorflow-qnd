@@ -73,7 +73,6 @@ def def_monitored_queue():
   @util.func_scope
   def monitored_queue(*tensors,
                       capacity,
-                      *,
                       queue_size_name,
                       return_queue=False):
     queue = tf.FIFOQueue(capacity, dtypes(*tensors))
