@@ -5,8 +5,8 @@
 
 Quick and Distributed TensorFlow command framework
 
-tensorflow-qnd is a framework to create commands to experiment models
-on distributed systems.
+tensorflow-qnd is a TensorFlow framework to create commands to experiment with
+models on multiple computers.
 
 
 ## Installation
@@ -14,7 +14,7 @@ on distributed systems.
 Python 3.5+ and TensorFlow 0.12+ are required.
 
 ```
-$ pip install --user --upgrade tensorflow-qnd
+$ pip3 install --user --upgrade tensorflow-qnd
 ```
 
 
