@@ -11,7 +11,7 @@ on distributed systems.
 
 ## Installation
 
-Python 3.5+ is required.
+Python 3.5+ and TensorFlow 0.12+ are required.
 
 ```
 $ pip install --user --upgrade tensorflow-qnd
