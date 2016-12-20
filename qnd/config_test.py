@@ -8,7 +8,7 @@ from .config import *
 
 
 
-class TestConfig(unittest.TestCase):
+class ConfigTest(unittest.TestCase):
   def test_def_config(self):
     config = def_config()
     self.assertTrue(isinstance(config(), tf.contrib.learn.ClusterConfig))

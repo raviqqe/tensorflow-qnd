@@ -4,7 +4,7 @@ from .util import *
 
 
 
-class TestUtil(unittest.TestCase):
+class UtilTest(unittest.TestCase):
   def test_func_scope(self):
     @func_scope
     def foo():
