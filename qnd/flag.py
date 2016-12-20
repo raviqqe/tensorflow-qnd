@@ -2,8 +2,13 @@ import gargparse
 
 
 
+_FLAGS = set()
+
 def add_flag(name, *args, **kwargs):
-  gargparse.add_argument("--" + name, *args, **kwargs)
+  if name not in _FLAGS:
+    global _FLAGS
+    _FLAGS.add(name)
+    gargparse.add_argument("--" + name, *args, **kwargs)
 
 
 def add_required_flag(name, *args, **kwargs):
