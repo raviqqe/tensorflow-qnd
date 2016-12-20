@@ -3,6 +3,7 @@ import unittest
 
 import tensorflow as tf
 
+from . import test
 from .config import *
 
 
@@ -23,4 +24,4 @@ def append_argv():
 
 if __name__ == "__main__":
   append_argv()
-  unittest.main(argv=["test"])
+  test.main()
