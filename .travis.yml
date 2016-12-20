@@ -10,4 +10,4 @@ install:
   - pip3 install gargparse
 
 script:
-- test/test.sh
+  - test/test.sh
