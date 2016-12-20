@@ -21,11 +21,7 @@ class InputsTest(unittest.TestCase):
 
       # Return (dict, dict)
 
-      def user_input_fn(filename_queue):
-        x = filename_queue.dequeue()
-        return {"feature": x}, {"label": x}
-
-      features, labels = input_fn(user_input_fn)
+      features, labels = input_fn(test.user_input_fn)
 
       self.assertIsInstance(features, dict)
       self.assertIsInstance(labels, dict)
