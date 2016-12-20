@@ -5,6 +5,6 @@ for module in $(find qnd | grep '_test\.py' \
                          | tr / .)
 do
   echo "# Testing ${module%_test}"
-  python3 -m $module
+  python3 -m $module || exit 1
   echo
 done
