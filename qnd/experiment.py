@@ -27,7 +27,7 @@ def def_experiment():
   eval_input_fn = def_eval_input_fn()
 
   def experiment(model_fn, file_reader):
-    return tf.contirb.learn.Experiment(
+    return tf.contrib.learn.Experiment(
         estimator(model_fn),
         train_input_fn(file_reader),
         eval_input_fn(file_reader),
