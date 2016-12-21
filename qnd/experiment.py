@@ -12,7 +12,7 @@ from .inputs import def_def_eval_input_fn
 # add_flag("summary_dir", default="summary", help="Directory containing checkpoint and event files")
 
 
-def def_experiment():
+def def_def_experiment_fn():
   adder = flag.FlagAdder()
 
   works_with = lambda name: "Works only with {}".format(name)
@@ -26,11 +26,14 @@ def def_experiment():
   def_train_input_fn = def_def_train_input_fn()
   def_eval_input_fn = def_def_eval_input_fn()
 
-  def experiment(model_fn, file_reader):
-    return tf.contrib.learn.Experiment(
-        estimator(model_fn),
-        def_train_input_fn(file_reader),
-        def_eval_input_fn(file_reader),
-        **{arg: getattr(ARGS, arg) for arg in adder.flags})
+  def def_experiment_fn(model_fn, file_reader):
+    def experiment_fn(output_dir):
+      return tf.contrib.learn.Experiment(
+          estimator(model_fn, output_dir),
+          def_train_input_fn(file_reader),
+          def_eval_input_fn(file_reader),
+          **{arg: getattr(ARGS, arg) for arg in adder.flags})
 
-  return experiment
+    return experiment_fn
+
+  return def_experiment_fn

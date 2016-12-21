@@ -11,15 +11,14 @@ from .flag import add_flag
 
 
 def def_estimator():
-  add_flag("model_dir", default="model", help="Directory for checkpoint files")
   config = def_config()
 
   @util.func_scope
-  def estimator(model_fn):
+  def estimator(model_fn, model_dir):
     # Hyperparameters (values of `params`) are set by command line arguments.
     return tf.contrib.learn.Estimator(_wrap_model_fn(model_fn),
                                       config=config(),
-                                      model_dir=ARGS.model_dir)
+                                      model_dir=model_dir)
 
   return estimator
 

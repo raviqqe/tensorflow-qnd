@@ -10,8 +10,8 @@ from .estimator import *
 
 class EstimatorTest(unittest.TestCase):
   def test_def_estimator(self):
-    self.assertTrue(isinstance(def_estimator()(test.oracle_model),
-                    tf.contrib.learn.Estimator))
+    self.assertIsInstance(def_estimator()(test.oracle_model, "output"),
+                          tf.contrib.learn.Estimator)
 
 
 if __name__ == "__main__":
