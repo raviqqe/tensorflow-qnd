@@ -6,7 +6,7 @@ import tensorflow as tf
 
 
 
-logging.getLogger().setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.INFO)
 
 add_argument("--batch_size", type=int, default=64)
 add_argument("--batch_queue_capacity", type=int, default=1024)
