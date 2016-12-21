@@ -30,9 +30,3 @@ class FlagAdder:
   @property
   def flags(self):
     return self._flags
-
-
-# flag types
-
-def tf_module_attr(name):
-  return getattr(tf, name)
