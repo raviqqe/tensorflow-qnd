@@ -16,6 +16,7 @@ options = \
 
 .PHONY: main
 main: ${train_file} ${valid_file}
+	kill $$(ps x | grep mnist.py | grep -v grep | awk '{print $$1}') || :
 	python3 mnist.py ${options} --task_type ps > ${var_dir}/ps.log 2>&1 &
 	python3 mnist.py ${options} --task_type master 2>&1 | tee ${var_dir}/master.log
 
