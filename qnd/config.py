@@ -12,11 +12,14 @@ from .flag import add_required_flag
 
 
 
-_JOBS = {"ps", "worker"}
+_JOBS = {getattr(tf.contrib.learn.TaskType, name)
+         for name in ["MASTER", "PS", "WORKER"]}
 
 
 def def_config():
   # ClusterConfig flags
+
+  add_required_flag("master_host")
 
   add_hosts_flag = functools.partial(
       add_required_flag,
@@ -53,6 +56,7 @@ def def_config():
     os.environ[config_env] = json.dumps({
       "environment": tf.contrib.learn.Environment.CLOUD,
       "cluster": {
+        "master": [ARGS.master_host],
         "ps": ARGS.ps_hosts,
         "worker": ARGS.worker_hosts,
       },

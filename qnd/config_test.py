@@ -15,8 +15,9 @@ class ConfigTest(unittest.TestCase):
 
 def append_argv():
   sys.argv += [
-      "--ps_hosts", "localhost:4242",
-      "--worker_hosts", "localhost:5353",
+      "--master_host", "localhost:4242",
+      "--ps_hosts", "localhost:5151",
+      "--worker_hosts", "localhost:4242",
       "--task_type", "ps",
       "--task_index", "0"]
 
