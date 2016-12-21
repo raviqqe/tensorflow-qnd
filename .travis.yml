@@ -2,6 +2,11 @@ dist: trusty
 
 language: python
 
+addons:
+  apt:
+    packages:
+      - ruby
+
 python:
   - "3.5"
 
@@ -10,9 +15,4 @@ install:
   - pip3 install gargparse
 
 script:
-  - pip3 install tensorflow-qnd
-  - pip3 uninstall -y tensorflow-qnd
-  - python3 setup.py install
-  - pip3 uninstall -y tensorflow-qnd
-  - test/test.sh
-  - test/run_examples.sh
+  - rake test
