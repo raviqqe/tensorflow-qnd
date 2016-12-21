@@ -1,8 +1,12 @@
+import logging
+
 from gargparse import add_argument, ARGS
 import qnd
 import tensorflow as tf
 
 
+
+logging.getLogger().setLevel(logging.DEBUG)
 
 add_argument("--batch_size", type=int, default=64)
 add_argument("--batch_queue_capacity", type=int, default=1024)
