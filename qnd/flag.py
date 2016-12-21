@@ -34,9 +34,5 @@ class FlagAdder:
 
 # flag types
 
-def str_list(string):
-  return string.split(',')
-
-
 def tf_module_attr(name):
   return getattr(tf, name)

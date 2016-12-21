@@ -23,8 +23,9 @@ def def_config():
 
   add_hosts_flag = functools.partial(
       add_required_flag,
-      type=flag.str_list,
+      type=(lambda string: string.split(',')),
       help="Comma-separated list of hostname:port pairs")
+
   add_hosts_flag("ps_hosts")
   add_hosts_flag("worker_hosts")
 
