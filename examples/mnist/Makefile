@@ -19,11 +19,10 @@ main: ${train_file} ${valid_file}
 	${mnist} ps > ${var_dir}/ps.log 2>&1 &
 	${mnist} master 2>&1 | tee ${var_dir}/master.log
 
-convert_to_records.py:
-	wget https://raw.githubusercontent.com/raviqqe/tensorflow/patch-1/tensorflow/examples/how_tos/reading_data/$@
 
-${train_file} ${valid_file}: convert_to_records.py
-	python3 $< --directory ${data_dir}
+${train_file} ${valid_file}:
+	curl -SL https://raw.githubusercontent.com/raviqqe/tensorflow/patch-1/tensorflow/examples/how_tos/reading_data/convert_to_records.py | \
+	python3 - --directory ${data_dir}
 
 .PHONY: clean
 clean:
