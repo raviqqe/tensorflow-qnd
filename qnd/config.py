@@ -4,11 +4,10 @@ import logging
 import os
 
 import tensorflow as tf
-from gargparse import ARGS
 
 from . import util
 from . import flag
-from .flag import add_flag, add_required_flag
+from .flag import FLAGS, add_flag, add_required_flag
 
 
 
@@ -51,28 +50,28 @@ def def_config():
                       "cluster configuration, {} is discarded."
                       .format(config_env))
 
-    if ARGS.master_host in ARGS.worker_hosts:
+    if FLAGS.master_host in FLAGS.worker_hosts:
       raise ValueError("Master host {} is found in worker hosts {}."
-                       .format(ARGS.master_host, ARGS.worker_hosts))
+                       .format(FLAGS.master_host, FLAGS.worker_hosts))
 
-    if ARGS.task_type not in _JOBS:
+    if FLAGS.task_type not in _JOBS:
       raise ValueError("Specified task type (job) {} is not in available "
-                       "task types {}".format(ARGS.task_type, _JOBS))
+                       "task types {}".format(FLAGS.task_type, _JOBS))
 
     os.environ[config_env] = json.dumps({
       "environment": tf.contrib.learn.Environment.CLOUD,
       "cluster": {
-        "master": [ARGS.master_host],
-        "ps": ARGS.ps_hosts,
-        "worker": [ARGS.master_host, *ARGS.worker_hosts],
+        "master": [FLAGS.master_host],
+        "ps": FLAGS.ps_hosts,
+        "worker": [FLAGS.master_host, *FLAGS.worker_hosts],
       },
       "task": {
-        "type": ARGS.task_type,
-        "index": ARGS.task_index,
+        "type": FLAGS.task_type,
+        "index": FLAGS.task_index,
       },
     })
 
     return tf.contrib.learn.RunConfig(
-        **{arg: getattr(ARGS, arg) for arg in adder.flags})
+        **{arg: getattr(FLAGS, arg) for arg in adder.flags})
 
   return config

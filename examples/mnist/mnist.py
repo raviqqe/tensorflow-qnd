@@ -1,6 +1,5 @@
 import logging
 
-from gargparse import add_argument, ARGS
 import qnd
 import tensorflow as tf
 
@@ -8,8 +7,8 @@ import tensorflow as tf
 
 logging.getLogger().setLevel(logging.INFO)
 
-add_argument("--batch_size", type=int, default=64)
-add_argument("--batch_queue_capacity", type=int, default=1024)
+qnd.add_flag("--batch_size", type=int, default=64)
+qnd.add_flag("--batch_queue_capacity", type=int, default=1024)
 
 
 
@@ -28,9 +27,9 @@ def read_file(filename_queue):
 
   return tf.train.shuffle_batch(
       [tf.to_float(image) / 255 - 0.5, features["label"]],
-      batch_size=ARGS.batch_size,
-      capacity=ARGS.batch_queue_capacity,
-      min_after_dequeue=ARGS.batch_queue_capacity//2)
+      batch_size=qnd.FLAGS.batch_size,
+      capacity=qnd.FLAGS.batch_queue_capacity,
+      min_after_dequeue=qnd.FLAGS.batch_queue_capacity//2)
 
 
 def linear(h, num_outputs):

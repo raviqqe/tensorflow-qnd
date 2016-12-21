@@ -2,11 +2,9 @@ import functools
 import inspect
 
 import tensorflow as tf
-from gargparse import ARGS
 
 from . import util
 from .config import def_config
-from .flag import add_flag
 
 
 

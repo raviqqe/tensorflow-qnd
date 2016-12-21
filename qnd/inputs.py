@@ -1,11 +1,9 @@
 import enum
 
 import tensorflow as tf
-import gargparse
-from gargparse import ARGS
 
 from . import util
-from .flag import add_flag, add_required_flag
+from .flag import FLAGS, add_flag, add_required_flag
 
 
 
@@ -32,7 +30,7 @@ def def_def_def_input_fn(use):
     def def_input_fn(user_input_fn):
       @util.func_scope
       def input_fn():
-        return read_files(getattr(ARGS, file_flag), user_input_fn)
+        return read_files(getattr(FLAGS, file_flag), user_input_fn)
 
       return input_fn
 
@@ -66,7 +64,7 @@ def def_file_pattern_to_name_queue(use):
   def file_pattern_to_name_queue(pattern):
     return tf.train.string_input_producer(
         tf.train.match_filenames_once(pattern),
-        num_epochs=(ARGS.num_epochs if use == DataUse.TRAIN else 1),
-        capacity=ARGS.filename_queue_capacity)
+        num_epochs=(FLAGS.num_epochs if use == DataUse.TRAIN else 1),
+        capacity=FLAGS.filename_queue_capacity)
 
   return file_pattern_to_name_queue

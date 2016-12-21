@@ -2,7 +2,6 @@ import types
 import unittest
 
 import tensorflow as tf
-from gargparse import ARGS
 
 from . import test
 from .experiment import *
