@@ -51,6 +51,7 @@ def def_config():
                        "task types {}".format(ARGS.task_type, _JOBS))
 
     os.environ[config_env] = json.dumps({
+      "environment": tf.contrib.learn.Environment.CLOUD,
       "cluster": {
         "ps": ARGS.ps_hosts,
         "worker": ARGS.worker_hosts,
