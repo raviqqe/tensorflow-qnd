@@ -1,6 +1,7 @@
 options = \
 	--train_file /tmp/data/train.tfrecords \
 	--eval_file /tmp/data/validation.tfrecords \
+	--model_dir model \
 	--ps_hosts localhost:4242 \
 	--worker_hosts localhost:5151 \
 	--task_index 0
