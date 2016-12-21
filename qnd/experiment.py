@@ -8,10 +8,6 @@ from .inputs import def_def_eval_input_fn
 
 
 
-# TODO: Where to set this? Or, is this the same as Estimator.model_dir?
-# add_flag("summary_dir", default="summary", help="Directory containing checkpoint and event files")
-
-
 def def_def_experiment_fn():
   adder = flag.FlagAdder()
 
