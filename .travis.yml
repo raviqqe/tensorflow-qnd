@@ -2,17 +2,13 @@ dist: trusty
 
 language: python
 
+python:
+  - "3.5"
+
 addons:
   apt:
     packages:
       - ruby
-
-python:
-  - "3.5"
-
-install:
-  - pip3 install https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.0rc1-cp35-cp35m-linux_x86_64.whl
-  - pip3 install gargparse
 
 script:
   - rake test
