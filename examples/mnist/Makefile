@@ -10,8 +10,6 @@ mnist = python3 mnist.py \
 	--output_dir ${var_dir}/output \
 	--master_host localhost:2049 \
 	--ps_hosts localhost:4242 \
-	--worker_hosts localhost:2049 \
-	--task_index 0 \
 	--task_type
 
 

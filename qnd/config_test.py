@@ -17,9 +17,7 @@ def append_argv():
   sys.argv += [
       "--master_host", "localhost:4242",
       "--ps_hosts", "localhost:5151",
-      "--worker_hosts", "localhost:4242",
-      "--task_type", "ps",
-      "--task_index", "0"]
+      "--task_type", "master"]
 
 
 if __name__ == "__main__":

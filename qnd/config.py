@@ -8,7 +8,7 @@ from gargparse import ARGS
 
 from . import util
 from . import flag
-from .flag import add_required_flag
+from .flag import add_flag, add_required_flag
 
 
 
@@ -22,15 +22,16 @@ def def_config():
   add_required_flag("master_host")
 
   add_hosts_flag = functools.partial(
-      add_required_flag,
+      add_flag,
       type=(lambda string: string.split(',')),
+      default=[],
       help="Comma-separated list of hostname:port pairs")
 
-  add_hosts_flag("ps_hosts")
+  add_hosts_flag("ps_hosts", required=True)
   add_hosts_flag("worker_hosts")
 
   add_required_flag("task_type", help="Must be in {} (aka job)".format(_JOBS))
-  add_required_flag("task_index", type=int)
+  add_flag("task_index", type=int, default=0)
 
   # RunConfig flags
 
@@ -59,7 +60,7 @@ def def_config():
       "cluster": {
         "master": [ARGS.master_host],
         "ps": ARGS.ps_hosts,
-        "worker": ARGS.worker_hosts,
+        "worker": [ARGS.master_host, *ARGS.worker_hosts],
       },
       "task": {
         "type": ARGS.task_type,
