@@ -32,12 +32,6 @@ def read_file(filename_queue):
       min_after_dequeue=qnd.FLAGS.batch_queue_capacity//2)
 
 
-def linear(h, num_outputs):
-  return tf.contrib.layers.fully_connected(
-      h,
-      num_outputs=num_outputs)
-
-
 def minimize(loss):
   return tf.contrib.layers.optimize_loss(
       loss,
@@ -47,12 +41,16 @@ def minimize(loss):
 
 
 def mnist_model(image, number):
-  h = linear(image, num_outputs=42)
-  h = linear(h, num_outputs=10)
+  h = tf.contrib.layers.fully_connected(image, 200)
+  h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
+
   loss = tf.reduce_mean(
       tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+  predictions = tf.argmax(h, axis=1)
 
-  return tf.argmax(h, axis=1), loss, minimize(loss)
+  return predictions, loss, minimize(loss), {
+    "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
+  }
 
 
 run = qnd.def_run()
