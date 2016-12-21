@@ -51,6 +51,10 @@ def def_config():
                       "cluster configuration, {} is discarded."
                       .format(config_env))
 
+    if ARGS.master_host in ARGS.worker_hosts:
+      raise ValueError("Master host {} is found in worker hosts {}."
+                       .format(ARGS.master_host, ARGS.worker_hosts))
+
     if ARGS.task_type not in _JOBS:
       raise ValueError("Specified task type (job) {} is not in available "
                        "task types {}".format(ARGS.task_type, _JOBS))
