@@ -1,6 +1,8 @@
 import sys
 import unittest
 
+import tensorflow as tf
+
 
 
 def main():
