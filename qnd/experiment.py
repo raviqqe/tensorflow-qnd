@@ -22,12 +22,12 @@ def def_def_experiment_fn():
   def_train_input_fn = def_def_train_input_fn()
   def_eval_input_fn = def_def_eval_input_fn()
 
-  def def_experiment_fn(model_fn, file_reader):
+  def def_experiment_fn(model_fn, input_fn):
     def experiment_fn(output_dir):
       return tf.contrib.learn.Experiment(
           estimator(model_fn, output_dir),
-          def_train_input_fn(file_reader),
-          def_eval_input_fn(file_reader),
+          def_train_input_fn(input_fn),
+          def_eval_input_fn(input_fn),
           **{arg: getattr(ARGS, arg) for arg in adder.flags})
 
     return experiment_fn
