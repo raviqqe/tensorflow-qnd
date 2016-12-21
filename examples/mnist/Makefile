@@ -27,4 +27,4 @@ ${train_file} ${valid_file}: convert_to_records.py
 
 .PHONY: clean
 clean:
-	rm -rf ${var_dir}/* convert_to_records.py
+	git clean -dfx .
