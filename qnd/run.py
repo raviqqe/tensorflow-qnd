@@ -1,4 +1,3 @@
-import tensorflow as tf
 import tensorflow.contrib.learn.python.learn.learn_runner as learn_runner
 
 from .experiment import def_def_experiment_fn
