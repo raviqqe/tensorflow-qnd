@@ -1,5 +1,5 @@
 var_dir = var
-data_dir = var/data
+data_dir = ${var_dir}/data
 train_file = ${data_dir}/train.tfrecords
 valid_file = ${data_dir}/validation.tfrecords
 
@@ -27,4 +27,4 @@ ${train_file} ${valid_file}: convert_to_records.py
 
 .PHONY: clean
 clean:
-	rm -rf var/* convert_to_records.py
+	rm -rf ${var_dir}/* convert_to_records.py
