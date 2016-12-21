@@ -16,11 +16,9 @@ add_argument("--batch_queue_capacity", type=int, default=1024)
 def read_file(filename_queue):
   _, serialized = tf.TFRecordReader().read(filename_queue)
 
-  int64_feature = tf.FixedLenFeature([], dtype=tf.int64)
-
   features = tf.parse_single_example(serialized, {
     "image_raw": tf.FixedLenFeature([], dtype=tf.string),
-    "label": int64_feature,
+    "label": tf.FixedLenFeature([], dtype=tf.int64),
   })
 
   image = tf.decode_raw(features["image_raw"], tf.uint8)
