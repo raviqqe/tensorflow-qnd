@@ -4,6 +4,7 @@ train_file = ${data_dir}/train.tfrecords
 valid_file = ${data_dir}/validation.tfrecords
 
 options = \
+	--num_epochs 10 \
 	--train_file ${train_file} \
 	--eval_file ${valid_file} \
 	--output_dir ${var_dir}/output \
