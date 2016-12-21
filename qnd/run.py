@@ -1,4 +1,6 @@
+from gargparse import ARGS
 import tensorflow as tf
+import tensorflow.contrib.learn.python.learn.learn_runner as learn_runner
 
 from .experiment import def_def_experiment_fn
 from .flag import add_flag
@@ -13,7 +15,7 @@ def def_run():
   def_experiment_fn = def_def_experiment_fn()
 
   def run(model_fn, input_fn):
-    tf.contrib.learn.learn_runner.run(def_experiment_fn(model_fn, input_fn),
-                                      ARGS.output_dir)
+    return learn_runner.run(def_experiment_fn(model_fn, input_fn),
+                            ARGS.output_dir)
 
   return run

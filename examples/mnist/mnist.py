@@ -56,11 +56,11 @@ def mnist_model(image, number):
   return tf.argmax(h, axis=1), loss, minimize(loss)
 
 
-train_and_evaluate = qnd.def_train_and_evaluate()
+run = qnd.def_run()
 
 
 def main():
-  train_and_evaluate(mnist_model, read_file)
+  run(mnist_model, read_file)
 
 
 
