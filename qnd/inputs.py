@@ -1,3 +1,5 @@
+import enum
+
 import tensorflow as tf
 import gargparse
 from gargparse import ARGS
@@ -7,8 +9,13 @@ from .flag import add_flag, add_required_flag
 
 
 
+class DataUse(enum.Enum):
+  TRAIN = "train"
+  EVAL = "eval"
+
+
 def add_file_flag(use):
-  flag_name = "{}_file".format(use)
+  flag_name = "{}_file".format(use.value)
   add_required_flag(flag_name,
                     help="File path of {} data file(s). "
                          "Glob is accepted. (e.g. train/*.csv)".format(use))
@@ -16,9 +23,11 @@ def add_file_flag(use):
 
 
 def def_def_def_input_fn(use):
+  assert isinstance(use, DataUse)
+
   def def_def_input_fn():
     file_flag = add_file_flag(use)
-    read_files = def_read_files()
+    read_files = def_read_files(use)
 
     def def_input_fn(user_input_fn):
       @util.func_scope
@@ -32,12 +41,12 @@ def def_def_def_input_fn(use):
   return def_def_input_fn
 
 
-def_def_train_input_fn = def_def_def_input_fn("train")
-def_def_eval_input_fn = def_def_def_input_fn("eval")
+def_def_train_input_fn = def_def_def_input_fn(DataUse.TRAIN)
+def_def_eval_input_fn = def_def_def_input_fn(DataUse.EVAL)
 
 
-def def_read_files():
-  file_pattern_to_name_queue = def_file_pattern_to_name_queue()
+def def_read_files(use):
+  file_pattern_to_name_queue = def_file_pattern_to_name_queue(use)
 
   @util.func_scope
   def read_files(file_pattern, user_input_fn):
@@ -46,15 +55,18 @@ def def_read_files():
   return read_files
 
 
-def def_file_pattern_to_name_queue():
-  add_flag("num_epochs", type=int)
+def def_file_pattern_to_name_queue(use):
+  assert isinstance(use, DataUse)
+
+  if use == DataUse.TRAIN:
+    add_flag("num_epochs", type=int)
   add_flag("filename_queue_capacity", type=int, default=32)
 
   @util.func_scope
   def file_pattern_to_name_queue(pattern):
     return tf.train.string_input_producer(
         tf.train.match_filenames_once(pattern),
-        num_epochs=ARGS.num_epochs,
+        num_epochs=(ARGS.num_epochs if use == DataUse.TRAIN else 1),
         capacity=ARGS.filename_queue_capacity)
 
   return file_pattern_to_name_queue
