@@ -10,7 +10,9 @@ install:
   - pip3 install gargparse
 
 script:
-  - test/test.sh
+  - pip3 install tensorflow-qnd
+  - pip3 uninstall -y tensorflow-qnd
   - python3 setup.py install
   - pip3 uninstall -y tensorflow-qnd
-  - pip3 install tensorflow-qnd
+  - test/test.sh
+  - test/run_examples.sh
