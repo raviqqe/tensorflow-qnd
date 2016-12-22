@@ -2,16 +2,16 @@ import tensorflow as tf
 
 from .flag import FLAGS, FlagAdder
 from .estimator import def_estimator
-from .inputs import DataUse, def_def_train_input_fn, def_def_eval_input_fn
+from .inputs import Mode, def_def_train_input_fn, def_def_eval_input_fn
 
 
 def def_def_experiment_fn():
     adder = FlagAdder()
 
-    for use in DataUse:
-        use = use.value
-        adder.add_flag("{}_steps".format(use), type=int,
-                       help="Maximum number of {} steps".format(use))
+    for mode in Mode:
+        mode = mode.value
+        adder.add_flag("{}_steps".format(mode), type=int,
+                       help="Maximum number of {} steps".format(mode))
 
     adder.add_flag("min_eval_frequency", type=int, default=1,
                    help="Minimum evaluation frequency in number of model "
