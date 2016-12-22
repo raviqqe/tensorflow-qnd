@@ -17,7 +17,7 @@ def add_file_flag(use):
     flag_name = "{}_file".format(use)
     add_required_flag(flag_name,
                       help="File path of {0} data file(s). "
-                           "A glob is available. (e.g. {0}/*.csv)"
+                           "A glob is available. (e.g. {0}/*.tfrecords)"
                            .format(use))
     return flag_name
 
