@@ -70,7 +70,7 @@ run = qnd.def_run()
 def main():
     run(mnist_model,
         train_input,
-        *([eval_input] if qnd.FLAGS.use_eval_input_fn else []))
+        eval_input if qnd.FLAGS.use_eval_input_fn else None)
 
 
 if __name__ == "__main__":
