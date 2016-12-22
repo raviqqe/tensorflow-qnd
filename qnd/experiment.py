@@ -2,19 +2,20 @@ import tensorflow as tf
 
 from .flag import FLAGS, FlagAdder
 from .estimator import def_estimator
-from .inputs import def_def_train_input_fn
-from .inputs import def_def_eval_input_fn
+from .inputs import DataUse, def_def_train_input_fn, def_def_eval_input_fn
 
 
 def def_def_experiment_fn():
     adder = FlagAdder()
 
-    works_with = lambda name: "Works only with {}".format(name)
-    train_help = works_with("qnd.train_and_evaluate()")
+    for use in DataUse:
+        use = use.value
+        adder.add_flag("{}_steps".format(use), type=int,
+                       help="Maximum number of {} steps".format(use))
 
-    adder.add_flag("train_steps", type=int, help=train_help)
-    adder.add_flag("eval_steps", type=int, help=works_with("qnd.evaluate()"))
-    adder.add_flag("min_eval_frequency", type=int, default=1, help=train_help)
+    adder.add_flag("min_eval_frequency", type=int, default=1,
+                   help="Minimum evaluation frequency in number of model "
+                        "savings")
 
     estimator = def_estimator()
     def_train_input_fn = def_def_train_input_fn()
