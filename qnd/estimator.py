@@ -32,8 +32,8 @@ def _wrap_model_fn(original_model_fn):
         elif are_args(dict):
             model_fn = def_model_fn(**features, **targets)
         else:
-            raise ValueError("features and targets should be both tf.Tensor or "
-                             "dict.")
+            raise ValueError(
+                "features and targets should be both tf.Tensor or dict.")
 
         predictions, loss, train_op, *eval_metric_ops = (
             model_fn(mode=mode)
