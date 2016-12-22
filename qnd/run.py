@@ -11,8 +11,9 @@ def def_run():
 
     def_experiment_fn = def_def_experiment_fn()
 
-    def run(model_fn, input_fn):
-        return learn_runner.run(def_experiment_fn(model_fn, input_fn),
-                                FLAGS.output_dir)
+    def run(model_fn, train_input_fn, eval_input_fn=None):
+        return learn_runner.run(
+            def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
+            FLAGS.output_dir)
 
     return run
