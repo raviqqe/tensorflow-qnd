@@ -6,7 +6,7 @@ valid_file = ${data_dir}/validation.tfrecords
 use_eval_input_fn ?= 0
 
 mnist = python3 mnist.py \
-	--num_epochs 10 \
+	--num_epochs 2 \
 	--train_file ${train_file} \
 	--eval_file ${valid_file} \
 	--output_dir ${var_dir}/output \
