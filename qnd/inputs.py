@@ -62,8 +62,7 @@ def def_file_pattern_to_name_queue(use):
         add_flag("num_epochs", type=int, help="Number of epochs")
     add_flag("filename_queue_capacity", type=int, default=32,
              help="Capacity of filename queues of {} and {} data"
-                  .format(*[getattr(DataUse, use).value
-                            for use in ["TRAIN", "EVAL"]]))
+                  .format(*[use.value for use in DataUse]))
 
     @util.func_scope
     def file_pattern_to_name_queue(pattern):
