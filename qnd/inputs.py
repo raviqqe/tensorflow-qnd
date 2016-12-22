@@ -69,6 +69,7 @@ def def_file_pattern_to_name_queue(use):
         return tf.train.string_input_producer(
             tf.train.match_filenames_once(pattern),
             num_epochs=(FLAGS.num_epochs if use == DataUse.TRAIN else 1),
+            shuffle=(use == DataUse.TRAIN),
             capacity=FLAGS.filename_queue_capacity)
 
     return file_pattern_to_name_queue
