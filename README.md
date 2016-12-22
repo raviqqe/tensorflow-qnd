@@ -7,6 +7,8 @@ Quick and Distributed TensorFlow command framework
 
 tensorflow-qnd is a TensorFlow framework to create commands to experiment with
 models on multiple computers.
+While made to be used on multiple computers in a cluster, this library is also
+useful to exploit multiple GPUs on a single machine.
 
 
 ## Installation
