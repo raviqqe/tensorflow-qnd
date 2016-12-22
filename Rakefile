@@ -34,9 +34,20 @@ end
 
 
 task_in_venv :script_test do
+  vsh('python3 test/empty.py')
+
   Dir.glob('test/*.py').each do |file|
-    vsh 'python3', file
+    vsh 'python3', file, '-h'
   end
+
+  # Worker hosts should not include a master host.
+  vsh(*%w(! python3 test/oracle.py
+          --master_host localhost:4242
+          --worker_host localhost:4242
+          --ps_hosts localhost:5151
+          --task_type job
+          --train_file README.md
+          --eval_file setup.py))
 end
 
 
