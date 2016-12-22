@@ -7,7 +7,7 @@ from .flag import FLAGS, add_flag
 def def_run():
     add_flag("output_dir",
              default="output",
-             help="Directory for checkpoint and event files")
+             help="Directory where checkpoint and event files are stored")
 
     def_experiment_fn = def_def_experiment_fn()
 

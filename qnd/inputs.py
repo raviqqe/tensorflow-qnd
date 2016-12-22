@@ -12,10 +12,13 @@ class DataUse(enum.Enum):
 
 
 def add_file_flag(use):
-    flag_name = "{}_file".format(use.value)
+    assert isinstance(use, str)
+
+    flag_name = "{}_file".format(use)
     add_required_flag(flag_name,
-                      help="File path of {} data file(s). "
-                           "Glob is accepted. (e.g. train/*.csv)".format(use))
+                      help="File path of {0} data file(s). "
+                           "A glob is available. (e.g. {0}/*.csv)"
+                           .format(use))
     return flag_name
 
 
@@ -23,7 +26,7 @@ def def_def_def_input_fn(use):
     assert isinstance(use, DataUse)
 
     def def_def_input_fn():
-        file_flag = add_file_flag(use)
+        file_flag = add_file_flag(use.value)
         read_files = def_read_files(use)
 
         def def_input_fn(user_input_fn):
@@ -56,8 +59,11 @@ def def_file_pattern_to_name_queue(use):
     assert isinstance(use, DataUse)
 
     if use == DataUse.TRAIN:
-        add_flag("num_epochs", type=int)
-    add_flag("filename_queue_capacity", type=int, default=32)
+        add_flag("num_epochs", type=int, help="Number of epochs")
+    add_flag("filename_queue_capacity", type=int, default=32,
+             help="Capacity of filename queues of {} and {} data"
+                  .format(*[getattr(DataUse, use).value
+                            for use in ["TRAIN", "EVAL"]]))
 
     @util.func_scope
     def file_pattern_to_name_queue(pattern):
