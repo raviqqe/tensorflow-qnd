@@ -2,14 +2,16 @@ VENV_DIR = '.venv'
 TENSORFLOW_URL = 'https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.0rc1-cp35-cp35m-linux_x86_64.whl'
 
 
-def venv_sh *args, **kwargs
-  sh([". #{VENV_DIR}/bin/activate &&", *args.map{ |x| x.to_s }].join(' '),
-     **kwargs)
-end
+def task_in_venv name, packages=['gargparse', TENSORFLOW_URL], &block
+  task name => %i(clean venv) do
+    def vsh *args, **kwargs
+      sh([". #{VENV_DIR}/bin/activate &&", *args.map{ |x| x.to_s }].join(' '),
+         **kwargs)
+    end
 
-
-def pip_install *packages
-  venv_sh 'pip3 install --upgrade', *packages
+    vsh 'pip3 install --upgrade', *packages
+    block.call
+  end
 end
 
 
@@ -23,24 +25,18 @@ task :clean do
 end
 
 
-task :new_venv => %i(clean venv)
-
-
-task :module_test => :new_venv do
-  pip_install 'gargparse', TENSORFLOW_URL
+task_in_venv :module_test do
   `find .`.split.select do |file|
     file =~ /_test\.py$/ and file !~ /\/\./
   end.each do |file|
-    sh 'pytest', file
+    vsh 'pytest', file
   end
 end
 
 
-task :mnist_example => :new_venv do
-  pip_install TENSORFLOW_URL
-
+task_in_venv :mnist_example, [TENSORFLOW_URL] do
   ['python3 setup.py install', 'make -C examples/mnist'].each do |command|
-    venv_sh command
+    vsh command
   end
 end
 
