@@ -6,8 +6,11 @@ import tensorflow as tf
 
 logging.getLogger().setLevel(logging.INFO)
 
-qnd.add_flag("--batch_size", type=int, default=64)
-qnd.add_flag("--batch_queue_capacity", type=int, default=1024)
+qnd.add_flag("batch_size", type=int, default=64)
+qnd.add_flag("batch_queue_capacity", type=int, default=1024)
+qnd.add_flag("use_eval_input_fn",
+             type=(lambda string: bool(int(string))),
+             default=False)
 
 
 def read_file(filename_queue):
@@ -22,12 +25,22 @@ def read_file(filename_queue):
 
     image = tf.decode_raw(features["image_raw"], tf.uint8)
     image.set_shape([28**2])
+    return [tf.to_float(image) / 255 - 0.5, features["label"]]
 
+
+def train_input(filename_queue):
     return tf.train.shuffle_batch(
-        [tf.to_float(image) / 255 - 0.5, features["label"]],
+        read_file(filename_queue),
         batch_size=qnd.FLAGS.batch_size,
         capacity=qnd.FLAGS.batch_queue_capacity,
         min_after_dequeue=qnd.FLAGS.batch_queue_capacity // 2)
+
+
+def eval_input(filename_queue):
+    return tf.train.batch(read_file(filename_queue),
+                          batch_size=qnd.FLAGS.batch_size,
+                          capacity=qnd.FLAGS.batch_queue_capacity,
+                          allow_smaller_final_batch=True)
 
 
 def minimize(loss):
@@ -55,7 +68,9 @@ run = qnd.def_run()
 
 
 def main():
-    run(mnist_model, read_file)
+    run(mnist_model,
+        train_input,
+        *([eval_input] if qnd.FLAGS.use_eval_input_fn else []))
 
 
 if __name__ == "__main__":

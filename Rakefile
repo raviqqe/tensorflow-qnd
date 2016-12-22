@@ -52,7 +52,11 @@ end
 
 
 task_in_venv :mnist_example do
-  vsh 'make -C examples/mnist'
+  ['', 'use_eval_input_fn=1'].each do |params|
+    ['clean', params].each do |args|
+      vsh "make -C examples/mnist #{args}"
+    end
+  end
 end
 
 
