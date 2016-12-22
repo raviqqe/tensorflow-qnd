@@ -1,6 +1,3 @@
-import sys
-import unittest
-
 import tensorflow as tf
 
 from . import inputs
@@ -8,38 +5,33 @@ from . import test
 
 
 
-class InputsTest(unittest.TestCase):
-  def test_def_input_fn(self):
-    for def_input_fn \
-        in [inputs.def_def_train_input_fn(), inputs.def_def_eval_input_fn()]:
-      # Return (tf.Tensor, tf.Tensor)
-
-      features, labels = def_input_fn(lambda queue: (queue.dequeue(),) * 2)()
-
-      self.assertIsInstance(features, tf.Tensor)
-      self.assertIsInstance(labels, tf.Tensor)
-
-      # Return (dict, dict)
-
-      features, labels = def_input_fn(test.user_input_fn)()
-
-      self.assertIsInstance(features, dict)
-      self.assertIsInstance(labels, dict)
-
-      self._assertAreInstances([*features.keys(), *labels.keys()], str)
-      self._assertAreInstances([*features.values(), *labels.values()],
-                               tf.Tensor)
-
-  def _assertAreInstances(self, objects, klass):
-    for obj in objects:
-      self.assertIsInstance(obj, klass)
+_FILE_PATTERN = "*.md"
+TEST_ARGS = ["--train_file", _FILE_PATTERN, "--eval_file", _FILE_PATTERN]
 
 
-def append_argv():
-  file_pattern = "*.md"
-  sys.argv += ["--train_file", file_pattern, "--eval_file", file_pattern]
+def test_def_input_fn():
+  test.initialize_argv(*TEST_ARGS)
+
+  for def_input_fn in [inputs.def_def_train_input_fn(),
+                       inputs.def_def_eval_input_fn()]:
+    # Return (tf.Tensor, tf.Tensor)
+
+    features, labels = def_input_fn(lambda queue: (queue.dequeue(),) * 2)()
+
+    assert isinstance(features, tf.Tensor)
+    assert isinstance(labels, tf.Tensor)
+
+    # Return (dict, dict)
+
+    features, labels = def_input_fn(test.user_input_fn)()
+
+    assert isinstance(features, dict)
+    assert isinstance(labels, dict)
+
+    _assert_are_instances([*features.keys(), *labels.keys()], str)
+    _assert_are_instances([*features.values(), *labels.values()], tf.Tensor)
 
 
-if __name__ == "__main__":
-  append_argv()
-  test.main()
+def _assert_are_instances(objects, klass):
+  for obj in objects:
+    assert isinstance(obj, klass)

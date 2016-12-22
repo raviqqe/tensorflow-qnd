@@ -1,17 +1,11 @@
 import types
-import unittest
 
 from . import test
-from .experiment_test import append_argv
-from .run import *
+from .experiment_test import TEST_ARGS
+from . import run
 
 
 
-class RunTest(unittest.TestCase):
-  def test_def_run(self):
-    self.assertIsInstance(def_run(), types.FunctionType)
-
-
-if __name__ == "__main__":
-  append_argv()
-  test.main()
+def test_def_run():
+  test.initialize_argv(TEST_ARGS)
+  assert isinstance(run.def_run(), types.FunctionType)

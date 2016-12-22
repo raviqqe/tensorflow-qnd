@@ -28,14 +28,10 @@ task :new_venv => %i(clean venv)
 
 task :module_test => :new_venv do
   pip_install 'gargparse', TENSORFLOW_URL
-
-  `find qnd`.split.each do |file|
-    if file =~ /_test\.py/
-      mod = file.gsub('/', '.').gsub('_test.py', '')
-
-      puts "Testing #{mod}"
-      venv_sh "python3 -m #{mod}_test"
-    end
+  `find .`.split.select do |file|
+    file =~ /_test\.py$/ and file !~ /\/\./
+  end.each do |file|
+    sh 'pytest', file
   end
 end
 
