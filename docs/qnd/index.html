@@ -970,27 +970,32 @@ table {
     <h1>Index</h1>
     <ul id="index">
 
+    <li class="set"><h3><a href="#header-functions">Functions</a></h3>
+      
+  <ul>
+    <li class="mono"><a href="#qnd.add_flag">add_flag</a></li>
+    <li class="mono"><a href="#qnd.add_required_flag">add_required_flag</a></li>
+    <li class="mono"><a href="#qnd.def_run">def_run</a></li>
+  </ul>
 
+    </li>
 
-    <li class="set"><h3><a href="#header-submodules">Sub-modules</a></h3>
+    <li class="set"><h3><a href="#header-classes">Classes</a></h3>
       <ul>
-        <li class="mono"><a href="config.m.html">qnd.config</a></li>
-        <li class="mono"><a href="config_test.m.html">qnd.config_test</a></li>
-        <li class="mono"><a href="estimator.m.html">qnd.estimator</a></li>
-        <li class="mono"><a href="estimator_test.m.html">qnd.estimator_test</a></li>
-        <li class="mono"><a href="experiment.m.html">qnd.experiment</a></li>
-        <li class="mono"><a href="experiment_test.m.html">qnd.experiment_test</a></li>
-        <li class="mono"><a href="flag.m.html">qnd.flag</a></li>
-        <li class="mono"><a href="inputs.m.html">qnd.inputs</a></li>
-        <li class="mono"><a href="inputs_test.m.html">qnd.inputs_test</a></li>
-        <li class="mono"><a href="run.m.html">qnd.run</a></li>
-        <li class="mono"><a href="run_test.m.html">qnd.run_test</a></li>
-        <li class="mono"><a href="test.m.html">qnd.test</a></li>
-        <li class="mono"><a href="test_test.m.html">qnd.test_test</a></li>
-        <li class="mono"><a href="util.m.html">qnd.util</a></li>
-        <li class="mono"><a href="util_test.m.html">qnd.util_test</a></li>
+        <li class="mono">
+        <span class="class_name"><a href="#qnd.FlagAdder">FlagAdder</a></span>
+        
+          
+  <ul>
+    <li class="mono"><a href="#qnd.FlagAdder.__init__">__init__</a></li>
+    <li class="mono"><a href="#qnd.FlagAdder.add_flag">add_flag</a></li>
+    <li class="mono"><a href="#qnd.FlagAdder.add_required_flag">add_required_flag</a></li>
+  </ul>
+
+        </li>
       </ul>
     </li>
+
     </ul>
   </div>
 
@@ -1011,6 +1016,8 @@ table {
 
 from .flag import *
 from .run import def_run
+
+__all__ = ["add_flag", "add_required_flag", "FlagAdder", "def_run"]
 </code></pre>
   </div>
 
@@ -1018,99 +1025,279 @@ from .run import def_run
 
   <section id="section-items">
 
-
-
-    <h2 class="section-title" id="header-submodules">Sub-modules</h2>
-      <div class="item">
-      <p class="name"><a href="config.m.html">qnd.config</a></p>
+    <h2 class="section-title" id="header-functions">Functions</h2>
       
+  <div class="item">
+    <div class="name def" id="qnd.add_flag">
+    <p>def <span class="ident">add_flag</span>(</p><p>name, *args, **kwargs)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Add a flag.</p>
+<p>Args:
+    name: Flag name. Real flag name will be <code>"--{}".format(name)</code>.
+    <em>args, </em>*kwargs: The rest arguments are the same as
+        <code>argparse.add_argument()</code>.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.add_flag', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.add_flag" class="source">
+    <pre><code>def add_flag(name, *args, **kwargs):
+    """Add a flag.
+
+    Args:
+        name: Flag name. Real flag name will be `"--{}".format(name)`.
+        *args, **kwargs: The rest arguments are the same as
+            `argparse.add_argument()`.
+    """
+    global _FLAG_NAMES
+
+    if name not in _FLAG_NAMES:
+        _FLAG_NAMES.add(name)
+        gargparse.add_argument("--" + name, *args, **kwargs)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="qnd.add_required_flag">
+    <p>def <span class="ident">add_required_flag</span>(</p><p>name, *args, **kwargs)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Add a required flag.</p>
+<p>Its interface is the same as <code>add_flag()</code> but <code>required=True</code> is set by
+default.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.add_required_flag', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.add_required_flag" class="source">
+    <pre><code>def add_required_flag(name, *args, **kwargs):
+    """Add a required flag.
+
+    Its interface is the same as `add_flag()` but `required=True` is set by
+    default.
+    """
+    add_flag(name, *args, required=True, **kwargs)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="qnd.def_run">
+    <p>def <span class="ident">def_run</span>(</p><p>batch_inputs=True, prepare_filename_queues=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Define <code>run()</code> function.</p>
+<p>See also <code>help(def_run())</code>.</p>
+<p>Args:
+    batch_inputs: If <code>True</code>, create batches from Tensors
+        returned from <code>train_input_fn()</code> and <code>train_input_fn()</code> and feed
+        them to a model.
+    prepare_filename_queues: If <code>True</code>, create filename queues for train
+        and eval data based on file paths specified by command line
+        arguments.</p>
+<p>Returns:
+    <code>run()</code> function.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_run', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.def_run" class="source">
+    <pre><code>def def_run(batch_inputs=True, prepare_filename_queues=True):
+    """Define `run()` function.
+
+    See also `help(def_run())`.
+
+    Args:
+        batch_inputs: If `True`, create batches from Tensors
+            returned from `train_input_fn()` and `train_input_fn()` and feed
+            them to a model.
+        prepare_filename_queues: If `True`, create filename queues for train
+            and eval data based on file paths specified by command line
+            arguments.
+
+    Returns:
+        `run()` function.
+    """
+    add_flag("output_dir",
+             default="output",
+             help="Directory where checkpoint and event files are stored")
+
+    def_experiment_fn = def_def_experiment_fn(batch_inputs,
+                                              prepare_filename_queues)
+
+    def run(model_fn, train_input_fn, eval_input_fn=None):
+        """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
+
+        Args:
+            model_fn: A function to construct a model.
+                Types of its arguments must be one of the following:
+                    `Tensor, ...`,
+                    `Tensor, ..., mode=ModeKeys`.
+                Types of its return values must be one of the following:
+                    `Tensor, Tensor, Operation, eval_metrics=dict<str, Tensor>`
+                    (predictions, loss, train_op, and eval_metrics (if any)),
+                    `ModelFnOps`.
+            train_input_fn, eval_input_fn: Functions to serve input Tensors
+                fed into the model. If `eval_input_fn` is `None`,
+                `train_input_fn` will be used instead.
+                Types of its arguments must be one of the following:
+                    `QueueBase` (a filename queue),
+                    `None` (No argument).
+                Types of its return values must be one of the following:
+                    `Tensor, Tensor` (x and y),
+                    `dict<str, Tensor>, dict<str, Tensor>`
+                    (features and labels).
+                The keys of `dict` arguments must match with names of
+                `model_fn` arguments.
+
+        Returns:
+            Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
+        """
+        return learn_runner.run(
+            def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
+            FLAGS.output_dir)
+
+    return run
+</code></pre>
+  </div>
+</div>
+
+  </div>
   
 
-      </div>
+    <h2 class="section-title" id="header-classes">Classes</h2>
+      
       <div class="item">
-      <p class="name"><a href="config_test.m.html">qnd.config_test</a></p>
+      <p id="qnd.FlagAdder" class="name">class <span class="ident">FlagAdder</span></p>
       
   
+    <div class="desc"><p>Manage addition of flags.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.FlagAdder" class="source">
+    <pre><code>class FlagAdder:
+    """Manage addition of flags."""
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="estimator.m.html">qnd.estimator</a></p>
-      
+    def __init__(self):
+        self._flags = []
+
+    def add_flag(self, name, *args, **kwargs):
+        add_flag(name, *args, **kwargs)
+        self._flags.append(name)
+
+    def add_required_flag(self, name, *args, **kwargs):
+        self.add_flag(name, *args, required=True, **kwargs)
+
+    @property
+    def flags(self):
+        """Get added flags.
+
+        Returns:
+            `dict` of flag names to values added by a `FlagAdder` instance.
+        """
+        return {flag: getattr(FLAGS, flag) for flag in self._flags}
+</code></pre>
+  </div>
+</div>
+
+
+      <div class="class">
+          <h3>Ancestors (in MRO)</h3>
+          <ul class="class_list">
+          <li><a href="#qnd.FlagAdder">FlagAdder</a></li>
+          <li>builtins.object</li>
+          </ul>
+          <h3>Static methods</h3>
+            
+  <div class="item">
+    <div class="name def" id="qnd.FlagAdder.__init__">
+    <p>def <span class="ident">__init__</span>(</p><p>self)</p>
+    </div>
+    
+
+    
   
+    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.__init__', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.FlagAdder.__init__" class="source">
+    <pre><code>def __init__(self):
+    self._flags = []
+</code></pre>
+  </div>
+</div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="estimator_test.m.html">qnd.estimator_test</a></p>
-      
+  </div>
   
+            
+  <div class="item">
+    <div class="name def" id="qnd.FlagAdder.add_flag">
+    <p>def <span class="ident">add_flag</span>(</p><p>self, name, *args, **kwargs)</p>
+    </div>
+    
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="experiment.m.html">qnd.experiment</a></p>
-      
+    
   
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.add_flag', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.FlagAdder.add_flag" class="source">
+    <pre><code>def add_flag(self, name, *args, **kwargs):
+    add_flag(name, *args, **kwargs)
+    self._flags.append(name)
+</code></pre>
+  </div>
+</div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="experiment_test.m.html">qnd.experiment_test</a></p>
-      
+  </div>
   
+            
+  <div class="item">
+    <div class="name def" id="qnd.FlagAdder.add_required_flag">
+    <p>def <span class="ident">add_required_flag</span>(</p><p>self, name, *args, **kwargs)</p>
+    </div>
+    
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="flag.m.html">qnd.flag</a></p>
-      
+    
   
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.add_required_flag', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.FlagAdder.add_required_flag" class="source">
+    <pre><code>def add_required_flag(self, name, *args, **kwargs):
+    self.add_flag(name, *args, required=True, **kwargs)
+</code></pre>
+  </div>
+</div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="inputs.m.html">qnd.inputs</a></p>
-      
+  </div>
   
+          <h3>Instance variables</h3>
+            <div class="item">
+            <p id="qnd.FlagAdder.flags" class="name">var <span class="ident">flags</span></p>
+            
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="inputs_test.m.html">qnd.inputs_test</a></p>
-      
+            
   
+    <div class="desc"><p>Get added flags.</p>
+<p>Returns:
+    <code>dict</code> of flag names to values added by a <code>FlagAdder</code> instance.</p></div>
+  <div class="source_cont">
+</div>
 
+            </div>
       </div>
-      <div class="item">
-      <p class="name"><a href="run.m.html">qnd.run</a></p>
-      
-  
+      </div>
 
-      </div>
-      <div class="item">
-      <p class="name"><a href="run_test.m.html">qnd.run_test</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="test.m.html">qnd.test</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="test_test.m.html">qnd.test_test</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="util.m.html">qnd.util</a></p>
-      
-  
-
-      </div>
-      <div class="item">
-      <p class="name"><a href="util_test.m.html">qnd.util_test</a></p>
-      
-  
-
-      </div>
   </section>
 
     </article>
