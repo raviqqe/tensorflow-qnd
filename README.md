@@ -89,17 +89,6 @@ add_required_flag(name, *args, **kwargs)
 See [examples](examples) directory.
 
 
-## Design
-
-All users need to do is to define model and input functions.
-
-- Model function : features and labels... -> predictions, loss, train op, eval metrics (if any)
-- Input function : filename queue -> features, labels
-  - Features and labels can be a `dict` of `str` to `tf.Tensor` or a single `tf.Tensor`.
-  - Features and labels should be batched.
-  - Its input is a filename queue so that users can use [Readers](https://www.tensorflow.org/api_docs/python/io_ops/readers#FixedLengthRecordReader).
-
-
 ## License
 
 [The Unlicense](https://unlicense.org)
