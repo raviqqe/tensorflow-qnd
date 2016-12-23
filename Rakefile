@@ -63,7 +63,7 @@ end
 task :test => %i(module_test script_test mnist_example)
 
 
-task_in_venv :update_usage do
+task_in_venv :readme_usage do
   usage = %w(def_run def_run() add_flag add_required_flag).map do |expression|
     `python3 -c 'import qnd; print(help(qnd.#{expression}))'`
   end.join("\n").split("\n").select do |line|
@@ -86,7 +86,7 @@ task_in_venv :html, ['pdoc', TENSORFLOW_URL] do
 end
 
 
-task :doc => %i(html update_usage)
+task :doc => %i(html readme_usage)
 
 
 task :upload => %i(test clean) do
