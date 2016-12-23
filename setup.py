@@ -1,3 +1,4 @@
+import re
 import setuptools
 import sys
 
@@ -8,7 +9,8 @@ if not sys.version_info >= (3, 5):
 
 setuptools.setup(
     name="tensorflow-qnd",
-    version="0.0.4",
+    version=re.search(r'__version__ *= *"([0-9]+\.[0-9]+\.[0-9]+)" *\n',
+                      open("qnd/__init__.py").read()).group(1),
     description="Quick and Distributed TensorFlow command framework",
     long_description=open("README.md").read(),
     license="Public Domain",
