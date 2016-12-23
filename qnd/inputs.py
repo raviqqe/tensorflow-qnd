@@ -25,14 +25,45 @@ def add_file_flag(mode):
 def def_def_def_input_fn(mode):
     assert isinstance(mode, Mode)
 
-    def def_def_input_fn():
+    def def_def_input_fn(batch_inputs=True):
+        if batch_inputs:
+            add_flag("batch_size", type=int, default=64,
+                     help="Mini-batch size")
+            add_flag("batch_queue_capacity", type=int, default=1024,
+                     help="Batch queue capacity")
+
         file_flag = add_file_flag(mode.value)
         read_files = def_read_files(mode)
 
         def def_input_fn(user_input_fn):
             @util.func_scope
             def input_fn():
-                return read_files(getattr(FLAGS, file_flag), user_input_fn)
+                x, y = read_files(getattr(FLAGS, file_flag), user_input_fn)
+
+                if not batch_inputs:
+                    return x, y
+
+                tuple_input = isinstance(x, tf.Tensor)
+
+                if not tuple_input:
+                    duplicate_keys = x.keys() & y.keys()
+                    if len(duplicate_keys) != 0:
+                        raise ValueError(
+                            "Some keys of x and y are duplicate. ({})"
+                            .format(duplicate_keys))
+
+                inputs = (tf.train.shuffle_batch if mode == Mode.TRAIN else
+                          tf.train.batch)(
+                    [x, y] if tuple_input else {**x, **y},
+                    batch_size=FLAGS.batch_size,
+                    capacity=FLAGS.batch_queue_capacity,
+                    **({"min_after_dequeue": FLAGS.batch_queue_capacity // 2}
+                       if mode == Mode.TRAIN else
+                       {"allow_smaller_final_batch": True}))
+
+                restore = lambda x: {key: inputs[key] for key in x.keys()}
+
+                return inputs if tuple_input else (restore(x), restore(y))
 
             return input_fn
 
