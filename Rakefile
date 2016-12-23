@@ -86,9 +86,12 @@ task_in_venv :update_usage do
 end
 
 
-task_in_venv :doc, ['pdoc', TENSORFLOW_URL] do
+task_in_venv :html, ['pdoc', TENSORFLOW_URL] do
   vsh 'pdoc --html --html-dir docs --overwrite qnd'
 end
+
+
+task :doc => %i(html update_usage)
 
 
 task :upload => %i(test clean) do
