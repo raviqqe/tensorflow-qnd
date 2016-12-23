@@ -5,7 +5,7 @@ from .estimator import def_estimator
 from .inputs import Mode, def_def_train_input_fn, def_def_eval_input_fn
 
 
-def def_def_experiment_fn(batch_inputs=True):
+def def_def_experiment_fn(batch_inputs=True, prepare_filename_queues=True):
     adder = FlagAdder()
 
     for mode in Mode:
@@ -18,8 +18,10 @@ def def_def_experiment_fn(batch_inputs=True):
                         "savings")
 
     estimator = def_estimator()
-    def_train_input_fn = def_def_train_input_fn(batch_inputs)
-    def_eval_input_fn = def_def_eval_input_fn(batch_inputs)
+    def_train_input_fn = def_def_train_input_fn(batch_inputs,
+                                                prepare_filename_queues)
+    def_eval_input_fn = def_def_eval_input_fn(batch_inputs,
+                                              prepare_filename_queues)
 
     def def_experiment_fn(model_fn, train_input_fn, eval_input_fn=None):
         def experiment_fn(output_dir):

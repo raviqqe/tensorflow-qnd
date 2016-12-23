@@ -25,20 +25,24 @@ def add_file_flag(mode):
 def def_def_def_input_fn(mode):
     assert isinstance(mode, Mode)
 
-    def def_def_input_fn(batch_inputs=True):
+    def def_def_input_fn(batch_inputs=True, prepare_filename_queues=True):
         if batch_inputs:
             add_flag("batch_size", type=int, default=64,
                      help="Mini-batch size")
             add_flag("batch_queue_capacity", type=int, default=1024,
                      help="Batch queue capacity")
 
-        file_flag = add_file_flag(mode.value)
-        read_files = def_read_files(mode)
+        if prepare_filename_queues:
+            file_flag = add_file_flag(mode.value)
+            read_files = def_read_files(mode)
 
         def def_input_fn(user_input_fn):
             @util.func_scope
             def input_fn():
-                x, y = read_files(getattr(FLAGS, file_flag), user_input_fn)
+                if prepare_filename_queues:
+                    x, y = user_input_fn(read_files(getattr(FLAGS, file_flag)))
+                else:
+                    x, y = user_input_fn()
 
                 if not batch_inputs:
                     return x, y
@@ -80,8 +84,8 @@ def def_read_files(mode):
     file_pattern_to_name_queue = def_file_pattern_to_name_queue(mode)
 
     @util.func_scope
-    def read_files(file_pattern, user_input_fn):
-        return user_input_fn(file_pattern_to_name_queue(file_pattern))
+    def read_files(file_pattern):
+        return file_pattern_to_name_queue(file_pattern)
 
     return read_files
 
