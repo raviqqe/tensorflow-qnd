@@ -14,7 +14,7 @@ setuptools.setup(
     license="Public Domain",
     author="Yota Toyama",
     author_email="raviqqe@gmail.com",
-    url="http://github.com/raviqqe/tensorflow-qnd/",
+    url="https://github.com/raviqqe/tensorflow-qnd/",
     packages=["qnd"],
     install_requires=["gargparse"],
     classifiers=[
