@@ -1,10 +1,9 @@
 import types
 
-from . import test
-from .experiment_test import TEST_ARGS
+from .experiment_test import append_argv
 from . import run
 
 
 def test_def_run():
-    test.initialize_argv(TEST_ARGS)
+    append_argv()
     assert isinstance(run.def_run(), types.FunctionType)

@@ -12,5 +12,10 @@ def user_input_fn(filename_queue):
     return {"x": x}, {"y": x}
 
 
-def initialize_argv(*args):
-    sys.argv = [sys.argv[0], *args]
+def append_argv(*args):
+    command = "THIS_SHOULD_NEVER_MATCH"
+
+    if sys.argv[0] != command:
+        sys.argv = [command]
+
+    sys.argv += [*args]

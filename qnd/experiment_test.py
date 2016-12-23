@@ -8,11 +8,8 @@ from . import experiment
 from . import inputs_test
 
 
-TEST_ARGS = [*estimator_test.TEST_ARGS, *inputs_test.TEST_ARGS]
-
-
 def test_def_experiment():
-    test.initialize_argv(*TEST_ARGS)
+    append_argv()
 
     def_experiment_fn = experiment.def_def_experiment_fn()
     _assert_is_function(def_experiment_fn)
@@ -25,3 +22,8 @@ def test_def_experiment():
 
 def _assert_is_function(obj):
     assert isinstance(obj, types.FunctionType)
+
+
+def append_argv():
+    estimator_test.append_argv()
+    inputs_test.append_argv()

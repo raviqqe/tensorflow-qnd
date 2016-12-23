@@ -5,11 +5,10 @@ from . import test
 
 
 _FILE_PATTERN = "*.md"
-TEST_ARGS = ["--train_file", _FILE_PATTERN, "--eval_file", _FILE_PATTERN]
 
 
 def test_def_input_fn():
-    test.initialize_argv(*TEST_ARGS)
+    append_argv()
 
     for def_input_fn in [inputs.def_def_train_input_fn(),
                          inputs.def_def_eval_input_fn()]:
@@ -35,3 +34,8 @@ def test_def_input_fn():
 def _assert_are_instances(objects, klass):
     for obj in objects:
         assert isinstance(obj, klass)
+
+
+def append_argv():
+    test.append_argv("--train_file", _FILE_PATTERN,
+                     "--eval_file", _FILE_PATTERN)
