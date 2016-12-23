@@ -47,6 +47,8 @@ def def_run(batch_inputs=True, prepare_filename_queues=True):
                     `Tensor, Tensor` (x and y),
                     `dict<str, Tensor>, dict<str, Tensor>`
                     (features and labels).
+                The keys of `dict` arguments must match with names of
+                `model_fn` arguments.
 
         Returns:
             Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
