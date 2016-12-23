@@ -64,24 +64,19 @@ task :test => %i(module_test script_test mnist_example)
 
 
 task_in_venv :update_usage do
-  usage = %(
-```
-#{
-  %w(def_run def_run() add_flag add_required_flag).map do |expression|
+  usage = %w(def_run def_run() add_flag add_required_flag).map do |expression|
     `python3 -c 'import qnd; print(help(qnd.#{expression}))'`
   end.join("\n").split("\n").select do |line|
     line = line.strip
     line !~ /^None$/ and line !~ /^Help on .*$/
   end.join("\n").strip
-}
-```)
 
   readme_file = 'README.md'
   md = File.read(readme_file)
   File.write(readme_file,
-             (md.match(/\A.*## Usage\n\n/m)[0] +
-              usage.strip + "\n" +
-              md.match(/\n\n## Examples.*\Z/m)[0])
+             (md.match(/\A.*## Usage\n\n```\n/m)[0] +
+              usage.strip +
+              md.match(/\n```\n\n\n## Examples.*\Z/m)[0])
               .gsub(/^ *$/, '').gsub(/\n(\n\n\n)/m, '\1'))
 end
 
