@@ -8,7 +8,7 @@ if not sys.version_info >= (3, 5):
 
 setuptools.setup(
     name="tensorflow-qnd",
-    version="0.0.3",
+    version="0.0.4",
     description="Quick and Distributed TensorFlow command framework",
     long_description=open("README.md").read(),
     license="Public Domain",
