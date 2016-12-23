@@ -23,7 +23,7 @@ def def_estimator():
 
 def _wrap_model_fn(original_model_fn):
     @util.func_scope
-    def wrapped_model(features, targets, mode):
+    def model(features, targets, mode):
         are_args = functools.partial(util.are_instances, [features, targets])
         def_model_fn = functools.partial(functools.partial, original_model_fn)
 
@@ -47,4 +47,4 @@ def _wrap_model_fn(original_model_fn):
             train_op=train_op,
             eval_metric_ops=(eval_metric_ops[0] if eval_metric_ops else None))
 
-    return wrapped_model
+    return model
