@@ -27,7 +27,7 @@ def def_def_experiment_fn():
                 estimator(model_fn, output_dir),
                 def_train_input_fn(train_input_fn),
                 def_eval_input_fn(eval_input_fn or train_input_fn),
-                **{arg: getattr(FLAGS, arg) for arg in adder.flags})
+                **adder.flags)
 
         return experiment_fn
 

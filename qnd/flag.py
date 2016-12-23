@@ -31,4 +31,4 @@ class FlagAdder:
 
     @property
     def flags(self):
-        return self._flags
+        return {flag: getattr(FLAGS, flag) for flag in self._flags}

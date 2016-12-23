@@ -85,7 +85,6 @@ def def_config():
             },
         })
 
-        return tf.contrib.learn.RunConfig(
-            **{arg: getattr(FLAGS, arg) for arg in adder.flags})
+        return tf.contrib.learn.RunConfig(**adder.flags)
 
     return config
