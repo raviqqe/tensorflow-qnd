@@ -11,7 +11,7 @@ class Mode(enum.Enum):
     EVAL = "eval"
 
 
-def add_file_flag(mode):
+def _add_file_flag(mode):
     assert isinstance(mode, str)
 
     flag_name = "{}_file".format(mode)
@@ -33,7 +33,7 @@ def def_def_def_input_fn(mode):
                      help="Batch queue capacity")
 
         if prepare_filename_queues:
-            file_flag = add_file_flag(mode.value)
+            file_flag = _add_file_flag(mode.value)
             read_files = def_read_files(mode)
 
         def def_input_fn(user_input_fn):
