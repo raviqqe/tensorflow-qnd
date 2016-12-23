@@ -3,14 +3,12 @@ data_dir = ${var_dir}/data
 train_file = ${data_dir}/train.tfrecords
 valid_file = ${data_dir}/validation.tfrecords
 
-use_eval_input_fn ?= 0
-
 mnist = python3 mnist.py \
 	--num_epochs 2 \
 	--train_file ${train_file} \
 	--eval_file ${valid_file} \
 	--output_dir ${var_dir}/output \
-	--use_eval_input_fn ${use_eval_input_fn} \
+	${use_eval_input_fn} \
 	--master_host localhost:2049 \
 	--ps_hosts localhost:4242 \
 	--task_type

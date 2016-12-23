@@ -6,9 +6,7 @@ import tensorflow as tf
 
 logging.getLogger().setLevel(logging.INFO)
 
-qnd.add_flag("use_eval_input_fn",
-             type=(lambda string: bool(int(string))),
-             default=False)
+qnd.add_flag("use_eval_input_fn", action="store_true")
 
 
 def read_file(filename_queue):
