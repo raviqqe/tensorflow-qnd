@@ -25,7 +25,7 @@ $ pip3 install --user --upgrade tensorflow-qnd
 
 ```
 def_run(batch_inputs=True, prepare_filename_queues=True)
-    Define run() function.
+    Define `run()` function.
 
     See also `help(def_run())`.
 
@@ -53,7 +53,9 @@ run(model_fn, train_input_fn, eval_input_fn=None)
                 `Tensor, Tensor, Operation, eval_metrics=dict<str, Tensor>`
                 (predictions, loss, train_op, and eval_metrics (if any)),
                 `ModelFnOps`.
-        input_fn: A function to serve input Tensors fed into the model.
+        train_input_fn, eval_input_fn: Functions to serve input Tensors
+            fed into the model. If `eval_input_fn` is `None`,
+            `train_input_fn` will be used instead.
             Types of its arguments must be one of the following:
                 `QueueBase` (a filename queue),
                 `None` (No argument).
