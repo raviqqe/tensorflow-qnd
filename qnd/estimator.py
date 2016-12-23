@@ -2,6 +2,7 @@ import functools
 import inspect
 
 import tensorflow as tf
+import tensorflow.contrib.learn as learn
 
 from . import util
 from .config import def_config
@@ -35,12 +36,17 @@ def _wrap_model_fn(original_model_fn):
             raise ValueError(
                 "features and targets should be both tf.Tensor or dict.")
 
-        predictions, loss, train_op, *eval_metric_ops = (
+        maybe_model_fn_ops = (
             model_fn(mode=mode)
             if "mode" in inspect.signature(model_fn).parameters.keys() else
             model_fn())
 
-        return tf.contrib.learn.estimators.model_fn.ModelFnOps(
+        if isinstance(maybe_model_fn_ops, learn.estimators.model_fn.ModelFnOps):
+            return maybe_model_fn_ops
+
+        predictions, loss, train_op, *eval_metric_ops = maybe_model_fn_ops
+
+        return learn.estimators.model_fn.ModelFnOps(
             mode=mode,
             predictions=predictions,
             loss=loss,
