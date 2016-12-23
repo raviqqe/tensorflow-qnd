@@ -2,14 +2,14 @@ VENV_DIR = '.venv'
 TENSORFLOW_URL = 'https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.0rc1-cp35-cp35m-linux_x86_64.whl'
 
 
-def task_in_venv name, &block
+def task_in_venv name, packages=[TENSORFLOW_URL], &block
   task name => %i(clean venv) do
     def vsh *args, **kwargs
       sh([". #{VENV_DIR}/bin/activate &&", *args.map{ |x| x.to_s }].join(' '),
          **kwargs)
     end
 
-    vsh "pip3 install --upgrade #{TENSORFLOW_URL}"
+    vsh "pip3 install --upgrade #{packages.join ' '}"
     vsh 'python3 setup.py install'
     block.call
   end
@@ -83,6 +83,11 @@ task_in_venv :update_usage do
               usage.strip + "\n" +
               md.match(/\n\n## Examples.*\Z/m)[0])
               .gsub(/^ *$/, '').gsub(/\n(\n\n\n)/m, '\1'))
+end
+
+
+task_in_venv :doc, ['pdoc', TENSORFLOW_URL] do
+  vsh 'pdoc --html --html-dir docs --overwrite qnd'
 end
 
 
