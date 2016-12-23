@@ -76,7 +76,7 @@ task_in_venv :readme_usage do
   File.write(readme_file,
              (md.match(/\A.*## Usage\n\n```\n/m)[0] +
               usage.strip +
-              md.match(/\n```\n\n\n## Examples.*\Z/m)[0])
+              md.match(/\n```\n\n[^\n]*\n\n\n## Examples.*\Z/m)[0])
               .gsub(/^ *$/, '').gsub(/\n(\n\n\n)/m, '\1'))
 end
 
