@@ -87,7 +87,7 @@ add_required_flag(name, *args, **kwargs)
     default.
 ```
 
-For more information, see [tensorflow-qnd](https://raviqqe.github.io/tensorflow-qnd).
+For more information, see [documentation](https://raviqqe.github.io/tensorflow-qnd).
 
 
 ## Examples
