@@ -1,6 +1,7 @@
 # tensorflow-qnd
 
 [![PyPI version](https://badge.fury.io/py/tensorflow-qnd.svg)](https://badge.fury.io/py/tensorflow-qnd)
+[![Python versions](https://img.shields.io/pypi/pyversions/tensorflow-qnd.svg)]()
 [![Build Status](https://travis-ci.org/raviqqe/tensorflow-qnd.svg?branch=master)](https://travis-ci.org/raviqqe/tensorflow-qnd)
 [![License](https://img.shields.io/badge/license-unlicense-lightgray.svg)](https://unlicense.org)
 
