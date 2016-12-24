@@ -11,9 +11,9 @@ def add_flag(name, *args, **kwargs):
     Added flags can be accessed by `FLAGS` module variable.
     (e.g. `FLAGS.my_flag_name`)
 
-    Args:
-        name: Flag name. Real flag name will be `"--{}".format(name)`.
-        *args, **kwargs: The rest arguments are the same as
+    - Args
+        - `name`: Flag name. Real flag name will be `"--{}".format(name)`.
+        - `*args`, `**kwargs`: The rest arguments are the same as
             `argparse.add_argument()`.
     """
     global _FLAG_NAMES
@@ -49,7 +49,7 @@ class FlagAdder:
     def flags(self):
         """Get added flags.
 
-        Returns:
-            `dict` of flag names to values added by a `FlagAdder` instance.
+        - Returns
+            - `dict` of flag names to values added by a `FlagAdder` instance.
         """
         return {flag: getattr(FLAGS, flag) for flag in self._flags}

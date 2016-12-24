@@ -1055,10 +1055,14 @@ __version__ = "0.0.4"
     <div class="desc"><p>Add a flag.</p>
 <p>Added flags can be accessed by <code>FLAGS</code> module variable.
 (e.g. <code>FLAGS.my_flag_name</code>)</p>
-<p>Args:
-    name: Flag name. Real flag name will be <code>"--{}".format(name)</code>.
-    <em>args, </em>*kwargs: The rest arguments are the same as
-        <code>argparse.add_argument()</code>.</p></div>
+<ul>
+<li>Args<ul>
+<li><code>name</code>: Flag name. Real flag name will be <code>"--{}".format(name)</code>.</li>
+<li><code>*args</code>, <code>**kwargs</code>: The rest arguments are the same as
+    <code>argparse.add_argument()</code>.</li>
+</ul>
+</li>
+</ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.add_flag', this);">Show source &equiv;</a></p>
   <div id="source-qnd.add_flag" class="source">
@@ -1068,9 +1072,9 @@ __version__ = "0.0.4"
     Added flags can be accessed by `FLAGS` module variable.
     (e.g. `FLAGS.my_flag_name`)
 
-    Args:
-        name: Flag name. Real flag name will be `"--{}".format(name)`.
-        *args, **kwargs: The rest arguments are the same as
+    - Args
+        - `name`: Flag name. Real flag name will be `"--{}".format(name)`.
+        - `*args`, `**kwargs`: The rest arguments are the same as
             `argparse.add_argument()`.
     """
     global _FLAG_NAMES
@@ -1123,15 +1127,24 @@ default.</p></div>
   
     <div class="desc"><p>Define <code>run()</code> function.</p>
 <p>See also <code>help(def_run())</code>.</p>
-<p>Args:
-    batch_inputs: If <code>True</code>, create batches from Tensors
-        returned from <code>train_input_fn()</code> and <code>train_input_fn()</code> and feed
-        them to a model.
-    prepare_filename_queues: If <code>True</code>, create filename queues for train
-        and eval data based on file paths specified by command line
-        arguments.</p>
-<p>Returns:
-    <code>run()</code> function.</p></div>
+<ul>
+<li>
+<p>Args</p>
+<ul>
+<li><code>batch_inputs</code>: If <code>True</code>, create batches from Tensors returned from
+    <code>train_input_fn()</code> and <code>train_input_fn()</code> and feed them to a model.</li>
+<li><code>prepare_filename_queues</code>: If <code>True</code>, create filename queues for
+    train and eval data based on file paths specified by command line
+    arguments.</li>
+</ul>
+</li>
+<li>
+<p>Returns</p>
+<ul>
+<li><code>run()</code> function.</li>
+</ul>
+</li>
+</ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_run', this);">Show source &equiv;</a></p>
   <div id="source-qnd.def_run" class="source">
@@ -1140,16 +1153,15 @@ default.</p></div>
 
     See also `help(def_run())`.
 
-    Args:
-        batch_inputs: If `True`, create batches from Tensors
-            returned from `train_input_fn()` and `train_input_fn()` and feed
-            them to a model.
-        prepare_filename_queues: If `True`, create filename queues for train
-            and eval data based on file paths specified by command line
+    - Args
+        - `batch_inputs`: If `True`, create batches from Tensors returned from
+            `train_input_fn()` and `train_input_fn()` and feed them to a model.
+        - `prepare_filename_queues`: If `True`, create filename queues for
+            train and eval data based on file paths specified by command line
             arguments.
 
-    Returns:
-        `run()` function.
+    - Returns
+        - `run()` function.
     """
     add_flag("output_dir",
              default="output",
@@ -1161,30 +1173,29 @@ default.</p></div>
     def run(model_fn, train_input_fn, eval_input_fn=None):
         """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
 
-        Args:
-            model_fn: A function to construct a model.
-                Types of its arguments must be one of the following:
-                    `Tensor, ...`,
-                    `Tensor, ..., mode=ModeKeys`.
-                Types of its return values must be one of the following:
-                    `Tensor, Tensor, Operation, eval_metric_ops=dict<str, Tensor>`
-                    (predictions, loss, train_op, and eval_metric_ops (if any)),
-                    `ModelFnOps`.
-            train_input_fn, eval_input_fn: Functions to serve input Tensors
-                fed into the model. If `eval_input_fn` is `None`,
+        - Args
+            - `model_fn`: A function to construct a model.
+                - Types of its arguments must be one of the following:
+                    - `Tensor, ...`
+                    - `Tensor, ..., mode=ModeKeys`
+                - Types of its return values must be one of the following:
+                    - `Tensor, Tensor, Operation, eval_metric_ops=dict<str, Tensor>`
+                        (predictions, loss, train_op, and eval_metric_ops (if any))
+                    - `ModelFnOps`
+            - `train_input_fn`, `eval_input_fn`: Functions to serve input
+                Tensors fed into the model. If `eval_input_fn` is `None`,
                 `train_input_fn` will be used instead.
-                Types of its arguments must be one of the following:
-                    `QueueBase` (a filename queue),
-                    `None` (No argument).
-                Types of its return values must be one of the following:
-                    `Tensor, Tensor` (x and y),
-                    `dict<str, Tensor>, dict<str, Tensor>`
-                    (features and labels).
-                The keys of `dict` arguments must match with names of
-                `model_fn` arguments.
+                - Types of its arguments must be one of the following:
+                    - `QueueBase` (a filename queue)
+                    - `None` (No argument)
+                - Types of its return values must be one of the following:
+                    - `Tensor, Tensor` (x and y)
+                    - `dict<str, Tensor>, dict<str, Tensor>` (features and labels)
+                        - The keys in `dict` arguments must match with names of
+                            `model_fn` arguments.
 
-        Returns:
-            Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
+        - Returns
+            - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
         """
         return learn_runner.run(
             def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
@@ -1225,8 +1236,8 @@ default.</p></div>
     def flags(self):
         """Get added flags.
 
-        Returns:
-            `dict` of flag names to values added by a `FlagAdder` instance.
+        - Returns
+            - `dict` of flag names to values added by a `FlagAdder` instance.
         """
         return {flag: getattr(FLAGS, flag) for flag in self._flags}
 </code></pre>
@@ -1311,8 +1322,12 @@ default.</p></div>
             
   
     <div class="desc"><p>Get added flags.</p>
-<p>Returns:
-    <code>dict</code> of flag names to values added by a <code>FlagAdder</code> instance.</p></div>
+<ul>
+<li>Returns<ul>
+<li><code>dict</code> of flag names to values added by a <code>FlagAdder</code> instance.</li>
+</ul>
+</li>
+</ul></div>
   <div class="source_cont">
 </div>
 
