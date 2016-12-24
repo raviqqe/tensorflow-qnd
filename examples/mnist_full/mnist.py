@@ -40,7 +40,7 @@ def minimize(loss):
 
 
 def model(image, number, mode):
-    h = tf.contrib.layers.fully_connected(image, 200)
+    h = tf.contrib.layers.fully_connected(image, 64)
     h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
     loss = tf.reduce_mean(
