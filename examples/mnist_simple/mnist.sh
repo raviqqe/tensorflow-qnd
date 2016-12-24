@@ -2,10 +2,11 @@
 
 var_dir=var
 data_dir=$var_dir/data
+script=mnist.py
 
 
 mnist() {
-  python3 mnist.py \
+  python3 $script \
     --num_epochs 2 \
     --train_file $data_dir/train.tfrecords \
     --eval_file $data_dir/validation.tfrecords \
@@ -23,7 +24,7 @@ main() {
     python3 - --directory $data_dir
   fi
 
-  kill $(ps x | grep mnist.py | grep -v grep | awk '{print $1}')
+  kill $(ps x | grep $script | grep -v grep | awk '{print $1}')
   mnist ps > $var_dir/ps.log 2>&1 &
   mnist master
 }
