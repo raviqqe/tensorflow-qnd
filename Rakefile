@@ -52,7 +52,7 @@ end
 
 
 task_in_venv :mnist_simple do |t|
-  vsh "cd examples/#{t.name} && ./mnist.sh"
+  vsh "cd examples/#{t.name} && ./main.sh"
 end
 
 
