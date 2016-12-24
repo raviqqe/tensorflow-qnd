@@ -51,6 +51,11 @@ task_in_venv :script_test do
 end
 
 
+task_in_venv :mnist_simple do |t|
+  vsh "cd examples/#{t.name} && ./mnist.sh"
+end
+
+
 task_in_venv :mnist_full do |t|
   [
     '',
@@ -62,11 +67,6 @@ task_in_venv :mnist_full do |t|
       vsh "make -C examples/#{t.name} #{args}"
     end
   end
-end
-
-
-task_in_venv :mnist_simple do |t|
-  vsh "cd examples/#{t.name} && ./mnist.sh"
 end
 
 
