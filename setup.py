@@ -24,7 +24,6 @@ setuptools.setup(
         "Intended Audience :: Developers",
         "License :: Public Domain",
         "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
         "Topic :: System :: Networking",
     ],
