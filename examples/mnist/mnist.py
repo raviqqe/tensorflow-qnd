@@ -33,7 +33,7 @@ def minimize(loss):
         "Adam")
 
 
-def mnist_model(image, number):
+def mnist_model(image, number, mode):
     h = tf.contrib.layers.fully_connected(image, 200)
     h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
@@ -50,7 +50,8 @@ def mnist_model(image, number):
             predictions=predictions,
             loss=loss,
             train_op=train_op,
-            eval_metric_ops=eval_metric_ops)
+            eval_metric_ops=eval_metric_ops,
+            mode=mode)
 
     return predictions, loss, train_op, eval_metric_ops
 
