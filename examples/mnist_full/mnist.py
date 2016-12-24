@@ -39,7 +39,7 @@ def minimize(loss):
         "Adam")
 
 
-def mnist_model(image, number, mode):
+def model(image, number, mode):
     h = tf.contrib.layers.fully_connected(image, 200)
     h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
@@ -66,9 +66,7 @@ run = qnd.def_run()
 
 
 def main():
-    run(mnist_model,
-        read_file,
-        read_file if qnd.FLAGS.use_eval_input_fn else None)
+    run(model, read_file, read_file if qnd.FLAGS.use_eval_input_fn else None)
 
 
 if __name__ == "__main__":
