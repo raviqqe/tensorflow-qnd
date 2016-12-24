@@ -32,7 +32,7 @@ def_run(batch_inputs=True, prepare_filename_queues=True)
 
     - Args
         - `batch_inputs`: If `True`, create batches from Tensors returned from
-            `train_input_fn()` and `train_input_fn()` and feed them to a model.
+            `train_input_fn()` and `eval_input_fn()` and feed them to a model.
         - `prepare_filename_queues`: If `True`, create filename queues for
             train and eval data based on file paths specified by command line
             arguments.

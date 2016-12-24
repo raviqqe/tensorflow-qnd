@@ -1132,7 +1132,7 @@ default.</p></div>
 <p>Args</p>
 <ul>
 <li><code>batch_inputs</code>: If <code>True</code>, create batches from Tensors returned from
-    <code>train_input_fn()</code> and <code>train_input_fn()</code> and feed them to a model.</li>
+    <code>train_input_fn()</code> and <code>eval_input_fn()</code> and feed them to a model.</li>
 <li><code>prepare_filename_queues</code>: If <code>True</code>, create filename queues for
     train and eval data based on file paths specified by command line
     arguments.</li>
@@ -1155,7 +1155,7 @@ default.</p></div>
 
     - Args
         - `batch_inputs`: If `True`, create batches from Tensors returned from
-            `train_input_fn()` and `train_input_fn()` and feed them to a model.
+            `train_input_fn()` and `eval_input_fn()` and feed them to a model.
         - `prepare_filename_queues`: If `True`, create filename queues for
             train and eval data based on file paths specified by command line
             arguments.
