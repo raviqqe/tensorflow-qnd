@@ -7,6 +7,7 @@ import tensorflow as tf
 logging.getLogger().setLevel(logging.INFO)
 
 qnd.add_flag("use_eval_input_fn", action="store_true")
+qnd.add_flag("use_model_fn_ops", action="store_true")
 
 
 def read_file(filename_queue):
@@ -39,11 +40,19 @@ def mnist_model(image, number):
     loss = tf.reduce_mean(
         tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
     predictions = tf.argmax(h, axis=1)
-
-    return predictions, loss, minimize(loss), {
+    train_op = minimize(loss)
+    eval_metrics = {
         "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
     }
 
+    if qnd.FLAGS.use_model_fn_ops:
+        return tf.contrib.learn.estimators.model_fn.ModelFnOps(
+            predictions=predictions,
+            loss=loss,
+            train_op=train_op,
+            eval_metrics=eval_metrics)
+
+    return predictions, loss, train_op, eval_metrics
 
 run = qnd.def_run()
 

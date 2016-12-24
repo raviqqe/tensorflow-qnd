@@ -52,8 +52,8 @@ end
 
 
 task_in_venv :mnist_example do
-  [[], %i(use_eval_input_fn)].each do |flags|
-    ['clean', flags.map{ |flag| "#{flag}=--#{flag}" }.join(' ')].each do |args|
+  ['', 'use_eval_input_fn', 'use_model_fn_ops'].each do |flag|
+    ['clean', flag.empty? ? '' : "#{flag}=--#{flag}"].each do |args|
       vsh "make -C examples/mnist #{args}"
     end
   end

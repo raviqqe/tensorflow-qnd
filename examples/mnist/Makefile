@@ -9,6 +9,7 @@ mnist = python3 mnist.py \
 	--eval_file ${valid_file} \
 	--output_dir ${var_dir}/output \
 	${use_eval_input_fn} \
+	${use_model_fn_ops} \
 	--master_host localhost:2049 \
 	--ps_hosts localhost:4242 \
 	--task_type
