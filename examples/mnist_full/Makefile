@@ -20,7 +20,7 @@ mnist = python3 mnist.py \
 main: ${train_file} ${valid_file}
 	kill $$(ps x | grep mnist.py | grep -v grep | awk '{print $$1}') || :
 	${mnist} ps > ${var_dir}/ps.log 2>&1 &
-	${mnist} master 2>&1
+	${mnist} master
 
 
 ${train_file} ${valid_file}:
