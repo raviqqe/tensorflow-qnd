@@ -74,23 +74,6 @@ end
 task :test => %i(module_test script_test mnist_simple mnist_full)
 
 
-task_in_venv :readme_usage do
-  usage = %w(def_run def_run() add_flag add_required_flag).map do |expression|
-    `python3 -c 'import qnd; print(help(qnd.#{expression}))'`
-  end.join("\n").split("\n").select do |line|
-    line = line.strip
-    line !~ /^None$/ and line !~ /^Help on .*$/
-  end.join("\n").strip
-
-  md = File.read(README_FILE)
-  File.write(README_FILE,
-             (md.match(/\A.*## Usage\n\n```\n/m)[0] +
-              usage.strip +
-              md.match(/\n```\n\n[^\n]*\n\n\n## Examples.*\Z/m)[0])
-              .gsub(/^ *$/, '').gsub(/\n(\n\n\n)/m, '\1'))
-end
-
-
 task_in_venv :readme_examples do
   md = File.read(README_FILE)
   File.write(README_FILE,
@@ -105,7 +88,7 @@ task_in_venv :html, ['pdoc', TENSORFLOW_URL] do
 end
 
 
-task :doc => %i(html readme_usage readme_examples)
+task :doc => %i(html readme_examples)
 
 
 task_in_venv :format, %w(autopep8) do
