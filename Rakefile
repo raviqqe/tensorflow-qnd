@@ -89,6 +89,11 @@ end
 task :doc => %i(html readme_usage)
 
 
+task_in_venv :format, %w(autopep8) do
+  sh "autopep8 -i #{Dir.glob('**/*.py').join ' '}"
+end
+
+
 task :upload => %i(test clean) do
   sh 'python3 setup.py sdist bdist_wheel'
   sh 'twine upload dist/*'
