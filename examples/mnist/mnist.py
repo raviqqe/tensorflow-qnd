@@ -41,7 +41,7 @@ def mnist_model(image, number):
         tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
     predictions = tf.argmax(h, axis=1)
     train_op = minimize(loss)
-    eval_metrics = {
+    eval_metric_ops = {
         "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
     }
 
@@ -50,9 +50,9 @@ def mnist_model(image, number):
             predictions=predictions,
             loss=loss,
             train_op=train_op,
-            eval_metrics=eval_metrics)
+            eval_metric_ops=eval_metric_ops)
 
-    return predictions, loss, train_op, eval_metrics
+    return predictions, loss, train_op, eval_metric_ops
 
 
 run = qnd.def_run()

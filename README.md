@@ -51,8 +51,8 @@ run(model_fn, train_input_fn, eval_input_fn=None)
                 `Tensor, ...`,
                 `Tensor, ..., mode=ModeKeys`.
             Types of its return values must be one of the following:
-                `Tensor, Tensor, Operation, eval_metrics=dict<str, Tensor>`
-                (predictions, loss, train_op, and eval_metrics (if any)),
+                `Tensor, Tensor, Operation, eval_metric_ops=dict<str, Tensor>`
+                (predictions, loss, train_op, and eval_metric_ops (if any)),
                 `ModelFnOps`.
         train_input_fn, eval_input_fn: Functions to serve input Tensors
             fed into the model. If `eval_input_fn` is `None`,
