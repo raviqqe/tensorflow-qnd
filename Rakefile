@@ -65,7 +65,12 @@ task_in_venv :mnist_example do
 end
 
 
-task :test => %i(module_test script_test mnist_example)
+task_in_venv :mnist_simple do
+  vsh 'cd examples/mnist_simple && ./mnist.sh'
+end
+
+
+task :test => %i(module_test script_test mnist_simple mnist_example)
 
 
 task_in_venv :readme_usage do
