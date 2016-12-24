@@ -7,6 +7,7 @@ import tensorflow as tf
 logging.getLogger().setLevel(logging.INFO)
 
 qnd.add_flag("use_eval_input_fn", action="store_true")
+qnd.add_flag("use_dict_inputs", action="store_true")
 qnd.add_flag("use_model_fn_ops", action="store_true")
 
 
@@ -22,7 +23,12 @@ def read_file(filename_queue):
 
     image = tf.decode_raw(features["image_raw"], tf.uint8)
     image.set_shape([28**2])
-    return tf.to_float(image) / 255 - 0.5, features["label"]
+    image = tf.to_float(image) / 255 - 0.5
+    number = features["label"]
+
+    return (({"image": image}, {"number": number})
+            if qnd.FLAGS.use_dict_inputs else
+            (image, number))
 
 
 def minimize(loss):
