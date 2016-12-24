@@ -8,7 +8,7 @@ _FLAG_NAMES = set()
 def add_flag(name, *args, **kwargs):
     """Add a flag.
 
-    Added flags can be accessed by `FLAGS` global variable.
+    Added flags can be accessed by `FLAGS` module variable.
     (e.g. `FLAGS.my_flag_name`)
 
     Args:
