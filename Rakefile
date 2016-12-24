@@ -3,7 +3,7 @@ TENSORFLOW_URL = 'https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow
 
 
 def task_in_venv name, packages=[TENSORFLOW_URL], &block
-  task name => %i(clean venv) do
+  task name => %i(clean venv) do |t|
     def vsh *args, **kwargs
       sh([". #{VENV_DIR}/bin/activate &&", *args.map{ |x| x.to_s }].join(' '),
          **kwargs)
@@ -11,7 +11,7 @@ def task_in_venv name, packages=[TENSORFLOW_URL], &block
 
     vsh "pip3 install --upgrade #{packages.join ' '}"
     vsh 'python3 setup.py install'
-    block.call
+    block.call t
   end
 end
 
@@ -51,7 +51,7 @@ task_in_venv :script_test do
 end
 
 
-task_in_venv :mnist_example do
+task_in_venv :mnist_full do |t|
   [
     '',
     'use_eval_input_fn',
@@ -59,18 +59,18 @@ task_in_venv :mnist_example do
     'use_model_fn_ops'
   ].each do |flag|
     ['clean', flag.empty? ? '' : "#{flag}=--#{flag}"].each do |args|
-      vsh "make -C examples/mnist #{args}"
+      vsh "make -C examples/#{t.name} #{args}"
     end
   end
 end
 
 
-task_in_venv :mnist_simple do
-  vsh 'cd examples/mnist_simple && ./mnist.sh'
+task_in_venv :mnist_simple do |t|
+  vsh "cd examples/#{t.name} && ./mnist.sh"
 end
 
 
-task :test => %i(module_test script_test mnist_simple mnist_example)
+task :test => %i(module_test script_test mnist_simple mnist_full)
 
 
 task_in_venv :readme_usage do
