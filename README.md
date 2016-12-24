@@ -74,6 +74,9 @@ run(model_fn, train_input_fn, eval_input_fn=None)
 add_flag(name, *args, **kwargs)
     Add a flag.
 
+    Added flags can be accessed by `FLAGS` global variable.
+    (e.g. `FLAGS.my_flag_name`)
+
     Args:
         name: Flag name. Real flag name will be `"--{}".format(name)`.
         *args, **kwargs: The rest arguments are the same as

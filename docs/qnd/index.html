@@ -1053,6 +1053,8 @@ __version__ = "0.0.4"
     
   
     <div class="desc"><p>Add a flag.</p>
+<p>Added flags can be accessed by <code>FLAGS</code> global variable.
+(e.g. <code>FLAGS.my_flag_name</code>)</p>
 <p>Args:
     name: Flag name. Real flag name will be <code>"--{}".format(name)</code>.
     <em>args, </em>*kwargs: The rest arguments are the same as
@@ -1062,6 +1064,9 @@ __version__ = "0.0.4"
   <div id="source-qnd.add_flag" class="source">
     <pre><code>def add_flag(name, *args, **kwargs):
     """Add a flag.
+
+    Added flags can be accessed by `FLAGS` global variable.
+    (e.g. `FLAGS.my_flag_name`)
 
     Args:
         name: Flag name. Real flag name will be `"--{}".format(name)`.
