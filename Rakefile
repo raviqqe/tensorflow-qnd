@@ -1,3 +1,4 @@
+README_FILE = 'README.md'
 VENV_DIR = '.venv'
 TENSORFLOW_URL = 'https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.0-cp35-cp35m-linux_x86_64.whl'
 
@@ -81,13 +82,21 @@ task_in_venv :readme_usage do
     line !~ /^None$/ and line !~ /^Help on .*$/
   end.join("\n").strip
 
-  readme_file = 'README.md'
-  md = File.read(readme_file)
-  File.write(readme_file,
+  md = File.read(README_FILE)
+  File.write(README_FILE,
              (md.match(/\A.*## Usage\n\n```\n/m)[0] +
               usage.strip +
               md.match(/\n```\n\n[^\n]*\n\n\n## Examples.*\Z/m)[0])
               .gsub(/^ *$/, '').gsub(/\n(\n\n\n)/m, '\1'))
+end
+
+
+task_in_venv :readme_examples do
+  md = File.read(README_FILE)
+  File.write(README_FILE,
+             (md.match(/\A.*## Examples\n\n```python\n/m)[0] +
+              File.read('examples/mnist_simple/mnist_simple.py').strip +
+              md.match(/\n```\n\n[^\n]*\n\n\n## License.*\Z/m)[0]))
 end
 
 
@@ -96,7 +105,7 @@ task_in_venv :html, ['pdoc', TENSORFLOW_URL] do
 end
 
 
-task :doc => %i(html readme_usage)
+task :doc => %i(html readme_usage readme_examples)
 
 
 task_in_venv :format, %w(autopep8) do
