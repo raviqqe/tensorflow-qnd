@@ -54,6 +54,7 @@ def mnist_model(image, number):
 
     return predictions, loss, train_op, eval_metrics
 
+
 run = qnd.def_run()
 
 
