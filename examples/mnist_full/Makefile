@@ -2,8 +2,9 @@ var_dir = var
 data_dir = ${var_dir}/data
 train_file = ${data_dir}/train.tfrecords
 valid_file = ${data_dir}/validation.tfrecords
+script = mnist.py
 
-mnist = python3 mnist.py \
+mnist = python3 ${script} \
 	--num_epochs 2 \
 	--train_file ${train_file} \
 	--eval_file ${valid_file} \
@@ -14,13 +15,15 @@ mnist = python3 mnist.py \
 	--master_host localhost:2049 \
 	--ps_hosts localhost:4242 \
 	--task_type
+kill_servers = kill $$(ps x | grep ${script} | grep -v grep | awk '{print $$1}') || :
 
 
 .PHONY: main
 main: ${train_file} ${valid_file}
-	kill $$(ps x | grep mnist.py | grep -v grep | awk '{print $$1}') || :
+	${kill_servers}
 	${mnist} ps > ${var_dir}/ps.log 2>&1 &
 	${mnist} master
+	${kill_servers}
 
 
 ${train_file} ${valid_file}:
