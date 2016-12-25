@@ -9,6 +9,8 @@ Quick and Distributed TensorFlow command framework
 
 tensorflow-qnd is a TensorFlow framework to create commands to train and
 evaluate models on multiple computers.
+The framework is built on top of
+`tensorflow.contrib.learn.python.learn.learn_runner` and relevant modules.
 While made to be used on multiple computers in a cluster, this library is also
 useful to exploit multiple GPUs on a single machine.
 
