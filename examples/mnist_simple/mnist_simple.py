@@ -40,7 +40,8 @@ def model(image, number):
     predictions = tf.argmax(h, axis=1)
 
     return predictions, loss, minimize(loss), {
-        "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
+        "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
+                                                          number)[1],
     }
 
 

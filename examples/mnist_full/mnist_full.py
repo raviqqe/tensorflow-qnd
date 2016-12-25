@@ -76,7 +76,8 @@ def model(image, number, mode):
     predictions = tf.argmax(h, axis=1)
     train_op = minimize(loss)
     eval_metric_ops = {
-        "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
+        "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
+                                                          number)[1],
     }
 
     if env("use_model_fn_ops"):
