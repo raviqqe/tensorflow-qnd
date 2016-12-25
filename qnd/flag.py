@@ -14,7 +14,7 @@ def add_flag(name, *args, **kwargs):
     - Args
         - `name`: Flag name. Real flag name will be `"--{}".format(name)`.
         - `*args`, `**kwargs`: The rest arguments are the same as
-            `argparse.add_argument()`.
+            `argparse.ArgumentParser.add_argument()`.
     """
     global _FLAG_NAMES
 
@@ -36,13 +36,22 @@ class FlagAdder:
     """Manage addition of flags."""
 
     def __init__(self):
+        """Create a `FlagAdder` instance."""
         self._flags = []
 
     def add_flag(self, name, *args, **kwargs):
+        """Add a flag.
+
+        See `add_flag()`.
+        """
         add_flag(name, *args, **kwargs)
         self._flags.append(name)
 
     def add_required_flag(self, name, *args, **kwargs):
+        """Add a required flag.
+
+        See `add_required_flag()`.
+        """
         self.add_flag(name, *args, required=True, **kwargs)
 
     @property

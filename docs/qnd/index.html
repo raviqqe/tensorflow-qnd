@@ -1059,7 +1059,7 @@ __version__ = "0.0.5"
 <li>Args<ul>
 <li><code>name</code>: Flag name. Real flag name will be <code>"--{}".format(name)</code>.</li>
 <li><code>*args</code>, <code>**kwargs</code>: The rest arguments are the same as
-    <code>argparse.add_argument()</code>.</li>
+    <code>argparse.ArgumentParser.add_argument()</code>.</li>
 </ul>
 </li>
 </ul></div>
@@ -1075,7 +1075,7 @@ __version__ = "0.0.5"
     - Args
         - `name`: Flag name. Real flag name will be `"--{}".format(name)`.
         - `*args`, `**kwargs`: The rest arguments are the same as
-            `argparse.add_argument()`.
+            `argparse.ArgumentParser.add_argument()`.
     """
     global _FLAG_NAMES
 
@@ -1223,13 +1223,22 @@ default.</p></div>
     """Manage addition of flags."""
 
     def __init__(self):
+        """Create a `FlagAdder` instance."""
         self._flags = []
 
     def add_flag(self, name, *args, **kwargs):
+        """Add a flag.
+
+        See `add_flag()`.
+        """
         add_flag(name, *args, **kwargs)
         self._flags.append(name)
 
     def add_required_flag(self, name, *args, **kwargs):
+        """Add a required flag.
+
+        See `add_required_flag()`.
+        """
         self.add_flag(name, *args, required=True, **kwargs)
 
     @property
@@ -1261,11 +1270,12 @@ default.</p></div>
 
     
   
-    <div class="desc"><p>Initialize self.  See help(type(self)) for accurate signature.</p></div>
+    <div class="desc"><p>Create a <code>FlagAdder</code> instance.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.__init__', this);">Show source &equiv;</a></p>
   <div id="source-qnd.FlagAdder.__init__" class="source">
     <pre><code>def __init__(self):
+    """Create a `FlagAdder` instance."""
     self._flags = []
 </code></pre>
   </div>
@@ -1282,10 +1292,15 @@ default.</p></div>
 
     
   
+    <div class="desc"><p>Add a flag.</p>
+<p>See <code>add_flag()</code>.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.add_flag', this);">Show source &equiv;</a></p>
   <div id="source-qnd.FlagAdder.add_flag" class="source">
     <pre><code>def add_flag(self, name, *args, **kwargs):
+    """Add a flag.
+    See `add_flag()`.
+    """
     add_flag(name, *args, **kwargs)
     self._flags.append(name)
 </code></pre>
@@ -1303,10 +1318,15 @@ default.</p></div>
 
     
   
+    <div class="desc"><p>Add a required flag.</p>
+<p>See <code>add_required_flag()</code>.</p></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.FlagAdder.add_required_flag', this);">Show source &equiv;</a></p>
   <div id="source-qnd.FlagAdder.add_required_flag" class="source">
     <pre><code>def add_required_flag(self, name, *args, **kwargs):
+    """Add a required flag.
+    See `add_required_flag()`.
+    """
     self.add_flag(name, *args, required=True, **kwargs)
 </code></pre>
   </div>
