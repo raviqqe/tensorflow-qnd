@@ -52,8 +52,10 @@ task_in_venv :script_test do
 end
 
 
-task_in_venv :mnist_simple do |t|
-  vsh "cd examples/#{t.name} && ./main.sh"
+%i(mnist_simple mnist_multi_workers).each do |name|
+  task_in_venv name do
+    vsh "cd examples/#{name} && ./main.sh"
+  end
 end
 
 
@@ -71,7 +73,13 @@ task_in_venv :mnist_full do |t|
 end
 
 
-task :test => %i(module_test script_test mnist_simple mnist_full)
+task :test => %i(
+  module_test
+  script_test
+  mnist_simple
+  mnist_multi_workers
+  mnist_full
+)
 
 
 task_in_venv :readme_examples do
