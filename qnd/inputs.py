@@ -25,11 +25,13 @@ def _add_file_flag(mode):
 def def_def_def_input_fn(mode):
     assert isinstance(mode, Mode)
 
+    BATCH_SIZE = 64
+
     def def_def_input_fn(batch_inputs=True, prepare_filename_queues=True):
         if batch_inputs:
-            add_flag("batch_size", type=int, default=64,
+            add_flag("batch_size", type=int, default=BATCH_SIZE,
                      help="Mini-batch size")
-            add_flag("batch_queue_capacity", type=int, default=1024,
+            add_flag("batch_queue_capacity", type=int, default=BATCH_SIZE * 16,
                      help="Batch queue capacity")
 
         if prepare_filename_queues:
