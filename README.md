@@ -125,7 +125,7 @@ optional arguments:
                         Comma-separated list of $hostname:$port pairs of
                         worker hosts (default: [])
   --task_type TASK_TYPE
-                        Must be in {'master', 'worker', 'ps'} (aka job)
+                        Must be in ['master', 'ps', 'worker'] (aka job)
                         (default: None)
   --task_index TASK_INDEX
                         Task index within a job (default: 0)

@@ -33,7 +33,7 @@ def def_config():
     add_hosts_flag("worker_hosts")
 
     add_required_flag(
-        "task_type", help="Must be in {} (aka job)".format(_JOBS))
+        "task_type", help="Must be in {} (aka job)".format(sorted(_JOBS)))
     add_flag("task_index", type=int, default=0, help="Task index within a job")
 
     # RunConfig flags
