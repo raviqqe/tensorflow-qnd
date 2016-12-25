@@ -66,6 +66,7 @@ task_in_venv :mnist_full do |t|
     'use_eval_input_fn',
     'use_dict_inputs',
     'use_model_fn_ops',
+    'self_batch',
   ].each do |flag|
     ['clean', (flag and "#{flag}=yes")].each do |args|
       vsh "make -C examples/#{t.name} #{args}"
