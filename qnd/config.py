@@ -77,7 +77,7 @@ def def_config():
             "cluster": {
                 "master": [FLAGS.master_host],
                 "ps": FLAGS.ps_hosts,
-                "worker": [FLAGS.master_host, *FLAGS.worker_hosts],
+                "worker": FLAGS.worker_hosts or [FLAGS.master_host],
             },
             "task": {
                 "type": FLAGS.task_type,
