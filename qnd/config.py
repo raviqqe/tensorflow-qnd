@@ -26,7 +26,7 @@ def def_config():
             type=(lambda string: string.split(',')),
             default=[],
             help="Comma-separated list of $hostname:$port pairs of {}"
-            .format(name.replace("_", " ")),
+                 .format(name.replace("_", " ")),
             **kwargs)
 
     add_hosts_flag("ps_hosts", required=True)
