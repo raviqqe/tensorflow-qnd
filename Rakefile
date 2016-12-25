@@ -1,12 +1,13 @@
 README_FILE = 'README.md'
 VENV_DIR = '.venv'
 TENSORFLOW_URL = 'https://storage.googleapis.com/tensorflow/linux/cpu/tensorflow-0.12.0-cp35-cp35m-linux_x86_64.whl'
+IN_VENV = ". #{VENV_DIR}/bin/activate &&"
 
 
 def task_in_venv name, packages=[TENSORFLOW_URL], &block
   task name => %i(clean venv) do |t|
     def vsh *args, **kwargs
-      sh([". #{VENV_DIR}/bin/activate &&", *args.map{ |x| x.to_s }].join(' '),
+      sh([IN_VENV, *args.map{ |x| x.to_s }].join(' '),
          **kwargs)
     end
 
@@ -84,10 +85,25 @@ task :test => %i(
 
 task_in_venv :readme_examples do
   md = File.read(README_FILE)
-  File.write(README_FILE,
-             (md.match(/\A.*## Examples\n\n```python\n/m)[0] +
-              File.read('examples/mnist_simple/mnist_simple.py').strip +
-              md.match(/\n```\n\n[^\n]*\n\n\n## License.*\Z/m)[0]))
+
+  File.write(README_FILE, %(
+#{md.match(/(\A.*## Examples)/m)[0]}
+
+```python
+#{File.read('examples/mnist_simple/mnist_simple.py').strip}
+```
+
+With the code above, you can create a command with the following interface.
+
+```
+#{`#{IN_VENV} python3 examples/mnist_simple/mnist_simple.py -h`.strip}
+```
+
+See also [examples](examples) directory.
+
+
+#{md.match(/## License.*\Z/m)[0].strip}
+).lstrip)
 end
 
 
