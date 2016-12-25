@@ -36,7 +36,7 @@ main() {
   mnist ps > $var_dir/ps.log 2>&1 &
 
   worker_id=0
-  for worker in echo $(echo $workers | tr , ' ')
+  for worker in $(echo $workers | tr , ' ')
   do
     mnist worker --task_index $worker_id > $var_dir/worker-$worker_id.log 2>&1 &
     worker_id=$(expr $worker_id + 1)
