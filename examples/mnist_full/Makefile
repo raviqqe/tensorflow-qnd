@@ -2,7 +2,7 @@ var_dir = var
 data_dir = ${var_dir}/data
 train_file = ${data_dir}/train.tfrecords
 valid_file = ${data_dir}/validation.tfrecords
-script = mnist.py
+script = mnist_full.py
 
 mnist = python3 ${script} \
 	--train_steps 1000 \
