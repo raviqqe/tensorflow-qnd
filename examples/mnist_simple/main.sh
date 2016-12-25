@@ -32,7 +32,7 @@ main() {
   kill_servers
 
   mnist ps > $var_dir/ps.log 2>&1 &
-  mnist master
+  mnist master &&
 
   kill_servers
 }
