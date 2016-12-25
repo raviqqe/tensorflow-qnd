@@ -63,7 +63,7 @@ def minimize(loss):
     return tf.contrib.layers.optimize_loss(
         loss,
         tf.contrib.framework.get_global_step(),
-        0.01,
+        0.001,
         "Adam")
 
 
