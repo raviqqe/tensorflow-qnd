@@ -8,7 +8,7 @@ workers=localhost:19310,localhost:10019
 
 mnist() {
   python3 $script \
-    --num_epochs 2 \
+    --train_steps 1000 \
     --train_file $data_dir/train.tfrecords \
     --eval_file $data_dir/validation.tfrecords \
     --output_dir $var_dir/output \

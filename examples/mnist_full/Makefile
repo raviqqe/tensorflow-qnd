@@ -5,7 +5,7 @@ valid_file = ${data_dir}/validation.tfrecords
 script = mnist.py
 
 mnist = python3 ${script} \
-	--num_epochs 2 \
+	--train_steps 1000 \
 	--train_file ${train_file} \
 	--eval_file ${valid_file} \
 	--output_dir ${var_dir}/output \

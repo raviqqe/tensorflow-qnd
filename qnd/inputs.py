@@ -93,8 +93,6 @@ def def_read_files(mode):
 def def_file_pattern_to_name_queue(mode):
     assert isinstance(mode, Mode)
 
-    if mode == Mode.TRAIN:
-        add_flag("num_epochs", type=int, help="Number of epochs")
     add_flag("filename_queue_capacity", type=int, default=32,
              help="Capacity of filename queues of {} and {} data"
                   .format(*[mode.value for mode in Mode]))
@@ -103,7 +101,7 @@ def def_file_pattern_to_name_queue(mode):
     def file_pattern_to_name_queue(pattern):
         return tf.train.string_input_producer(
             tf.train.match_filenames_once(pattern),
-            num_epochs=(FLAGS.num_epochs if mode == Mode.TRAIN else 1),
+            num_epochs=(None if mode == Mode.TRAIN else 1),
             shuffle=(mode == Mode.TRAIN),
             capacity=FLAGS.filename_queue_capacity)
 
