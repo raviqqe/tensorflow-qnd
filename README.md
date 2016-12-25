@@ -18,7 +18,7 @@ useful to exploit multiple GPUs on a single machine.
 Python 3.5+ and TensorFlow 0.12+ are required.
 
 ```
-$ pip3 install --user --upgrade tensorflow-qnd
+pip3 install --user --upgrade tensorflow-qnd
 ```
 
 
