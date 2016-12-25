@@ -62,12 +62,12 @@ end
 
 task_in_venv :mnist_full do |t|
   [
-    '',
+    nil,
     'use_eval_input_fn',
     'use_dict_inputs',
-    'use_model_fn_ops'
+    'use_model_fn_ops',
   ].each do |flag|
-    ['clean', flag.empty? ? '' : "#{flag}=--#{flag}"].each do |args|
+    ['clean', (flag and "#{flag}=yes")].each do |args|
       vsh "make -C examples/#{t.name} #{args}"
     end
   end

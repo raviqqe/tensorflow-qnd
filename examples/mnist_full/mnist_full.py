@@ -1,14 +1,20 @@
 import logging
+import os
+import sys
 
 import qnd
 import tensorflow as tf
 
 
-logging.getLogger().setLevel(logging.INFO)
+def env(name):
+    assert name in ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops"]
 
-qnd.add_flag("use_eval_input_fn", action="store_true")
-qnd.add_flag("use_dict_inputs", action="store_true")
-qnd.add_flag("use_model_fn_ops", action="store_true")
+    env_is_set = name in os.environ
+
+    if env_is_set:
+        print("Environment variable, {} is set.".format(name), file=sys.stderr)
+
+    return env_is_set
 
 
 def read_file(filename_queue):
@@ -27,7 +33,7 @@ def read_file(filename_queue):
     number = features["label"]
 
     return (({"image": image}, {"number": number})
-            if qnd.FLAGS.use_dict_inputs else
+            if env("use_dict_inputs") else
             (image, number))
 
 
@@ -51,7 +57,7 @@ def model(image, number, mode):
         "accuracy": tf.reduce_mean(tf.to_float(tf.equal(predictions, number)))
     }
 
-    if qnd.FLAGS.use_model_fn_ops:
+    if env("use_model_fn_ops"):
         return tf.contrib.learn.estimators.model_fn.ModelFnOps(
             predictions=predictions,
             loss=loss,
@@ -66,7 +72,9 @@ run = qnd.def_run()
 
 
 def main():
-    run(model, read_file, read_file if qnd.FLAGS.use_eval_input_fn else None)
+    logging.getLogger().setLevel(logging.INFO)
+
+    run(model, read_file, read_file if env("use_eval_input_fn") else None)
 
 
 if __name__ == "__main__":
