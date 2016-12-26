@@ -36,13 +36,22 @@ def def_def_def_input_fn(mode):
 
         if prepare_filename_queues:
             file_flag = _add_file_flag(mode.value)
-            read_files = def_read_files(mode)
+            filenames_to_queue = def_filenames_to_queue(mode)
 
         def def_input_fn(user_input_fn):
+            def initialize_filename_variables():
+                return {
+                    mode: tf.train.match_filenames_once(
+                        getattr(FLAGS, "{}_file".format(mode.value)),
+                        name="{}_filenames".format(mode.value))
+                    for mode in Mode
+                }
+
             @util.func_scope
             def input_fn():
                 if prepare_filename_queues:
-                    x, y = user_input_fn(read_files(getattr(FLAGS, file_flag)))
+                    x, y = user_input_fn(filenames_to_queue(
+                        initialize_filename_variables()[mode]))
                 else:
                     x, y = user_input_fn()
 
@@ -82,17 +91,7 @@ def_def_train_input_fn = def_def_def_input_fn(Mode.TRAIN)
 def_def_eval_input_fn = def_def_def_input_fn(Mode.EVAL)
 
 
-def def_read_files(mode):
-    file_pattern_to_name_queue = def_file_pattern_to_name_queue(mode)
-
-    @util.func_scope
-    def read_files(file_pattern):
-        return file_pattern_to_name_queue(file_pattern)
-
-    return read_files
-
-
-def def_file_pattern_to_name_queue(mode):
+def def_filenames_to_queue(mode):
     assert isinstance(mode, Mode)
 
     add_flag("filename_queue_capacity", type=int, default=32,
@@ -100,11 +99,11 @@ def def_file_pattern_to_name_queue(mode):
                   .format(*[mode.value for mode in Mode]))
 
     @util.func_scope
-    def file_pattern_to_name_queue(pattern):
+    def filenames_to_queue(filenames):
         return tf.train.string_input_producer(
-            tf.train.match_filenames_once(pattern),
+            filenames,
             num_epochs=(None if mode == Mode.TRAIN else 1),
             shuffle=(mode == Mode.TRAIN),
             capacity=FLAGS.filename_queue_capacity)
 
-    return file_pattern_to_name_queue
+    return filenames_to_queue
