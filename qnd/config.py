@@ -18,7 +18,7 @@ def def_config():
     # ClusterConfig flags
 
     add_required_flag("master_host",
-                      help="$hostname:$port pair of a master host")
+                      help="HOSTNAME:PORT pair of a master host")
 
     def add_hosts_flag(name, **kwargs):
         return add_flag(
