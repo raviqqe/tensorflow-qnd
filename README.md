@@ -173,9 +173,10 @@ training step.
 
 ### Use streaming metrics for `eval_metric_ops`
 
-When non-streaming ones such as `tf.contrib.metrics.accuracy` are used as a
-return value `eval_metric_ops` of your `model_fn` or arguments of `ModelFnOps`,
-their values will be ones of the last batch in every evaluation step.
+When non-streaming ones such as `tf.contrib.metrics.accuracy` are used in a
+return value `eval_metric_ops` of your `model_fn` or as arguments of
+`ModelFnOps`, their values will be ones of the last batch in every evaluation
+step.
 
 
 ## License
