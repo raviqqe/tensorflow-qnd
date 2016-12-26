@@ -162,6 +162,22 @@ optional arguments:
 See also [examples](examples) directory.
 
 
+## Caveats
+
+### Necessary update of a global step variable
+
+As done in [all examples](examples), you must get a global step variable
+with `tf.contrib.framework.get_global_step()` and update (increment) it in each
+training step.
+
+
+### Use streaming metrics for `eval_metric_ops`
+
+When non-streaming ones such as `tf.contrib.metrics.accuracy` are used as a
+return value `eval_metric_ops` of your `model_fn` or arguments of `ModelFnOps`,
+their values will be ones of the last batch in every evaluation step.
+
+
 ## License
 
 [The Unlicense](https://unlicense.org)

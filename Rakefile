@@ -107,7 +107,7 @@ With the code above, you can create a command with the following interface.
 See also [examples](examples) directory.
 
 
-#{md.match(/## License.*\Z/m)[0].strip}
+#{md.match(/## Caveats.*\Z/m)[0].strip}
 ).lstrip)
 end
 
