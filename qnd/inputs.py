@@ -39,19 +39,14 @@ def def_def_def_input_fn(mode):
             filenames_to_queue = def_filenames_to_queue(mode)
 
         def def_input_fn(user_input_fn):
-            def initialize_filename_variables():
-                return {
-                    mode: tf.train.match_filenames_once(
-                        getattr(FLAGS, "{}_file".format(mode.value)),
-                        name="{}_filenames".format(mode.value))
-                    for mode in Mode
-                }
-
             @util.func_scope
             def input_fn():
                 if prepare_filename_queues:
-                    x, y = user_input_fn(filenames_to_queue(
-                        initialize_filename_variables()[mode]))
+                    x, y = user_input_fn(filenames_to_queue({
+                        mode: tf.train.match_filenames_once(
+                            getattr(FLAGS, "{}_file".format(mode.value)),
+                            name="{}_filenames".format(mode.value))
+                        for mode in Mode}[mode]))
                 else:
                     x, y = user_input_fn()
 
