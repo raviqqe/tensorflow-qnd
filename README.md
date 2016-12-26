@@ -159,7 +159,7 @@ optional arguments:
                         (e.g. eval/*.tfrecords) (default: None)
 ```
 
-See also [examples](examples) directory.
+Explore [examples](examples) directory for more and see how to run them.
 
 
 ## Caveats

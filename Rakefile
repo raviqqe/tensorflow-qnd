@@ -104,7 +104,7 @@ With the code above, you can create a command with the following interface.
 #{`#{IN_VENV} python3 examples/mnist_simple/mnist_simple.py -h`.strip}
 ```
 
-See also [examples](examples) directory.
+Explore [examples](examples) directory for more and see how to run them.
 
 
 #{md.match(/## Caveats.*\Z/m)[0].strip}
