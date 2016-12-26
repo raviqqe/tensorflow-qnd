@@ -121,7 +121,7 @@ optional arguments:
                         Minimum evaluation frequency in number of model
                         savings (default: 1)
   --master_host MASTER_HOST
-                        $hostname:$port pair of a master host (default: None)
+                        HOSTNAME:PORT pair of a master host (default: None)
   --ps_hosts PS_HOSTS   Comma-separated list of $hostname:$port pairs of ps
                         hosts (default: [])
   --worker_hosts WORKER_HOSTS
