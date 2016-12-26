@@ -1,6 +1,5 @@
 import logging
 import os
-import sys
 
 import qnd
 import tensorflow as tf
@@ -9,17 +8,18 @@ import tensorflow as tf
 BATCH_SIZE = 64
 
 
+ENV_FLAGS = ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops",
+             "self_batch", "self_filename_queue"]
+
+
 def env(name):
-    assert name in ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops",
-                    "self_batch", "self_filename_queue"]
+    assert name in ENV_FLAGS
+    return name in os.environ
 
-    env_is_set = name in os.environ
 
-    if env_is_set:
-        print("Environment variable, {} is set.".format(name), file=sys.stderr)
-
-    return env_is_set
-
+for name in ENV_FLAGS:
+    if env(name):
+        print("Environment variable, {} is set.".format(name))
 
 if env("self_filename_queue"):
     qnd.add_required_flag("train_file")
