@@ -102,8 +102,9 @@ def model(image, number, mode):
     return predictions, loss, train_op, eval_metric_ops
 
 
-run = qnd.def_run(batch_inputs=(not env("self_batch")),
-                  prepare_filename_queues=(not env("self_filename_queue")))
+train_and_evaluate = qnd.def_train_and_evaluate(
+    batch_inputs=(not env("self_batch")),
+    prepare_filename_queues=(not env("self_filename_queue")))
 
 
 def main():
@@ -122,9 +123,9 @@ def main():
 
         return input_fn
 
-    run(model,
-        def_input_fn(train_batch,
-                     lambda: filename_queue(train=True)),
+    train_and_evaluate(
+        model,
+        def_input_fn(train_batch, lambda: filename_queue(train=True)),
         (def_input_fn(eval_batch, lambda: filename_queue())
          if env("use_eval_input_fn") else
          None))

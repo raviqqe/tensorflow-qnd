@@ -45,11 +45,11 @@ def model(image, number):
     }
 
 
-run = qnd.def_run()
+train_and_evaluate = qnd.def_train_and_evaluate()
 
 
 def main():
-    run(model, read_file)
+    train_and_evaluate(model, read_file)
 
 
 if __name__ == "__main__":

@@ -982,7 +982,7 @@ table {
   <ul>
     <li class="mono"><a href="#qnd.add_flag">add_flag</a></li>
     <li class="mono"><a href="#qnd.add_required_flag">add_required_flag</a></li>
-    <li class="mono"><a href="#qnd.def_run">def_run</a></li>
+    <li class="mono"><a href="#qnd.def_train_and_evaluate">def_train_and_evaluate</a></li>
   </ul>
 
     </li>
@@ -1022,9 +1022,10 @@ table {
     <pre><code>"""Quick and Distributed TensorFlow command framework"""
 
 from .flag import *
-from .run import def_run
+from .train_and_evaluate import def_train_and_evaluate
 
-__all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder", "def_run"]
+__all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
+           "def_train_and_evaluate"]
 __version__ = "0.0.8"
 </code></pre>
   </div>
@@ -1118,15 +1119,15 @@ default.</p></div>
   
       
   <div class="item">
-    <div class="name def" id="qnd.def_run">
-    <p>def <span class="ident">def_run</span>(</p><p>batch_inputs=True, prepare_filename_queues=True)</p>
+    <div class="name def" id="qnd.def_train_and_evaluate">
+    <p>def <span class="ident">def_train_and_evaluate</span>(</p><p>batch_inputs=True, prepare_filename_queues=True)</p>
     </div>
     
 
     
   
-    <div class="desc"><p>Define <code>run()</code> function.</p>
-<p>See also <code>help(def_run())</code>.</p>
+    <div class="desc"><p>Define <code>train_and_evaluate()</code> function.</p>
+<p>See also <code>help(def_train_and_evaluate())</code>.</p>
 <ul>
 <li>
 <p>Args</p>
@@ -1141,17 +1142,17 @@ default.</p></div>
 <li>
 <p>Returns</p>
 <ul>
-<li><code>run()</code> function.</li>
+<li><code>train_and_evaluate()</code> function.</li>
 </ul>
 </li>
 </ul></div>
   <div class="source_cont">
-  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_run', this);">Show source &equiv;</a></p>
-  <div id="source-qnd.def_run" class="source">
-    <pre><code>def def_run(batch_inputs=True, prepare_filename_queues=True):
-    """Define `run()` function.
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_train_and_evaluate', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.def_train_and_evaluate" class="source">
+    <pre><code>def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
+    """Define `train_and_evaluate()` function.
 
-    See also `help(def_run())`.
+    See also `help(def_train_and_evaluate())`.
 
     - Args
         - `batch_inputs`: If `True`, create batches from Tensors returned from
@@ -1161,7 +1162,7 @@ default.</p></div>
             arguments.
 
     - Returns
-        - `run()` function.
+        - `train_and_evaluate()` function.
     """
     add_flag("output_dir",
              default="output",
@@ -1170,7 +1171,7 @@ default.</p></div>
     def_experiment_fn = def_def_experiment_fn(batch_inputs,
                                               prepare_filename_queues)
 
-    def run(model_fn, train_input_fn, eval_input_fn=None):
+    def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
         """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
 
         - Args
@@ -1201,7 +1202,7 @@ default.</p></div>
             def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
             FLAGS.output_dir)
 
-    return run
+    return train_and_evaluate
 </code></pre>
   </div>
 </div>

@@ -4,10 +4,10 @@ from .experiment import def_def_experiment_fn
 from .flag import FLAGS, add_flag
 
 
-def def_run(batch_inputs=True, prepare_filename_queues=True):
-    """Define `run()` function.
+def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
+    """Define `train_and_evaluate()` function.
 
-    See also `help(def_run())`.
+    See also `help(def_train_and_evaluate())`.
 
     - Args
         - `batch_inputs`: If `True`, create batches from Tensors returned from
@@ -17,7 +17,7 @@ def def_run(batch_inputs=True, prepare_filename_queues=True):
             arguments.
 
     - Returns
-        - `run()` function.
+        - `train_and_evaluate()` function.
     """
     add_flag("output_dir",
              default="output",
@@ -26,7 +26,7 @@ def def_run(batch_inputs=True, prepare_filename_queues=True):
     def_experiment_fn = def_def_experiment_fn(batch_inputs,
                                               prepare_filename_queues)
 
-    def run(model_fn, train_input_fn, eval_input_fn=None):
+    def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
         """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
 
         - Args
@@ -57,4 +57,4 @@ def def_run(batch_inputs=True, prepare_filename_queues=True):
             def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
             FLAGS.output_dir)
 
-    return run
+    return train_and_evaluate

@@ -13,11 +13,11 @@ def input_fn(q):
     return tf.zeros(shape, tf.float32), tf.ones(shape, tf.int32)
 
 
-run = qnd.def_run()
+train_and_evaluate = qnd.def_train_and_evaluate()
 
 
 def main():
-    run(model_fn, input_fn)
+    train_and_evaluate(model_fn, input_fn)
 
 
 if __name__ == "__main__":
