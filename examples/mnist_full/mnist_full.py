@@ -26,9 +26,14 @@ if env("self_filename_queue"):
     qnd.add_required_flag("eval_file")
 
 
-def filename_queue(pattern, train=False):
+def filename_queue(train=False):
+    train_filenames = tf.train.match_filenames_once(
+        qnd.FLAGS.train_file, name="train_filenames")
+    eval_filenames = tf.train.match_filenames_once(
+        qnd.FLAGS.eval_file, name="eval_filenames")
+
     return tf.train.string_input_producer(
-        tf.train.match_filenames_once(pattern),
+        train_filenames if train else eval_filenames,
         num_epochs=(None if train else 1),
         shuffle=train)
 
@@ -119,8 +124,8 @@ def main():
 
     run(model,
         def_input_fn(train_batch,
-                     lambda: filename_queue(qnd.FLAGS.train_file, train=True)),
-        (def_input_fn(eval_batch, lambda: filename_queue(qnd.FLAGS.eval_file))
+                     lambda: filename_queue(train=True)),
+        (def_input_fn(eval_batch, lambda: filename_queue())
          if env("use_eval_input_fn") else
          None))
 
