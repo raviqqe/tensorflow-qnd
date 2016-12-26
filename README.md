@@ -182,3 +182,8 @@ step.
 ## License
 
 [The Unlicense](https://unlicense.org)
+
+
+## References
+
+- [Distributed TensorFlow | TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
