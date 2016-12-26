@@ -63,12 +63,16 @@ end
 task_in_venv :mnist_full do |t|
   [
     nil,
-    'use_eval_input_fn',
-    'use_dict_inputs',
-    'use_model_fn_ops',
-    'self_batch',
-  ].each do |flag|
-    ['clean', (flag and "#{flag}=yes")].each do |args|
+    %i(use_eval_input_fn),
+    %i(use_dict_inputs),
+    %i(use_model_fn_ops),
+    %i(self_batch),
+    %i(self_filename_queue use_eval_input_fn),
+  ].each do |flags|
+    [
+      'clean',
+      (flags and flags.map{ |flag| "#{flag}=yes"}.join(' ')),
+    ].each do |args|
       vsh "make -C examples/#{t.name} #{args}"
     end
   end

@@ -11,7 +11,7 @@ BATCH_SIZE = 64
 
 def env(name):
     assert name in ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops",
-                    "self_batch"]
+                    "self_batch", "self_filename_queue"]
 
     env_is_set = name in os.environ
 
@@ -21,22 +21,28 @@ def env(name):
     return env_is_set
 
 
-def train_batch(input_fn):
-    def batched_input_fn(filename_queue):
-        capacity = BATCH_SIZE * 10
-        return tf.train.shuffle_batch(input_fn(filename_queue),
-                                      batch_size=BATCH_SIZE,
-                                      capacity=capacity,
-                                      min_after_dequeue=capacity // 2)
-
-    return batched_input_fn
+if env("self_filename_queue"):
+    qnd.add_required_flag("train_file")
+    qnd.add_required_flag("eval_file")
 
 
-def eval_batch(input_fn):
-    def batched_input_fn(filename_queue):
-        return tf.train.batch(input_fn(filename_queue), batch_size=BATCH_SIZE)
+def filename_queue(pattern, train=False):
+    return tf.train.string_input_producer(
+        tf.train.match_filenames_once(pattern),
+        num_epochs=(None if train else 1),
+        shuffle=train)
 
-    return batched_input_fn
+
+def train_batch(*tensors):
+    capacity = BATCH_SIZE * 10
+    return tf.train.shuffle_batch(tensors,
+                                  batch_size=BATCH_SIZE,
+                                  capacity=capacity,
+                                  min_after_dequeue=capacity // 2)
+
+
+def eval_batch(*tensors):
+    return tf.train.batch(tensors, batch_size=BATCH_SIZE)
 
 
 def read_file(filename_queue):
@@ -91,18 +97,32 @@ def model(image, number, mode):
     return predictions, loss, train_op, eval_metric_ops
 
 
-run = qnd.def_run(batch_inputs=(not env("self_batch")))
+run = qnd.def_run(batch_inputs=(not env("self_batch")),
+                  prepare_filename_queues=(not env("self_filename_queue")))
 
 
 def main():
     logging.getLogger().setLevel(logging.INFO)
 
-    def input_fn(batch_fn):
-        return batch_fn(read_file) if env("self_batch") else read_file
+    def def_input_fn(batch_fn, filename_queue_fn):
+        def batch(*tensors):
+            return batch_fn(*tensors) if env("self_batch") else tensors
+
+        if env("self_filename_queue"):
+            def input_fn():
+                return batch(*read_file(filename_queue_fn()))
+        else:
+            def input_fn(filename_queue):
+                return batch(*read_file(filename_queue))
+
+        return input_fn
 
     run(model,
-        input_fn(train_batch),
-        input_fn(eval_batch) if env("use_eval_input_fn") else None)
+        def_input_fn(train_batch,
+                     lambda: filename_queue(qnd.FLAGS.train_file, train=True)),
+        (def_input_fn(eval_batch, lambda: filename_queue(qnd.FLAGS.eval_file))
+         if env("use_eval_input_fn") else
+         None))
 
 
 if __name__ == "__main__":
