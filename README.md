@@ -173,8 +173,8 @@ Explore [examples](examples) directory for more and see how to run them.
 
 ### Necessary update of a global step variable
 
-As done in [all examples](examples), you must get a global step variable
-with `tf.contrib.framework.get_global_step()` and update (increment) it in each
+As done in [examples](examples), you must get a global step variable with
+`tf.contrib.framework.get_global_step()` and update (increment) it in each
 training step.
 
 
