@@ -31,14 +31,33 @@ See [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
 
 ## Examples
 
+`train.py`:
+
 ```python
 import logging
 
 import qnd
 import tensorflow as tf
 
+import mnist
 
-logging.getLogger().setLevel(logging.INFO)
+
+train_and_evaluate = qnd.def_train_and_evaluate()
+
+
+def main():
+    logging.getLogger().setLevel(logging.INFO)
+    train_and_evaluate(mnist.model, mnist.read_file)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+`mnist.py`:
+
+```python
+import tensorflow as tf
 
 
 def read_file(filename_queue):
@@ -65,48 +84,39 @@ def minimize(loss):
         "Adam")
 
 
-def model(image, number):
+def model(image, number=None, mode=None):
     h = tf.contrib.layers.fully_connected(image, 64)
     h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
+    predictions = tf.argmax(h, axis=1)
+
+    if mode == tf.contrib.learn.ModeKeys.INFER:
+        return predictions
+
     loss = tf.reduce_mean(
         tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
-    predictions = tf.argmax(h, axis=1)
 
     return predictions, loss, minimize(loss), {
         "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
                                                           number)[1],
     }
-
-
-train_and_evaluate = qnd.def_train_and_evaluate()
-
-
-def main():
-    train_and_evaluate(model, read_file)
-
-
-if __name__ == "__main__":
-    main()
 ```
 
 With the code above, you can create a command with the following interface.
 
 ```
-usage: mnist_simple.py [-h] [--output_dir OUTPUT_DIR]
-                       [--train_steps TRAIN_STEPS] [--eval_steps EVAL_STEPS]
-                       [--min_eval_frequency MIN_EVAL_FREQUENCY] --master_host
-                       MASTER_HOST --ps_hosts PS_HOSTS
-                       [--worker_hosts WORKER_HOSTS] --task_type TASK_TYPE
-                       [--task_index TASK_INDEX] [--num_cores NUM_CORES]
-                       [--log_device_placement]
-                       [--save_summary_steps SAVE_SUMMARY_STEPS]
-                       [--save_checkpoints_steps SAVE_CHECKPOINTS_STEPS]
-                       [--batch_size BATCH_SIZE]
-                       [--batch_queue_capacity BATCH_QUEUE_CAPACITY]
-                       --train_file TRAIN_FILE
-                       [--filename_queue_capacity FILENAME_QUEUE_CAPACITY]
-                       --eval_file EVAL_FILE
+usage: train.py [-h] [--output_dir OUTPUT_DIR] [--train_steps TRAIN_STEPS]
+                [--eval_steps EVAL_STEPS]
+                [--min_eval_frequency MIN_EVAL_FREQUENCY] --master_host
+                MASTER_HOST --ps_hosts PS_HOSTS [--worker_hosts WORKER_HOSTS]
+                --task_type TASK_TYPE [--task_index TASK_INDEX]
+                [--num_cores NUM_CORES] [--log_device_placement]
+                [--save_summary_steps SAVE_SUMMARY_STEPS]
+                [--save_checkpoints_steps SAVE_CHECKPOINTS_STEPS]
+                [--batch_size BATCH_SIZE]
+                [--batch_queue_capacity BATCH_QUEUE_CAPACITY] --train_file
+                TRAIN_FILE [--filename_queue_capacity FILENAME_QUEUE_CAPACITY]
+                --eval_file EVAL_FILE
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -152,8 +162,8 @@ optional arguments:
                         File path of train data file(s). A glob is available.
                         (e.g. train/*.tfrecords) (default: None)
   --filename_queue_capacity FILENAME_QUEUE_CAPACITY
-                        Capacity of filename queues of train and eval data
-                        (default: 32)
+                        Capacity of filename queues of train, eval and infer
+                        data (default: 32)
   --eval_file EVAL_FILE
                         File path of eval data file(s). A glob is available.
                         (e.g. eval/*.tfrecords) (default: None)
