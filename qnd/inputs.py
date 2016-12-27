@@ -84,8 +84,8 @@ def def_def_def_input_fn(mode):
     return def_def_input_fn
 
 
-def_def_train_input_fn = def_def_def_input_fn(tf.contrib.learn.ModeKeys.TRAIN)
-def_def_eval_input_fn = def_def_def_input_fn(tf.contrib.learn.ModeKeys.EVAL)
+for mode in MODES:
+    globals()["def_def_{}_input_fn".format(mode)] = def_def_def_input_fn(mode)
 
 
 def def_filenames_to_queue(mode):
