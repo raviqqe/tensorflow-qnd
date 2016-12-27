@@ -24,6 +24,11 @@ end
 
 
 task :clean do
+  sh "git clean -dfx -e #{VENV_DIR}"
+end
+
+
+task :clobber do
   sh 'git clean -dfx'
 end
 
@@ -141,7 +146,7 @@ task_in_venv :format, %w(autopep8) do
 end
 
 
-task :upload => %i(test clean) do
+task :upload => %i(test clobber) do
   sh 'python3 setup.py sdist bdist_wheel'
   sh 'twine upload dist/*'
 end
