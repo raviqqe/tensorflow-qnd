@@ -11,7 +11,7 @@ setuptools.setup(
     name="tensorflow-qnd",
     version=re.search(r'__version__ *= *"([0-9]+\.[0-9]+\.[0-9]+)" *\n',
                       open("qnd/__init__.py").read()).group(1),
-    description="Quick and Distributed TensorFlow command framework",
+    description="Quick and Dirty TensorFlow command framework",
     long_description=open("README.md").read(),
     license="Public Domain",
     author="Yota Toyama",

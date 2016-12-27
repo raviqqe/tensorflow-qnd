@@ -1,4 +1,4 @@
-"""Quick and Distributed TensorFlow command framework"""
+"""Quick and Dirty TensorFlow command framework"""
 
 from .flag import *
 from .infer import def_infer

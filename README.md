@@ -5,7 +5,7 @@
 [![Build Status](https://travis-ci.org/raviqqe/tensorflow-qnd.svg?branch=master)](https://travis-ci.org/raviqqe/tensorflow-qnd)
 [![License](https://img.shields.io/badge/license-unlicense-lightgray.svg)](https://unlicense.org)
 
-Quick and Distributed TensorFlow command framework
+Quick and Dirty TensorFlow command framework
 
 tensorflow-qnd is a TensorFlow framework to create commands to train and
 evaluate models on multiple computers.
