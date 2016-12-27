@@ -13,7 +13,7 @@ def input_fn(q):
     return tf.zeros(shape, tf.float32), tf.ones(shape, tf.int32)
 
 
-train_and_evaluate = qnd.def_train_and_evaluate()
+train_and_evaluate = qnd.def_train_and_evaluate(distributed=True)
 
 
 def main():
