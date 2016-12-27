@@ -2,7 +2,7 @@
 
 var_dir=var
 data_dir=$var_dir/data
-script=mnist_multi_workers.py
+script=train.py
 workers=localhost:19310,localhost:10019
 
 

@@ -4,9 +4,10 @@ import os
 import qnd
 import tensorflow as tf
 
+import mnist
+
 
 BATCH_SIZE = 64
-
 
 ENV_FLAGS = ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops",
              "self_batch", "self_filename_queue"]
@@ -51,55 +52,19 @@ def eval_batch(*tensors):
 
 
 def read_file(filename_queue):
-    _, serialized = tf.TFRecordReader().read(filename_queue)
-
-    scalar_feature = lambda dtype: tf.FixedLenFeature([], dtype)
-
-    features = tf.parse_single_example(serialized, {
-        "image_raw": scalar_feature(tf.string),
-        "label": scalar_feature(tf.int64),
-    })
-
-    image = tf.decode_raw(features["image_raw"], tf.uint8)
-    image.set_shape([28**2])
-    image = tf.to_float(image) / 255 - 0.5
-    number = features["label"]
+    image, number = mnist.read_file(filename_queue)
 
     return (({"image": image}, {"number": number})
             if env("use_dict_inputs") else
             (image, number))
 
 
-def minimize(loss):
-    return tf.contrib.layers.optimize_loss(
-        loss,
-        tf.contrib.framework.get_global_step(),
-        0.001,
-        "Adam")
+def model(image, number=None, mode=tf.contrib.learn.ModeKeys.TRAIN):
+    results = mnist.model(image, number, mode)
 
-
-def model(image, number, mode):
-    h = tf.contrib.layers.fully_connected(image, 64)
-    h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
-
-    loss = tf.reduce_mean(
-        tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
-    predictions = tf.argmax(h, axis=1)
-    train_op = minimize(loss)
-    eval_metric_ops = {
-        "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
-                                                          number)[1],
-    }
-
-    if env("use_model_fn_ops"):
-        return tf.contrib.learn.estimators.model_fn.ModelFnOps(
-            predictions=predictions,
-            loss=loss,
-            train_op=train_op,
-            eval_metric_ops=eval_metric_ops,
-            mode=mode)
-
-    return predictions, loss, train_op, eval_metric_ops
+    return (tf.contrib.learn.estimators.model_fn.ModelFnOps(mode, *results)
+            if env("use_model_fn_ops") else
+            results)
 
 
 train_and_evaluate = qnd.def_train_and_evaluate(

@@ -1,1 +1,0 @@
-../mnist_simple/mnist_simple.py
