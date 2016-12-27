@@ -18,11 +18,9 @@ def read_file(filename_queue):
 
 
 def minimize(loss):
-    return tf.contrib.layers.optimize_loss(
+    return tf.train.AdamOptimizer().minimize(
         loss,
-        tf.contrib.framework.get_global_step(),
-        0.001,
-        "Adam")
+        tf.contrib.framework.get_global_step())
 
 
 def model(image, number=None, mode=None):
