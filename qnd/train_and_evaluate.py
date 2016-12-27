@@ -4,7 +4,9 @@ from .experiment import def_def_experiment_fn
 from .flag import FLAGS, add_output_dir_flag
 
 
-def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
+def def_train_and_evaluate(batch_inputs=True,
+                           prepare_filename_queues=True,
+                           standalone=False):
     """Define `train_and_evaluate()` function.
 
     See also `help(def_train_and_evaluate())`.
@@ -22,7 +24,8 @@ def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
     add_output_dir_flag()
 
     def_experiment_fn = def_def_experiment_fn(batch_inputs,
-                                              prepare_filename_queues)
+                                              prepare_filename_queues,
+                                              standalone)
 
     def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
         """Run `tf.contrib.learn.python.learn.learn_runner.run()`.

@@ -23,10 +23,7 @@ train() {
 infer() {
   python3 $infer_script \
     --infer_file $data_dir/test.tfrecords \
-    --output_dir $var_dir/output \
-    --master_host localhost:2049 \
-    --ps_hosts localhost:4242 \
-    --task_type $1
+    --output_dir $var_dir/output
 }
 
 
@@ -53,7 +50,7 @@ main() {
 
   echo Infering labels of test dataset...
 
-  infer master > $prediction_file &&
+  infer > $prediction_file &&
   python3 gt.py $data_dir/test.tfrecords > $gt_file &&
 
   python3 accuracy.py $prediction_file $gt_file

@@ -8,8 +8,8 @@ from . import util
 from .config import def_config
 
 
-def def_estimator():
-    config = def_config()
+def def_estimator(standalone=False):
+    config = def_config(standalone)
 
     @util.func_scope
     def estimator(model_fn, model_dir):

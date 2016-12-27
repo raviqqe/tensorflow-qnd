@@ -6,7 +6,7 @@ from .inputs import def_def_infer_input_fn
 def def_infer(batch_inputs=True, prepare_filename_queues=True):
     add_output_dir_flag()
 
-    estimator = def_estimator()
+    estimator = def_estimator(standalone=True)
     def_infer_input_fn = def_def_infer_input_fn(batch_inputs,
                                                 prepare_filename_queues)
 
