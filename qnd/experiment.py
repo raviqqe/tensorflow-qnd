@@ -2,14 +2,14 @@ import tensorflow as tf
 
 from .flag import FLAGS, FlagAdder
 from .estimator import def_estimator
-from .inputs import Mode, def_def_train_input_fn, def_def_eval_input_fn
+from .inputs import def_def_train_input_fn, def_def_eval_input_fn
 
 
 def def_def_experiment_fn(batch_inputs=True, prepare_filename_queues=True):
     adder = FlagAdder()
 
-    for mode in Mode:
-        mode = mode.value
+    for mode in [tf.contrib.learn.ModeKeys.TRAIN,
+                 tf.contrib.learn.ModeKeys.EVAL]:
         adder.add_flag("{}_steps".format(mode), type=int,
                        help="Maximum number of {} steps".format(mode))
 
