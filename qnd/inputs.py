@@ -42,12 +42,14 @@ def def_def_def_input_fn(mode):
             @util.func_scope
             def input_fn():
                 if prepare_filename_queues:
-                    x, y = user_input_fn(filenames_to_queue({
-                        mode: tf.train.match_filenames_once(
+                    x, y = user_input_fn(filenames_to_queue(
+                        tf.matching_files(FLAGS.infer_file)
+                        if mode == tf.contrib.learn.ModeKeys.INFER else
+                        {mode: tf.train.match_filenames_once(
                             getattr(FLAGS, "{}_file".format(mode)),
                             name="{}_filenames".format(mode))
-                        for mode in [tf.contrib.learn.ModeKeys.TRAIN,
-                                     tf.contrib.learn.ModeKeys.EVAL]}[mode]))
+                         for mode in [tf.contrib.learn.ModeKeys.TRAIN,
+                                      tf.contrib.learn.ModeKeys.EVAL]}[mode]))
                 else:
                     x, y = user_input_fn()
 
