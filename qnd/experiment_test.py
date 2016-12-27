@@ -3,7 +3,6 @@ import types
 import tensorflow as tf
 
 from . import test
-from . import estimator_test
 from . import experiment
 from . import inputs_test
 
@@ -25,5 +24,4 @@ def _assert_is_function(obj):
 
 
 def append_argv():
-    estimator_test.append_argv()
     inputs_test.append_argv()
