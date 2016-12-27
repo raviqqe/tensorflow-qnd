@@ -1,7 +1,7 @@
 import tensorflow.contrib.learn.python.learn.learn_runner as learn_runner
 
 from .experiment import def_def_experiment_fn
-from .flag import FLAGS, add_flag, add_output_dir_flag
+from .flag import FLAGS, add_output_dir_flag
 
 
 def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):

@@ -1,5 +1,5 @@
 from .estimator import def_estimator
-from .flag import FLAGS, add_flag, add_output_dir_flag
+from .flag import FLAGS, add_output_dir_flag
 from .inputs import def_def_infer_input_fn
 
 
