@@ -48,7 +48,7 @@ main() {
 
   kill_servers || exit 1
 
-  echo Infering labels of test dataset...
+  echo Infering labels of test data...
 
   infer > $prediction_file &&
   python3 gt.py $data_dir/test.tfrecords > $gt_file &&
