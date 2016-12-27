@@ -48,8 +48,11 @@ task_in_venv :script_test do
     vsh :python3, file, '-h'
   end
 
+  distributed_oracle = 'distributed=yes python3 test/oracle.py'
+  vsh "#{distributed_oracle} -h"
+
   # Worker hosts should not include a master host.
-  vsh(*%w(! python3 test/oracle.py
+  vsh(*%W(! #{distributed_oracle}
           --master_host localhost:4242
           --worker_host localhost:4242
           --ps_hosts localhost:5151
