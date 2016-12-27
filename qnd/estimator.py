@@ -43,6 +43,10 @@ def _wrap_model_fn(original_model_fn):
             if "mode" in inspect.signature(model_fn).parameters.keys() else
             model_fn())
 
+        if (not isinstance(results, learn.estimators.model_fn.ModelFnOps)
+                and not isinstance(results, tuple)):
+            results = (results,)
+
         return (
             results
             if isinstance(results, learn.estimators.model_fn.ModelFnOps) else
