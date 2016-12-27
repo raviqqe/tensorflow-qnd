@@ -7,7 +7,7 @@ workers=localhost:19310,localhost:10019
 
 
 mnist() {
-  python3 $script \
+  distributed=yes python3 $script \
     --train_steps 1000 \
     --train_file $data_dir/train.tfrecords \
     --eval_file $data_dir/validation.tfrecords \
@@ -25,7 +25,7 @@ kill_servers() {
 
 
 main() {
-  ../lib/fetch_dataset.sh &&
+  ../lib/fetch_dataset.sh || exit 1
 
   kill_servers
 
@@ -35,8 +35,8 @@ main() {
   for worker in $(echo $workers | tr , ' ')
   do
     mnist worker --task_index $worker_id > $var_dir/worker-$worker_id.log 2>&1 &
-    worker_id=$(expr $worker_id + 1)
-  done
+    worker_id=$(($worker_id + 1))
+  done &&
 
   mnist master &&
 

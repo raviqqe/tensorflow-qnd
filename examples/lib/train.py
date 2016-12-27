@@ -1,11 +1,13 @@
 import logging
+import os
 
 import qnd
 
 import mnist
 
 
-train_and_evaluate = qnd.def_train_and_evaluate()
+train_and_evaluate = qnd.def_train_and_evaluate(
+    distributed=("distributed" in os.environ))
 
 
 def main():
