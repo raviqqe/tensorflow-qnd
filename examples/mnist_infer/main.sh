@@ -2,6 +2,8 @@
 
 var_dir=var
 data_dir=$var_dir/data
+gt_file=$var_dir/gt.csv
+prediction_file=$var_dir/predictions.csv
 train_script=train.py
 infer_script=infer.py
 
@@ -17,6 +19,7 @@ train() {
     --task_type $1
 }
 
+
 infer() {
   python3 $infer_script \
     --infer_file $data_dir/test.tfrecords \
@@ -28,8 +31,7 @@ infer() {
 
 
 kill_servers() {
-  kill $(ps x | grep -e $train_script -e $infer_script | grep -v grep |
-         awk '{print $1}')
+  kill $(ps x | grep $train_script | grep -v grep | awk '{print $1}')
 }
 
 
@@ -47,12 +49,14 @@ main() {
   train ps > $var_dir/train_ps.log 2>&1 &
   train master &&
 
-  kill_servers
+  kill_servers || exit 1
 
   echo Infering labels of test dataset...
 
-  infer ps > $var_dir/infer_ps.log 2>&1 &
-  infer master > $var_dir/predictions.csv
+  infer master > $prediction_file &&
+  python3 gt.py $data_dir/test.tfrecords > $gt_file &&
+
+  python3 accuracy.py $prediction_file $gt_file
 }
 
 
