@@ -34,21 +34,15 @@ def _wrap_model_fn(original_model_fn):
             raise ValueError(
                 "features and targets should be both tf.Tensor or dict.")
 
-        maybe_model_fn_ops = (
+        results = (
             model_fn(mode=mode)
             if "mode" in inspect.signature(model_fn).parameters.keys() else
             model_fn())
 
-        if isinstance(maybe_model_fn_ops, learn.estimators.model_fn.ModelFnOps):
-            return maybe_model_fn_ops
-
-        predictions, loss, train_op, *eval_metric_ops = maybe_model_fn_ops
-
-        return learn.estimators.model_fn.ModelFnOps(
-            mode=mode,
-            predictions=predictions,
-            loss=loss,
-            train_op=train_op,
-            eval_metric_ops=(eval_metric_ops[0] if eval_metric_ops else None))
+        return (
+            results
+            if isinstance(results, learn.estimators.model_fn.ModelFnOps) else
+            learn.estimators.model_fn.ModelFnOps(mode, *results)
+        )
 
     return model
