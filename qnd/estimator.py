@@ -13,8 +13,6 @@ def def_estimator():
 
     @util.func_scope
     def estimator(model_fn, model_dir):
-        # Hyperparameters (values of `params`) are set by command line
-        # arguments.
         return tf.contrib.learn.Estimator(_wrap_model_fn(model_fn),
                                           config=config(),
                                           model_dir=model_dir)
