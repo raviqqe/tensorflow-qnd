@@ -101,7 +101,7 @@ task :test => %i(
 )
 
 
-task_in_venv :readme_examples do
+task :readme_examples do
   md = File.read(README_FILE)
 
   command_script = 'train.py'
