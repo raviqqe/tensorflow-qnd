@@ -1,12 +1,10 @@
 from .estimator import def_estimator
-from .flag import FLAGS, add_flag
+from .flag import FLAGS, add_flag, add_output_dir_flag
 from .inputs import def_def_eval_input_fn
 
 
 def def_infer(batch_inputs=True, prepare_filename_queues=True):
-    add_flag("output_dir",
-             default="output",
-             help="Directory where checkpoint and event files are stored")
+    add_output_dir_flag()
 
     estimator = def_estimator()
     def_eval_input_fn = def_def_eval_input_fn(batch_inputs,

@@ -62,3 +62,9 @@ class FlagAdder:
             - `dict` of flag names to values added by a `FlagAdder` instance.
         """
         return {flag: getattr(FLAGS, flag) for flag in self._flags}
+
+
+def add_output_dir_flag():
+    add_flag("output_dir",
+             default="output",
+             help="Directory where checkpoint and event files are stored")

@@ -1,7 +1,7 @@
 import tensorflow.contrib.learn.python.learn.learn_runner as learn_runner
 
 from .experiment import def_def_experiment_fn
-from .flag import FLAGS, add_flag
+from .flag import FLAGS, add_flag, add_output_dir_flag
 
 
 def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
@@ -19,9 +19,7 @@ def def_train_and_evaluate(batch_inputs=True, prepare_filename_queues=True):
     - Returns
         - `train_and_evaluate()` function.
     """
-    add_flag("output_dir",
-             default="output",
-             help="Directory where checkpoint and event files are stored")
+    add_output_dir_flag()
 
     def_experiment_fn = def_def_experiment_fn(batch_inputs,
                                               prepare_filename_queues)
