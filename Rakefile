@@ -92,17 +92,32 @@ task :test => %i(
 task_in_venv :readme_examples do
   md = File.read(README_FILE)
 
+  command_script = 'train.py'
+  library_script = 'mnist.py'
+
+  def read_example_file file
+    File.read(File.join('examples/mnist_simple', file)).strip
+  end
+
   File.write(README_FILE, %(
 #{md.match(/(\A.*## Examples)/m)[0]}
 
+`#{command_script}`:
+
 ```python
-#{File.read('examples/mnist_simple/mnist_simple.py').strip}
+#{read_example_file command_script}
+```
+
+`#{library_script}`:
+
+```python
+#{read_example_file library_script}
 ```
 
 With the code above, you can create a command with the following interface.
 
 ```
-#{`#{IN_VENV} python3 examples/mnist_simple/mnist_simple.py -h`.strip}
+#{`#{IN_VENV} cd examples/mnist_simple && python3 #{command_script} -h`.strip}
 ```
 
 Explore [examples](examples) directory for more and see how to run them.

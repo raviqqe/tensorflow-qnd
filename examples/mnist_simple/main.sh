@@ -2,7 +2,7 @@
 
 var_dir=var
 data_dir=$var_dir/data
-script=mnist_simple.py
+script=train.py
 
 
 mnist() {
