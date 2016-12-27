@@ -30,6 +30,10 @@ def _wrap_model_fn(original_model_fn):
             model_fn = def_model_fn(features, targets)
         elif are_args(dict):
             model_fn = def_model_fn(**features, **targets)
+        elif isinstance(features, tf.Tensor) and targets is None:
+            model_fn = def_model_fn(features)
+        elif isinstance(features, dict) and targets is None:
+            model_fn = def_model_fn(**features)
         else:
             raise ValueError(
                 "features and targets should be both tf.Tensor or dict.")
