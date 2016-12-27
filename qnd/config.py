@@ -14,10 +14,10 @@ _JOBS = {getattr(tf.contrib.learn.TaskType, name)
          for name in ["MASTER", "PS", "WORKER"]}
 
 
-def def_config(standalone=False):
+def def_config(distributed=False):
     # ClusterConfig flags
 
-    if not standalone:
+    if distributed:
         add_required_flag("master_host",
                           help="HOSTNAME:PORT pair of a master host")
 
@@ -58,7 +58,7 @@ def def_config(standalone=False):
 
     @util.func_scope
     def config():
-        if not standalone:
+        if distributed:
             config_env = "TF_CONFIG"
 
             if config_env in os.environ and os.environ[config_env]:

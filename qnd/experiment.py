@@ -7,7 +7,7 @@ from .inputs import def_def_train_input_fn, def_def_eval_input_fn
 
 def def_def_experiment_fn(batch_inputs=True,
                           prepare_filename_queues=True,
-                          standalone=False):
+                          distributed=False):
     adder = FlagAdder()
 
     for mode in [tf.contrib.learn.ModeKeys.TRAIN,
@@ -19,7 +19,7 @@ def def_def_experiment_fn(batch_inputs=True,
                    help="Minimum evaluation frequency in number of model "
                         "savings")
 
-    estimator = def_estimator(standalone)
+    estimator = def_estimator(distributed)
     def_train_input_fn = def_def_train_input_fn(batch_inputs,
                                                 prepare_filename_queues)
     def_eval_input_fn = def_def_eval_input_fn(batch_inputs,
