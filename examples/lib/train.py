@@ -1,7 +1,6 @@
 import logging
 
 import qnd
-import tensorflow as tf
 
 import mnist
 
