@@ -24,8 +24,7 @@ main: ${train_file} ${valid_file}
 
 
 ${train_file} ${valid_file}:
-	curl -SL https://raw.githubusercontent.com/raviqqe/tensorflow/patch-1/tensorflow/examples/how_tos/reading_data/convert_to_records.py | \
-	python3 - --directory ${data_dir}
+	../lib/fetch_dataset.sh
 
 
 .PHONY: clean

@@ -33,11 +33,7 @@ kill_servers() {
 
 
 main() {
-  if [ ! -d $data_dir ]
-  then
-    curl -SL https://raw.githubusercontent.com/raviqqe/tensorflow/patch-1/tensorflow/examples/how_tos/reading_data/convert_to_records.py |
-    python3 - --directory $data_dir
-  fi
+  ../lib/fetch_dataset.sh &&
 
   kill_servers
 
