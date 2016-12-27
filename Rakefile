@@ -53,7 +53,7 @@ task_in_venv :script_test do
 end
 
 
-%i(mnist_simple mnist_multi_workers).each do |name|
+%i(mnist_simple mnist_multi_workers mnist_infer).each do |name|
   task_in_venv name do
     vsh "cd examples/#{name} && ./main.sh"
   end
@@ -84,6 +84,7 @@ task :test => %i(
   script_test
   mnist_simple
   mnist_multi_workers
+  mnist_infer
   mnist_full
 )
 
