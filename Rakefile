@@ -10,7 +10,6 @@ end
 
 def task_in_venv name, &block
   task name => %i(clean venv) do |t|
-
     block.call t
   end
 end
