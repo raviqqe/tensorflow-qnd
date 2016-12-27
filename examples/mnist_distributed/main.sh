@@ -1,7 +1,7 @@
 #!/bin/sh
 
-var_dir=var
-data_dir=$var_dir/data
+. ../lib/mnist.sh || exit 1
+
 script=train.py
 workers=localhost:19310,localhost:10019
 
@@ -25,7 +25,7 @@ kill_servers() {
 
 
 main() {
-  ../lib/fetch_dataset.sh || exit 1
+  fetch_dataset || exit 1
 
   kill_servers
 

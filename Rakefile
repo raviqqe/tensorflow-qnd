@@ -78,12 +78,8 @@ task_in_venv :mnist_full do |t|
     %i(self_batch),
     %i(self_filename_queue use_eval_input_fn),
   ].each do |flags|
-    [
-      'clean',
-      (flags and flags.map{ |flag| "#{flag}=yes"}.join(' ')),
-    ].each do |args|
-      vsh "make -C examples/#{t.name} #{args}"
-    end
+    vsh(*%W(cd examples/#{t.name} &&
+            #{flags and flags.map{ |flag| "#{flag}=yes"}.join(' ')} ./main.sh))
   end
 end
 
