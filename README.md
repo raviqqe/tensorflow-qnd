@@ -25,6 +25,7 @@ remove most of boilerplate code with this framework.
   (only for training and evaluation)
   - Just set an optional argument `distributed ` of `def_train_and_evaluate()`
     as `True`. (i.e. `def_train_and_evaluate(distributed=True)`)
+  - Supports only data parallel training
 
 
 ## Installation
