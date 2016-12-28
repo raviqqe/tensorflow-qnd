@@ -1128,17 +1128,57 @@ default.</p></div>
 
     
   
+    <div class="desc"><p>Define <code>infer()</code> function.</p>
+<p>See also <code>help(def_infer())</code>.</p>
+<ul>
+<li>
+<p>Args</p>
+<ul>
+<li><code>batch_inputs</code>: Same as <code>def_train_and_evaluate()</code>'s.</li>
+<li><code>prepare_filename_queues</code>: Same as <code>def_train_and_evaluate()</code>'s.</li>
+</ul>
+</li>
+<li>
+<p>Returns</p>
+<ul>
+<li><code>infer()</code> function.</li>
+</ul>
+</li>
+</ul></div>
   <div class="source_cont">
   <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_infer', this);">Show source &equiv;</a></p>
   <div id="source-qnd.def_infer" class="source">
     <pre><code>def def_infer(batch_inputs=True, prepare_filename_queues=True):
+    """Define `infer()` function.
+
+    See also `help(def_infer())`.
+
+    - Args
+        - `batch_inputs`: Same as `def_train_and_evaluate()`'s.
+        - `prepare_filename_queues`: Same as `def_train_and_evaluate()`'s.
+
+    - Returns
+        - `infer()` function.
+    """
     add_output_dir_flag()
 
-    estimator = def_estimator(standalone=True)
+    estimator = def_estimator(distributed=False)
     def_infer_input_fn = def_def_infer_input_fn(batch_inputs,
                                                 prepare_filename_queues)
 
     def infer(model_fn, input_fn):
+        """Infer labels or regression values from features of samples fed by
+        `input_fn`.
+
+        - Args
+            - `model_fn`: Same as `train_and_evaluate()`'s.
+            - `input_fn`: Same as `train_input_fn` and `eval_input_fn`
+                arguments of `train_and_evaluate()` but returns only features.
+
+        - Returns
+            - Generator of inferred label(s) or regression value(s) for each
+                sample.
+        """
         return estimator(model_fn, FLAGS.output_dir).predict(
             input_fn=def_infer_input_fn(input_fn))
 
@@ -1152,7 +1192,7 @@ default.</p></div>
       
   <div class="item">
     <div class="name def" id="qnd.def_train_and_evaluate">
-    <p>def <span class="ident">def_train_and_evaluate</span>(</p><p>batch_inputs=True, prepare_filename_queues=True, standalone=False)</p>
+    <p>def <span class="ident">def_train_and_evaluate</span>(</p><p>batch_inputs=True, prepare_filename_queues=True, distributed=False)</p>
     </div>
     
 
@@ -1169,6 +1209,8 @@ default.</p></div>
 <li><code>prepare_filename_queues</code>: If <code>True</code>, create filename queues for
     train and eval data based on file paths specified by command line
     arguments.</li>
+<li><code>distributed</code>: If <code>True</code>, set up flags to train and evaluate models
+    on a distributed system.</li>
 </ul>
 </li>
 <li>
@@ -1183,7 +1225,7 @@ default.</p></div>
   <div id="source-qnd.def_train_and_evaluate" class="source">
     <pre><code>def def_train_and_evaluate(batch_inputs=True,
                            prepare_filename_queues=True,
-                           standalone=False):
+                           distributed=False):
     """Define `train_and_evaluate()` function.
 
     See also `help(def_train_and_evaluate())`.
@@ -1194,6 +1236,8 @@ default.</p></div>
         - `prepare_filename_queues`: If `True`, create filename queues for
             train and eval data based on file paths specified by command line
             arguments.
+        - `distributed`: If `True`, set up flags to train and evaluate models
+            on a distributed system.
 
     - Returns
         - `train_and_evaluate()` function.
@@ -1202,10 +1246,11 @@ default.</p></div>
 
     def_experiment_fn = def_def_experiment_fn(batch_inputs,
                                               prepare_filename_queues,
-                                              standalone)
+                                              distributed)
 
     def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
-        """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
+        """Train and evaluate a model with features and targets fed by
+        `input_fn`s.
 
         - Args
             - `model_fn`: A function to construct a model.
@@ -1216,17 +1261,18 @@ default.</p></div>
                     - `Tensor, Tensor, Operation, eval_metric_ops=dict<str, Tensor>`
                         (predictions, loss, train_op, and eval_metric_ops (if any))
                     - `ModelFnOps`
-            - `train_input_fn`, `eval_input_fn`: Functions to serve input
+            - `train_input_fn`, `eval_input_fn`: Functions to create input
                 Tensors fed into the model. If `eval_input_fn` is `None`,
                 `train_input_fn` will be used instead.
                 - Types of its arguments must be one of the following:
                     - `QueueBase` (a filename queue)
-                    - `None` (No argument)
+                    - No argument if `prepare_filename_queues` of
+                        `def_train_and_evaluate()` is `False`.
                 - Types of its return values must be one of the following:
-                    - `Tensor, Tensor` (x and y)
-                    - `dict<str, Tensor>, dict<str, Tensor>` (features and labels)
-                        - The keys in `dict` objects must match with names of
-                            `model_fn`'s arguments.
+                    - `Tensor, Tensor` (features and targets)
+                    - `dict<str, Tensor>, dict<str, Tensor>` (features and targets)
+                        - The keys in `dict` objects must match with argument
+                            names of `model_fn`.
 
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.

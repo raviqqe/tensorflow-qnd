@@ -35,13 +35,15 @@ See [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
 
 ```python
 import logging
+import os
 
 import qnd
 
 import mnist
 
 
-train_and_evaluate = qnd.def_train_and_evaluate()
+train_and_evaluate = qnd.def_train_and_evaluate(
+    distributed=("distributed" in os.environ))
 
 
 def main():
@@ -104,9 +106,7 @@ With the code above, you can create a command with the following interface.
 ```
 usage: train.py [-h] [--output_dir OUTPUT_DIR] [--train_steps TRAIN_STEPS]
                 [--eval_steps EVAL_STEPS]
-                [--min_eval_frequency MIN_EVAL_FREQUENCY] --master_host
-                MASTER_HOST --ps_hosts PS_HOSTS [--worker_hosts WORKER_HOSTS]
-                --task_type TASK_TYPE [--task_index TASK_INDEX]
+                [--min_eval_frequency MIN_EVAL_FREQUENCY]
                 [--num_cores NUM_CORES] [--log_device_placement]
                 [--save_summary_steps SAVE_SUMMARY_STEPS]
                 [--save_checkpoints_steps SAVE_CHECKPOINTS_STEPS]
@@ -127,18 +127,6 @@ optional arguments:
   --min_eval_frequency MIN_EVAL_FREQUENCY
                         Minimum evaluation frequency in number of model
                         savings (default: 1)
-  --master_host MASTER_HOST
-                        HOSTNAME:PORT pair of a master host (default: None)
-  --ps_hosts PS_HOSTS   Comma-separated list of $hostname:$port pairs of ps
-                        hosts (default: [])
-  --worker_hosts WORKER_HOSTS
-                        Comma-separated list of $hostname:$port pairs of
-                        worker hosts (default: [])
-  --task_type TASK_TYPE
-                        Must be in ['master', 'ps', 'worker'] (aka job)
-                        (default: None)
-  --task_index TASK_INDEX
-                        Task index within a job (default: 0)
   --num_cores NUM_CORES
                         Number of CPU cores used. 0 means use of a default
                         value. (default: 0)
