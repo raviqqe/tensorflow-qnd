@@ -1,5 +1,6 @@
 import functools
 import inspect
+import typing
 
 import tensorflow as tf
 import tensorflow.contrib.learn as learn
@@ -43,14 +44,13 @@ def _wrap_model_fn(original_model_fn):
             if "mode" in inspect.signature(model_fn).parameters.keys() else
             model_fn())
 
-        if (not isinstance(results, learn.estimators.model_fn.ModelFnOps)
-                and not isinstance(results, tuple)):
-            results = (results,)
-
         return (
             results
             if isinstance(results, learn.estimators.model_fn.ModelFnOps) else
-            learn.estimators.model_fn.ModelFnOps(mode, *results)
-        )
+            learn.estimators.model_fn.ModelFnOps(
+                mode,
+                *(results
+                  if isinstance(results, typing.Sequence) else
+                  (results,))))
 
     return model
