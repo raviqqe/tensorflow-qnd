@@ -54,7 +54,7 @@ task_in_venv :script_test do
   # Worker hosts should not include a master host.
   vsh(*%W(! #{distributed_oracle}
           --master_host localhost:4242
-          --worker_host localhost:4242
+          --worker_hosts localhost:4242
           --ps_hosts localhost:5151
           --task_type job
           --train_file README.md
