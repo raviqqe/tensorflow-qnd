@@ -41,8 +41,8 @@ def def_def_def_input_fn(mode):
         def def_input_fn(user_input_fn):
             @util.func_scope
             def input_fn():
-                if prepare_filename_queues:
-                    x, y = user_input_fn(filenames_to_queue(
+                inputs = (
+                    user_input_fn(filenames_to_queue(
                         tf.matching_files(FLAGS.infer_file)
                         if mode == tf.contrib.learn.ModeKeys.INFER else
                         {mode: tf.train.match_filenames_once(
@@ -50,40 +50,63 @@ def def_def_def_input_fn(mode):
                             name="{}_filenames".format(mode))
                          for mode in [tf.contrib.learn.ModeKeys.TRAIN,
                                       tf.contrib.learn.ModeKeys.EVAL]}[mode]))
-                else:
-                    x, y = user_input_fn()
+                    if prepare_filename_queues else
+                    user_input_fn())
 
-                if not batch_inputs:
-                    return x, y
+                inputs = ((inputs,)
+                          if type(inputs) in {dict, tf.Tensor} else
+                          inputs)
 
-                tuple_input = isinstance(x, tf.Tensor)
+                _check_inputs(inputs)
 
-                if not tuple_input:
-                    duplicate_keys = x.keys() & y.keys()
-                    if len(duplicate_keys) != 0:
-                        raise ValueError(
-                            "Some keys of x and y are duplicate. ({})"
-                            .format(duplicate_keys))
-
-                inputs = (tf.train.shuffle_batch
-                          if mode == tf.contrib.learn.ModeKeys.TRAIN else
-                          tf.train.batch)(
-                    [x, y] if tuple_input else {**x, **y},
-                    batch_size=FLAGS.batch_size,
-                    capacity=FLAGS.batch_queue_capacity,
-                    **({"min_after_dequeue": FLAGS.batch_queue_capacity // 2}
-                       if mode == tf.contrib.learn.ModeKeys.TRAIN else
-                       {"allow_smaller_final_batch": True}))
-
-                restore = lambda x: {key: inputs[key] for key in x.keys()}
-
-                return inputs if tuple_input else (restore(x), restore(y))
+                return _batch_inputs(inputs, mode) if batch_inputs else inputs
 
             return input_fn
 
         return def_input_fn
 
     return def_def_input_fn
+
+
+def _batch_inputs(inputs, mode):
+    tensor_input = isinstance(inputs[0], tf.Tensor)
+
+    batched_inputs = (tf.train.shuffle_batch
+                      if mode == tf.contrib.learn.ModeKeys.TRAIN else
+                      tf.train.batch)(
+        [*inputs] if tensor_input else _merge_dicts(*inputs),
+        batch_size=FLAGS.batch_size,
+        capacity=FLAGS.batch_queue_capacity,
+        **({"min_after_dequeue": FLAGS.batch_queue_capacity // 2}
+           if mode == tf.contrib.learn.ModeKeys.TRAIN else
+           {"allow_smaller_final_batch": True}))
+
+    restore_dict = lambda x: {key: batched_inputs[key] for key in x.keys()}
+
+    return batched_inputs if tensor_input else [*map(restore_dict, inputs)]
+
+
+def _merge_dicts(*dicts):
+    return {key: value for dict_ in dicts for key, value in dict_.items()}
+
+
+def _check_inputs(inputs):
+    if len(inputs) not in {1, 2}:
+        raise ValueError("Too many return values from input_fn. "
+                         "(returned values: {})"
+                         .format(inputs))
+
+    if len(inputs) == 2 and type(inputs[0]) != type(inputs[1]):
+        raise ValueError("features and targets should be the same type. "
+                         "(features type: {}, targets type: {})"
+                         .format(*map(type, inputs)))
+
+    if len(inputs) == 2 and isinstance(inputs[0], dict):
+        duplicate_keys = inputs[0].keys() & inputs[1].keys()
+        if len(duplicate_keys) != 0:
+            raise ValueError(
+                "Some keys of features and targets are duplicate. ({})"
+                .format(duplicate_keys))
 
 
 for mode in MODES:
