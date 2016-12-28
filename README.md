@@ -8,11 +8,20 @@
 Quick and Dirty TensorFlow command framework
 
 tensorflow-qnd is a TensorFlow framework to create commands to train and
-evaluate models on multiple computers.
+evaluate models and make inference with them.
 The framework is built on top of
 [TF Learn](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn).
-While made to be used on multiple computers in a cluster, it is also useful to
-exploit multiple GPUs on a single machine.
+
+
+## Features
+
+- Creation of commands
+  - To train and evaluate models
+  - To infer labels or regression values with trained models
+- Configuration of command line arguments to set hyperparameters of models etc.
+- Distributed TensorFlow (only training and evaluation)
+  - Just set an optional argument `distributed ` of `def_train_and_evaluate()`
+    as `True`. (i.e. `def_train_and_evaluate(distributed=True)`)
 
 
 ## Installation
@@ -26,7 +35,14 @@ pip3 install --user --upgrade tensorflow-qnd
 
 ## Usage
 
-See [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
+1. Add command line arguments with `add_flag` and `add_required_flag` functions.
+2. Define a `train_and_evaluate` or `infer` function with
+   `def_train_and_evaluate` or `def_infer` function
+3. Pass `model_fn` (model constructor) and `input_fn` (input producer) functions
+   to that defined function.
+4. Run the script with appropriate command line arguments.
+
+For more information, see [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
 
 
 ## Examples
