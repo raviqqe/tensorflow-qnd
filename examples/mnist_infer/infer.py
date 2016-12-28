@@ -8,6 +8,9 @@ import mnist
 infer = qnd.def_infer()
 
 
+model = mnist.def_model()
+
+
 def read_file(filename_queue):
     return mnist.read_file(filename_queue)[0]
 
@@ -15,7 +18,7 @@ def read_file(filename_queue):
 def main():
     logging.getLogger().setLevel(logging.INFO)
 
-    for label in infer(mnist.model, read_file):
+    for label in infer(model, read_file):
         print(label)
 
 

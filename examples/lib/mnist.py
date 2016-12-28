@@ -1,3 +1,4 @@
+import qnd
 import tensorflow as tf
 
 
@@ -23,19 +24,26 @@ def minimize(loss):
         tf.contrib.framework.get_global_step())
 
 
-def model(image, number=None, mode=None):
-    h = tf.contrib.layers.fully_connected(image, 64)
-    h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
+def def_model():
+    qnd.add_flag("hidden_layer_size", type=int, default=64,
+                 help="Hidden layer size")
 
-    predictions = tf.argmax(h, axis=1)
+    def model(image, number=None, mode=None):
+        h = tf.contrib.layers.fully_connected(image,
+                                              qnd.FLAGS.hidden_layer_size)
+        h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
-    if mode == tf.contrib.learn.ModeKeys.INFER:
-        return predictions
+        predictions = tf.argmax(h, axis=1)
 
-    loss = tf.reduce_mean(
-        tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+        if mode == tf.contrib.learn.ModeKeys.INFER:
+            return predictions
 
-    return predictions, loss, minimize(loss), {
-        "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
-                                                          number)[1],
-    }
+        loss = tf.reduce_mean(
+            tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+
+        return predictions, loss, minimize(loss), {
+            "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
+                                                              number)[1],
+        }
+
+    return model
