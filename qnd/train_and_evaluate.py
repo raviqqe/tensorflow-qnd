@@ -30,7 +30,8 @@ def def_train_and_evaluate(batch_inputs=True,
                                               distributed)
 
     def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
-        """Run `tf.contrib.learn.python.learn.learn_runner.run()`.
+        """Train and evaluate a model with features and targets fed by
+        `input_fn`s.
 
         - Args
             - `model_fn`: A function to construct a model.
@@ -41,17 +42,18 @@ def def_train_and_evaluate(batch_inputs=True,
                     - `Tensor, Tensor, Operation, eval_metric_ops=dict<str, Tensor>`
                         (predictions, loss, train_op, and eval_metric_ops (if any))
                     - `ModelFnOps`
-            - `train_input_fn`, `eval_input_fn`: Functions to serve input
+            - `train_input_fn`, `eval_input_fn`: Functions to create input
                 Tensors fed into the model. If `eval_input_fn` is `None`,
                 `train_input_fn` will be used instead.
                 - Types of its arguments must be one of the following:
                     - `QueueBase` (a filename queue)
-                    - `None` (No argument)
+                    - No argument if `prepare_filename_queues` of
+                        `def_train_and_evaluate()` is `False`.
                 - Types of its return values must be one of the following:
-                    - `Tensor, Tensor` (x and y)
-                    - `dict<str, Tensor>, dict<str, Tensor>` (features and labels)
-                        - The keys in `dict` objects must match with names of
-                            `model_fn`'s arguments.
+                    - `Tensor, Tensor` (features and targets)
+                    - `dict<str, Tensor>, dict<str, Tensor>` (features and targets)
+                        - The keys in `dict` objects must match with argument
+                            names of `model_fn`.
 
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
