@@ -1028,7 +1028,7 @@ from .train_and_evaluate import def_train_and_evaluate
 
 __all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
            "def_train_and_evaluate", "def_infer"]
-__version__ = "0.0.8"
+__version__ = "0.0.9"
 </code></pre>
   </div>
 
@@ -1209,8 +1209,8 @@ default.</p></div>
 <li><code>prepare_filename_queues</code>: If <code>True</code>, create filename queues for
     train and eval data based on file paths specified by command line
     arguments.</li>
-<li><code>distributed</code>: If <code>True</code>, set up flags to train and evaluate models
-    on a distributed system.</li>
+<li><code>distributed</code>: If <code>True</code>, configure command line arguments to train
+    and evaluate models on a distributed system.</li>
 </ul>
 </li>
 <li>
@@ -1236,8 +1236,8 @@ default.</p></div>
         - `prepare_filename_queues`: If `True`, create filename queues for
             train and eval data based on file paths specified by command line
             arguments.
-        - `distributed`: If `True`, set up flags to train and evaluate models
-            on a distributed system.
+        - `distributed`: If `True`, configure command line arguments to train
+            and evaluate models on a distributed system.
 
     - Returns
         - `train_and_evaluate()` function.

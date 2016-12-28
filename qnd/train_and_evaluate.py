@@ -17,8 +17,8 @@ def def_train_and_evaluate(batch_inputs=True,
         - `prepare_filename_queues`: If `True`, create filename queues for
             train and eval data based on file paths specified by command line
             arguments.
-        - `distributed`: If `True`, set up flags to train and evaluate models
-            on a distributed system.
+        - `distributed`: If `True`, configure command line arguments to train
+            and evaluate models on a distributed system.
 
     - Returns
         - `train_and_evaluate()` function.
