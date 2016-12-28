@@ -11,6 +11,8 @@ tensorflow-qnd is a TensorFlow framework to create commands to train and
 evaluate models and make inference with them.
 The framework is built on top of
 [TF Learn](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn).
+Especially if you are working on research projects using TensorFlow, you can
+remove most of boilerplate code with this framework.
 
 
 ## Features
