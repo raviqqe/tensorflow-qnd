@@ -62,9 +62,12 @@ train_and_evaluate = qnd.def_train_and_evaluate(
     distributed=("distributed" in os.environ))
 
 
+model = mnist.def_model()
+
+
 def main():
     logging.getLogger().setLevel(logging.INFO)
-    train_and_evaluate(mnist.model, mnist.read_file)
+    train_and_evaluate(model, mnist.read_file)
 
 
 if __name__ == "__main__":
@@ -74,6 +77,7 @@ if __name__ == "__main__":
 `mnist.py` (module):
 
 ```python
+import qnd
 import tensorflow as tf
 
 
@@ -99,22 +103,29 @@ def minimize(loss):
         tf.contrib.framework.get_global_step())
 
 
-def model(image, number=None, mode=None):
-    h = tf.contrib.layers.fully_connected(image, 64)
-    h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
+def def_model():
+    qnd.add_flag("hidden_layer_size", type=int, default=64,
+                 help="Hidden layer size")
 
-    predictions = tf.argmax(h, axis=1)
+    def model(image, number=None, mode=None):
+        h = tf.contrib.layers.fully_connected(image,
+                                              qnd.FLAGS.hidden_layer_size)
+        h = tf.contrib.layers.fully_connected(h, 10, activation_fn=None)
 
-    if mode == tf.contrib.learn.ModeKeys.INFER:
-        return predictions
+        predictions = tf.argmax(h, axis=1)
 
-    loss = tf.reduce_mean(
-        tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+        if mode == tf.contrib.learn.ModeKeys.INFER:
+            return predictions
 
-    return predictions, loss, minimize(loss), {
-        "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
-                                                          number)[1],
-    }
+        loss = tf.reduce_mean(
+            tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+
+        return predictions, loss, minimize(loss), {
+            "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,
+                                                              number)[1],
+        }
+
+    return model
 ```
 
 With the code above, you can create a command with the following interface.
@@ -129,7 +140,7 @@ usage: train.py [-h] [--output_dir OUTPUT_DIR] [--train_steps TRAIN_STEPS]
                 [--batch_size BATCH_SIZE]
                 [--batch_queue_capacity BATCH_QUEUE_CAPACITY] --train_file
                 TRAIN_FILE [--filename_queue_capacity FILENAME_QUEUE_CAPACITY]
-                --eval_file EVAL_FILE
+                --eval_file EVAL_FILE [--hidden_layer_size HIDDEN_LAYER_SIZE]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -168,6 +179,8 @@ optional arguments:
   --eval_file EVAL_FILE
                         File path of eval data file(s). A glob is available.
                         (e.g. eval/*.tfrecords) (default: None)
+  --hidden_layer_size HIDDEN_LAYER_SIZE
+                        Hidden layer size (default: 64)
 ```
 
 Explore [examples](examples) directory for more information and see how to run
