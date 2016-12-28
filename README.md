@@ -21,7 +21,8 @@ remove most of boilerplate code with this framework.
   - To train and evaluate models
   - To infer labels or regression values with trained models
 - Configuration of command line arguments to set hyperparameters of models etc.
-- Distributed TensorFlow (only training and evaluation)
+- [Distributed TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
+  (only for training and evaluation)
   - Just set an optional argument `distributed ` of `def_train_and_evaluate()`
     as `True`. (i.e. `def_train_and_evaluate(distributed=True)`)
 
@@ -209,8 +210,3 @@ step.
 ## License
 
 [The Unlicense](https://unlicense.org)
-
-
-## References
-
-- [Distributed TensorFlow | TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
