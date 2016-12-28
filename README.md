@@ -13,6 +13,8 @@ The framework is built on top of
 [TF Learn](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn).
 Especially if you are working on research projects using TensorFlow, you can
 remove most of boilerplate code with this framework.
+All you need to do is to define a model constructor `model_fn` and input
+producer(s) `input_fn` to feed a dataset to the model.
 
 
 ## Features
@@ -22,10 +24,10 @@ remove most of boilerplate code with this framework.
   - To infer labels or regression values with trained models
 - Configuration of command line arguments to set hyperparameters of models etc.
 - [Distributed TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
-  (only for training and evaluation)
   - Just set an optional argument `distributed ` of `def_train_and_evaluate()`
-    as `True`. (i.e. `def_train_and_evaluate(distributed=True)`)
+    as `True` (i.e. `def_train_and_evaluate(distributed=True)`) to enable it.
   - Supports only data parallel training
+  - Only for training and evaluation but not for inference
 
 
 ## Installation
