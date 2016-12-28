@@ -47,7 +47,7 @@ For more information, see [documentation](https://raviqqe.github.io/tensorflow-q
 
 ## Examples
 
-`train.py`:
+`train.py` (command script):
 
 ```python
 import logging
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     main()
 ```
 
-`mnist.py`:
+`mnist.py` (module):
 
 ```python
 import tensorflow as tf
@@ -170,7 +170,8 @@ optional arguments:
                         (e.g. eval/*.tfrecords) (default: None)
 ```
 
-Explore [examples](examples) directory for more and see how to run them.
+Explore [examples](examples) directory for more information and see how to run
+them.
 
 
 ## Caveats

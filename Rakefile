@@ -107,13 +107,13 @@ task :readme_examples do
   File.write(README_FILE, %(
 #{md.match(/(\A.*## Examples)/m)[0]}
 
-`#{command_script}`:
+`#{command_script}` (command script):
 
 ```python
 #{read_example_file command_script}
 ```
 
-`#{library_script}`:
+`#{library_script}` (module):
 
 ```python
 #{read_example_file library_script}
@@ -125,7 +125,8 @@ With the code above, you can create a command with the following interface.
 #{`#{IN_VENV} cd examples/mnist_simple && python3 #{command_script} -h`.strip}
 ```
 
-Explore [examples](examples) directory for more and see how to run them.
+Explore [examples](examples) directory for more information and see how to run
+them.
 
 
 #{md.match(/## Caveats.*\Z/m)[0].strip}
