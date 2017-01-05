@@ -210,6 +210,12 @@ return value `eval_metric_ops` of your `model_fn` or as arguments of
 step.
 
 
+## Contributing
+
+Please send issues about any bugs, feature requests or questions, or pull
+requests.
+
+
 ## License
 
 [The Unlicense](https://unlicense.org)
