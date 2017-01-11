@@ -45,7 +45,7 @@ class FlagAdder:
         See `add_flag()`.
         """
         add_flag(name, *args, **kwargs)
-        self._flags.append(name)
+        self._flags.append(kwargs.get("dest") or name)
 
     def add_required_flag(self, name, *args, **kwargs):
         """Add a required flag.
