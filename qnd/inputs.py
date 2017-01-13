@@ -70,16 +70,18 @@ def def_def_def_input_fn(mode):
 
 def _batch_inputs(inputs, mode):
     tensor_input = isinstance(inputs[0], tf.Tensor)
+    infer_mode = mode == tf.contrib.learn.ModeKeys.INFER
 
-    batched_inputs = (tf.train.shuffle_batch
-                      if mode == tf.contrib.learn.ModeKeys.TRAIN else
-                      tf.train.batch)(
+    batched_inputs = (tf.train.batch
+                      if infer_mode else
+                      tf.train.shuffle_batch)(
         [*inputs] if tensor_input else _merge_dicts(*inputs),
         batch_size=FLAGS.batch_size,
         capacity=FLAGS.batch_queue_capacity,
-        **({"min_after_dequeue": FLAGS.batch_queue_capacity // 2}
-           if mode == tf.contrib.learn.ModeKeys.TRAIN else
-           {"allow_smaller_final_batch": True}))
+        allow_smaller_final_batch=(mode != tf.contrib.learn.ModeKeys.TRAIN),
+        **({}
+           if infer_mode else
+           {"min_after_dequeue": FLAGS.batch_queue_capacity // 2}))
 
     restore_dict = lambda x: {key: batched_inputs[key] for key in x.keys()}
 
@@ -127,7 +129,7 @@ def def_filenames_to_queue(mode):
             num_epochs=(None
                         if mode == tf.contrib.learn.ModeKeys.TRAIN else
                         1),
-            shuffle=(mode == tf.contrib.learn.ModeKeys.TRAIN),
+            shuffle=(mode != tf.contrib.learn.ModeKeys.INFER),
             capacity=FLAGS.filename_queue_capacity)
 
     return filenames_to_queue
