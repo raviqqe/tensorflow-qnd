@@ -1028,7 +1028,7 @@ from .train_and_evaluate import def_train_and_evaluate
 
 __all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
            "def_train_and_evaluate", "def_infer"]
-__version__ = "0.0.9"
+__version__ = "0.0.12"
 </code></pre>
   </div>
 
@@ -1312,7 +1312,7 @@ default.</p></div>
         See `add_flag()`.
         """
         add_flag(name, *args, **kwargs)
-        self._flags.append(name)
+        self._flags.append(kwargs.get("dest") or name)
 
     def add_required_flag(self, name, *args, **kwargs):
         """Add a required flag.
@@ -1382,7 +1382,7 @@ default.</p></div>
     See `add_flag()`.
     """
     add_flag(name, *args, **kwargs)
-    self._flags.append(name)
+    self._flags.append(kwargs.get("dest") or name)
 </code></pre>
   </div>
 </div>

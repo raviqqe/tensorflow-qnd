@@ -144,7 +144,8 @@ usage: train.py [-h] [--output_dir OUTPUT_DIR] [--train_steps TRAIN_STEPS]
                 [--save_summary_steps SAVE_SUMMARY_STEPS]
                 [--save_checkpoints_steps SAVE_CHECKPOINTS_STEPS]
                 [--batch_size BATCH_SIZE]
-                [--batch_queue_capacity BATCH_QUEUE_CAPACITY] --train_file
+                [--batch_queue_capacity BATCH_QUEUE_CAPACITY]
+                [--num_batch_threads NUM_BATCH_THREADS] --train_file
                 TRAIN_FILE [--filename_queue_capacity FILENAME_QUEUE_CAPACITY]
                 --eval_file EVAL_FILE [--hidden_layer_size HIDDEN_LAYER_SIZE]
 
@@ -176,6 +177,8 @@ optional arguments:
                         Mini-batch size (default: 64)
   --batch_queue_capacity BATCH_QUEUE_CAPACITY
                         Batch queue capacity (default: 1024)
+  --num_batch_threads NUM_BATCH_THREADS
+                        Number of threads used to create batches (default: 2)
   --train_file TRAIN_FILE
                         File path of train data file(s). A glob is available.
                         (e.g. train/*.tfrecords) (default: None)
