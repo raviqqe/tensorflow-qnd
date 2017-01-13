@@ -1,4 +1,5 @@
 import enum
+import os
 
 import tensorflow as tf
 
@@ -33,6 +34,8 @@ def def_def_def_input_fn(mode):
                      help="Mini-batch size")
             add_flag("batch_queue_capacity", type=int, default=BATCH_SIZE * 16,
                      help="Batch queue capacity")
+            add_flag("num_batch_threads", type=int, default=os.cpu_count(),
+                     help="Number of threads used to create batches")
 
         if prepare_filename_queues:
             file_flag = _add_file_flag(mode)
@@ -78,6 +81,7 @@ def _batch_inputs(inputs, mode):
         [*inputs] if tensor_input else _merge_dicts(*inputs),
         batch_size=FLAGS.batch_size,
         capacity=FLAGS.batch_queue_capacity,
+        num_threads=FLAGS.num_batch_threads,
         allow_smaller_final_batch=(mode != tf.contrib.learn.ModeKeys.TRAIN),
         **({}
            if infer_mode else
