@@ -16,8 +16,7 @@ def def_def_experiment_fn(batch_inputs=True,
                        help="Maximum number of {} steps".format(mode))
 
     adder.add_flag("min_eval_frequency", type=int, default=1,
-                   help="Minimum evaluation frequency in number of model "
-                        "savings")
+                   help="Minimum evaluation frequency in number of train steps")
 
     estimator = def_estimator(distributed)
     def_train_input_fn = def_def_train_input_fn(batch_inputs,
