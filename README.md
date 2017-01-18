@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/tensorflow-qnd.svg)](https://badge.fury.io/py/tensorflow-qnd)
 [![Python versions](https://img.shields.io/pypi/pyversions/tensorflow-qnd.svg)](setup.py)
-[![wercker status](https://app.wercker.com/status/0cb9af0e04969eddbc4f58c9c3aac677/s/master "wercker status")](https://app.wercker.com/project/byKey/0cb9af0e04969eddbc4f58c9c3aac677)
+[![wercker status](https://app.wercker.com/status/28ed86fae4933770c92881a466e81929/s/master "wercker status")](https://app.wercker.com/project/byKey/28ed86fae4933770c92881a466e81929)
 [![License](https://img.shields.io/badge/license-unlicense-lightgray.svg)](https://unlicense.org)
 
 Quick and Dirty TensorFlow command framework
