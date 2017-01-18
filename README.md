@@ -143,6 +143,7 @@ usage: train.py [-h] [--output_dir OUTPUT_DIR] [--train_steps TRAIN_STEPS]
                 [--num_cores NUM_CORES] [--log_device_placement]
                 [--save_summary_steps SAVE_SUMMARY_STEPS]
                 [--save_checkpoints_steps SAVE_CHECKPOINTS_STEPS]
+                [--keep_checkpoint_max KEEP_CHECKPOINT_MAX]
                 [--batch_size BATCH_SIZE]
                 [--batch_queue_capacity BATCH_QUEUE_CAPACITY]
                 [--num_batch_threads NUM_BATCH_THREADS] --train_file
@@ -159,8 +160,8 @@ optional arguments:
   --eval_steps EVAL_STEPS
                         Maximum number of eval steps (default: None)
   --min_eval_frequency MIN_EVAL_FREQUENCY
-                        Minimum evaluation frequency in number of model
-                        savings (default: 1)
+                        Minimum evaluation frequency in number of train steps
+                        (default: 1)
   --num_cores NUM_CORES
                         Number of CPU cores used. 0 means use of a default
                         value. (default: 0)
@@ -173,12 +174,14 @@ optional arguments:
   --save_checkpoints_steps SAVE_CHECKPOINTS_STEPS
                         Number of steps every time of which a model is saved
                         (default: None)
+  --keep_checkpoint_max KEEP_CHECKPOINT_MAX
+                        Max number of kept checkpoint files (default: 86058)
   --batch_size BATCH_SIZE
                         Mini-batch size (default: 64)
   --batch_queue_capacity BATCH_QUEUE_CAPACITY
                         Batch queue capacity (default: 1024)
   --num_batch_threads NUM_BATCH_THREADS
-                        Number of threads used to create batches (default: 2)
+                        Number of threads used to create batches (default: 16)
   --train_file TRAIN_FILE
                         File path of train data file(s). A glob is available.
                         (e.g. train/*.tfrecords) (default: None)
