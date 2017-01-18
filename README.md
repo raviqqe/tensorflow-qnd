@@ -2,7 +2,7 @@
 
 [![PyPI version](https://badge.fury.io/py/tensorflow-qnd.svg)](https://badge.fury.io/py/tensorflow-qnd)
 [![Python versions](https://img.shields.io/pypi/pyversions/tensorflow-qnd.svg)](setup.py)
-[![Build Status](https://travis-ci.org/raviqqe/tensorflow-qnd.svg?branch=master)](https://travis-ci.org/raviqqe/tensorflow-qnd)
+[![wercker status](https://app.wercker.com/status/0cb9af0e04969eddbc4f58c9c3aac677/s/master "wercker status")](https://app.wercker.com/project/byKey/0cb9af0e04969eddbc4f58c9c3aac677)
 [![License](https://img.shields.io/badge/license-unlicense-lightgray.svg)](https://unlicense.org)
 
 Quick and Dirty TensorFlow command framework
