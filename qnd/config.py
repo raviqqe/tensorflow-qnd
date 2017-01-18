@@ -55,6 +55,8 @@ def def_config(distributed=False):
                    help=saver_help("summary"))
     adder.add_flag("save_checkpoints_steps", type=int,
                    help=saver_help("a model"))
+    adder.add_flag("keep_checkpoint_max", type=int, default=2049 * 42,
+                   help="Max number of kept checkpoint files")
 
     @util.func_scope
     def config():
