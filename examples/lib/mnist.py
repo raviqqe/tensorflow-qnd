@@ -39,7 +39,8 @@ def def_model():
             return predictions
 
         loss = tf.reduce_mean(
-            tf.nn.sparse_softmax_cross_entropy_with_logits(h, number))
+            tf.nn.sparse_softmax_cross_entropy_with_logits(labels=number,
+                                                           logits=h))
 
         return predictions, loss, minimize(loss), {
             "accuracy": tf.contrib.metrics.streaming_accuracy(predictions,

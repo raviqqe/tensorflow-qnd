@@ -1,4 +1,4 @@
-import tensorflow.contrib.learn.python.learn.learn_runner as learn_runner
+from tensorflow.contrib.learn.python.learn.learn_runner import run
 
 from .experiment import def_def_experiment_fn
 from .flag import FLAGS, add_output_dir_flag
@@ -58,7 +58,7 @@ def def_train_and_evaluate(batch_inputs=True,
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
         """
-        return learn_runner.run(
+        return run(
             def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
             FLAGS.output_dir)
 
