@@ -9,7 +9,9 @@ define_tasks('qnd', define_pytest: false)
 
 
 task_in_venv :pytest do
-  Dir.glob('qnd/**/*_test.py').each do |file|
+  vsh 'cd examples/lib && . ./mnist.sh && fetch_dataset'
+
+  Dir.glob(['qnd/**/*_test.py', 'examples/**/*_test.py']).each do |file|
     vsh :pytest, file
   end
 end
