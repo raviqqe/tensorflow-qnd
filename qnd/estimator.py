@@ -46,8 +46,8 @@ def _wrap_model_fn(original_model_fn):
 
         return (
             results
-            if isinstance(results, learn.ModelFnOps) else
-            learn.ModelFnOps(
+            if isinstance(results, learn.estimators.model_fn.ModelFnOps) else
+            learn.estimators.model_fn.ModelFnOps(
                 mode,
                 *(results
                   if isinstance(results, typing.Sequence) else
