@@ -1028,7 +1028,7 @@ from .train_and_evaluate import def_train_and_evaluate
 
 __all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
            "def_train_and_evaluate", "def_infer"]
-__version__ = "0.0.14"
+__version__ = "0.0.17"
 </code></pre>
   </div>
 
@@ -1081,6 +1081,9 @@ __version__ = "0.0.14"
             `argparse.ArgumentParser.add_argument()`.
     """
     global _FLAG_NAMES
+
+    if 'help' not in kwargs:
+        kwargs['help'] = '(no description)'
 
     if name not in _FLAG_NAMES:
         _FLAG_NAMES.add(name)
@@ -1277,7 +1280,7 @@ default.</p></div>
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
         """
-        return learn_runner.run(
+        return run(
             def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
             FLAGS.output_dir)
 
