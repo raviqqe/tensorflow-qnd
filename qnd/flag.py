@@ -18,6 +18,9 @@ def add_flag(name, *args, **kwargs):
     """
     global _FLAG_NAMES
 
+    if 'help' not in kwargs:
+        kwargs['help'] = ''
+
     if name not in _FLAG_NAMES:
         _FLAG_NAMES.add(name)
         gargparse.add_argument("--" + name, *args, **kwargs)
