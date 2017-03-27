@@ -1,12 +1,9 @@
 require_relative './third/tensorflow-rakefile/tfrake.rb'
 include TFRake
 
-
-README_FILE = 'README.md'
-
+README_FILE = 'README.md'.freeze
 
 define_tasks('qnd', define_pytest: false)
-
 
 task_in_venv :pytest do
   vsh 'cd examples/lib && . ./mnist.sh && fetch_dataset'
@@ -15,7 +12,6 @@ task_in_venv :pytest do
     vsh :pytest, file
   end
 end
-
 
 task_in_venv :script_test do
   vsh 'python3 test/empty.py'
@@ -28,22 +24,20 @@ task_in_venv :script_test do
   vsh "#{distributed_oracle} -h"
 
   # Worker hosts should not include a master host.
-  vsh(*%W(! #{distributed_oracle}
-          --master_host localhost:4242
-          --worker_hosts localhost:4242
-          --ps_hosts localhost:5151
-          --task_type job
-          --train_file README.md
-          --eval_file setup.py))
+  vsh('!', distributed_oracle.to_s,
+      '--master_host', 'localhost:4242',
+      '--worker_hosts', 'localhost:4242',
+      '--ps_hosts', 'localhost:5151',
+      '--task_type', 'job',
+      '--train_file', 'README.md',
+      '--eval_file', 'setup.py')
 end
-
 
 %i(mnist_simple mnist_distributed mnist_infer).each do |name|
   task_in_venv name do
     vsh "cd examples/#{name} && ./main.sh"
   end
 end
-
 
 task_in_venv :mnist_full do |t|
   [
@@ -52,15 +46,16 @@ task_in_venv :mnist_full do |t|
     %i(use_dict_inputs),
     %i(use_model_fn_ops),
     %i(self_batch),
-    %i(self_filename_queue use_eval_input_fn),
+    %i(self_filename_queue use_eval_input_fn)
   ].each do |flags|
-    vsh(*%W(cd examples/#{t.name} &&
-            #{flags and flags.map{ |flag| "#{flag}=yes"}.join(' ')} ./main.sh))
+    vsh(
+      'cd', "examples/#{t.name}", '&&',
+      (flags && flags.map { |flag| "#{flag}=yes" }.join(' ')).to_s, './main.sh'
+    )
   end
 end
 
-
-task :test => %i(
+task test: %i(
   pytest
   script_test
   mnist_simple
@@ -69,14 +64,13 @@ task :test => %i(
   mnist_full
 )
 
-
 task :readme_examples do
   md = File.read(README_FILE)
 
   command_script = 'train.py'
   library_script = 'mnist.py'
 
-  def read_example_file file
+  def read_example_file(file)
     File.read(File.join('examples/mnist_simple', file)).strip
   end
 
@@ -109,5 +103,4 @@ them.
 ).lstrip)
 end
 
-
-task :doc => %i(pdoc readme_examples)
+task doc: %i(pdoc readme_examples)
