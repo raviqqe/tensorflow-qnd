@@ -33,7 +33,7 @@ task_in_venv :script_test do
       '--eval_file', 'setup.py')
 end
 
-%i(mnist_simple mnist_distributed mnist_infer).each do |name|
+%i(mnist_simple mnist_distributed mnist_evaluate mnist_infer).each do |name|
   task_in_venv name do
     vsh "cd examples/#{name} && ./main.sh"
   end
@@ -60,6 +60,7 @@ task test: %i(
   script_test
   mnist_simple
   mnist_distributed
+  mnist_evaluate
   mnist_infer
   mnist_full
 )
