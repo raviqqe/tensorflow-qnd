@@ -982,6 +982,7 @@ table {
   <ul>
     <li class="mono"><a href="#qnd.add_flag">add_flag</a></li>
     <li class="mono"><a href="#qnd.add_required_flag">add_required_flag</a></li>
+    <li class="mono"><a href="#qnd.def_evaluate">def_evaluate</a></li>
     <li class="mono"><a href="#qnd.def_infer">def_infer</a></li>
     <li class="mono"><a href="#qnd.def_train_and_evaluate">def_train_and_evaluate</a></li>
   </ul>
@@ -1025,10 +1026,11 @@ table {
 from .flag import *
 from .infer import def_infer
 from .train_and_evaluate import def_train_and_evaluate
+from .evaluate import def_evaluate
 
 __all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
-           "def_train_and_evaluate", "def_infer"]
-__version__ = "0.0.17"
+           "def_train_and_evaluate", "def_evaluate", "def_infer"]
+__version__ = "0.0.18"
 </code></pre>
   </div>
 
@@ -1116,6 +1118,74 @@ default.</p></div>
     default.
     """
     add_flag(name, *args, required=True, **kwargs)
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
+    <div class="name def" id="qnd.def_evaluate">
+    <p>def <span class="ident">def_evaluate</span>(</p><p>batch_inputs=True, prepare_filename_queues=True)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Define <code>evaluate()</code> function.</p>
+<p>See also <code>help(def_evaluate())</code>.</p>
+<ul>
+<li>
+<p>Args</p>
+<ul>
+<li><code>batch_inputs</code>: Same as <code>def_train_and_evaluate()</code>'s.</li>
+<li><code>prepare_filename_queues</code>: Same as <code>def_train_and_evaluate()</code>'s.</li>
+</ul>
+</li>
+<li>
+<p>Returns</p>
+<ul>
+<li><code>evaluate()</code> function.</li>
+</ul>
+</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_evaluate', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.def_evaluate" class="source">
+    <pre><code>def def_evaluate(batch_inputs=True, prepare_filename_queues=True):
+    """Define `evaluate()` function.
+
+    See also `help(def_evaluate())`.
+
+    - Args
+        - `batch_inputs`: Same as `def_train_and_evaluate()`'s.
+        - `prepare_filename_queues`: Same as `def_train_and_evaluate()`'s.
+
+    - Returns
+        - `evaluate()` function.
+    """
+    add_output_dir_flag()
+
+    estimator = def_estimator(distributed=False)
+    def_eval_input_fn = def_def_infer_input_fn(batch_inputs,
+                                               prepare_filename_queues)
+
+    def evaluate(model_fn, input_fn):
+        """Evaluate a model with data sample fed by `input_fn`.
+
+        - Args
+            - `model_fn`: Same as `train_and_evaluate()`'s.
+            - `input_fn`: Same as `eval_input_fn` argument of
+                `train_and_evaluate()`.
+
+        - Returns
+            - Evaluation results. See `Evaluable` interface in TensorFlow.
+        """
+        return estimator(model_fn, FLAGS.output_dir).evaluate(
+            input_fn=def_eval_input_fn(input_fn))
+
+    return evaluate
 </code></pre>
   </div>
 </div>
