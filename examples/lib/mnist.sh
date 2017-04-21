@@ -8,6 +8,7 @@ prediction_file=$var_dir/predictions.csv
 train() {
   python3 train.py \
     --train_steps 1000 \
+    --eval_steps 50 \
     --train_file $data_dir/train.tfrecords \
     --eval_file $data_dir/validation.tfrecords \
     --output_dir $var_dir/output
