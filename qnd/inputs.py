@@ -1,4 +1,3 @@
-import enum
 import os
 
 import tensorflow as tf
@@ -38,7 +37,7 @@ def def_def_def_input_fn(mode):
                      help="Number of threads used to create batches")
 
         if prepare_filename_queues:
-            file_flag = _add_file_flag(mode)
+            _add_file_flag(mode)
             filenames_to_queue = def_filenames_to_queue(mode)
 
         def def_input_fn(user_input_fn):
@@ -87,7 +86,7 @@ def _batch_inputs(inputs, mode):
            if infer_mode else
            {"min_after_dequeue": FLAGS.batch_queue_capacity // 2}))
 
-    restore_dict = lambda x: {key: batched_inputs[key] for key in x.keys()}
+    def restore_dict(x): return {key: batched_inputs[key] for key in x.keys()}
 
     return batched_inputs if tensor_input else [*map(restore_dict, inputs)]
 
@@ -102,7 +101,7 @@ def _check_inputs(inputs):
                          "(returned values: {})"
                          .format(inputs))
 
-    if len(inputs) == 2 and type(inputs[0]) != type(inputs[1]):
+    if len(inputs) == 2 and not isinstance(inputs[0], type(inputs[1])):
         raise ValueError("features and targets should be the same type. "
                          "(features type: {}, targets type: {})"
                          .format(*map(type, inputs)))

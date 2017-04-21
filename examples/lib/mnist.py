@@ -5,7 +5,7 @@ import tensorflow as tf
 def read_file(filename_queue):
     _, serialized = tf.TFRecordReader().read(filename_queue)
 
-    scalar_feature = lambda dtype: tf.FixedLenFeature([], dtype)
+    def scalar_feature(dtype): return tf.FixedLenFeature([], dtype)
 
     features = tf.parse_single_example(serialized, {
         "image_raw": scalar_feature(tf.string),
