@@ -33,7 +33,7 @@ task_in_venv :script_test do
       '--eval_file', 'setup.py')
 end
 
-%i(mnist_simple mnist_distributed mnist_evaluate mnist_infer).each do |name|
+%i[mnist_simple mnist_distributed mnist_evaluate mnist_infer].each do |name|
   task_in_venv name do
     vsh "cd examples/#{name} && ./main.sh"
   end
@@ -42,11 +42,11 @@ end
 task_in_venv :mnist_full do |t|
   [
     nil,
-    %i(use_eval_input_fn),
-    %i(use_dict_inputs),
-    %i(use_model_fn_ops),
-    %i(self_batch),
-    %i(self_filename_queue use_eval_input_fn)
+    %i[use_eval_input_fn],
+    %i[use_dict_inputs],
+    %i[use_model_fn_ops],
+    %i[self_batch],
+    %i[self_filename_queue use_eval_input_fn]
   ].each do |flags|
     vsh(
       'cd', "examples/#{t.name}", '&&',
@@ -55,7 +55,7 @@ task_in_venv :mnist_full do |t|
   end
 end
 
-task test: %i(
+task test: %i[
   pytest
   script_test
   mnist_simple
@@ -63,7 +63,7 @@ task test: %i(
   mnist_evaluate
   mnist_infer
   mnist_full
-)
+]
 
 task :readme_examples do
   md = File.read(README_FILE)
@@ -104,4 +104,4 @@ them.
 ).lstrip)
 end
 
-task doc: %i(pdoc readme_examples)
+task doc: %i[pdoc readme_examples]
