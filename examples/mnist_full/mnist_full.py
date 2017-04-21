@@ -64,7 +64,7 @@ mnist_model = mnist.def_model()
 def model(image, number=None, mode=tf.contrib.learn.ModeKeys.TRAIN):
     results = mnist_model(image, number, mode)
 
-    return (tf.contrib.learn.estimators.model_fn.ModelFnOps(mode, *results)
+    return (tf.contrib.learn.ModelFnOps(mode, *results)
             if env("use_model_fn_ops") else
             results)
 
