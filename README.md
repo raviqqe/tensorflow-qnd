@@ -90,7 +90,7 @@ import tensorflow as tf
 def read_file(filename_queue):
     _, serialized = tf.TFRecordReader().read(filename_queue)
 
-    scalar_feature = lambda dtype: tf.FixedLenFeature([], dtype)
+    def scalar_feature(dtype): return tf.FixedLenFeature([], dtype)
 
     features = tf.parse_single_example(serialized, {
         "image_raw": scalar_feature(tf.string),
@@ -159,7 +159,7 @@ optional arguments:
   --train_steps TRAIN_STEPS
                         Maximum number of train steps (default: None)
   --eval_steps EVAL_STEPS
-                        Maximum number of eval steps (default: None)
+                        Maximum number of eval steps (default: 100)
   --min_eval_frequency MIN_EVAL_FREQUENCY
                         Minimum evaluation frequency in number of train steps
                         (default: 1)
@@ -182,7 +182,7 @@ optional arguments:
   --batch_queue_capacity BATCH_QUEUE_CAPACITY
                         Batch queue capacity (default: 1024)
   --num_batch_threads NUM_BATCH_THREADS
-                        Number of threads used to create batches (default: 16)
+                        Number of threads used to create batches (default: 2)
   --train_file TRAIN_FILE
                         File path of train data file(s). A glob is available.
                         (e.g. train/*.tfrecords) (default: None)
