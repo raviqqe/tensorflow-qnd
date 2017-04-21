@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-from .flag import FLAGS, FlagAdder
+from .flag import FlagAdder
 from .estimator import def_estimator
 from .inputs import def_def_train_input_fn, def_def_eval_input_fn
 
@@ -12,11 +12,15 @@ def def_def_experiment_fn(batch_inputs=True,
 
     for mode in [tf.contrib.learn.ModeKeys.TRAIN,
                  tf.contrib.learn.ModeKeys.EVAL]:
-        adder.add_flag("{}_steps".format(mode), type=int,
-                       help="Maximum number of {} steps".format(mode))
+        adder.add_flag(
+            "{}_steps".format(mode),
+            type=int,
+            default=(100 if mode == tf.contrib.learn.ModeKeys.EVAL else None),
+            help="Maximum number of {} steps".format(mode))
 
-    adder.add_flag("min_eval_frequency", type=int, default=1,
-                   help="Minimum evaluation frequency in number of train steps")
+    adder.add_flag(
+        "min_eval_frequency", type=int, default=1,
+        help="Minimum evaluation frequency in number of train steps")
 
     estimator = def_estimator(distributed)
     def_train_input_fn = def_def_train_input_fn(batch_inputs,
