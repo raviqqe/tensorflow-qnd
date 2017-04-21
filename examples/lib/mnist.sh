@@ -27,7 +27,7 @@ infer() {
 fetch_dataset() {
   if [ ! -d $shared_data_dir ]
   then
-    curl -SL https://raw.githubusercontent.com/raviqqe/tensorflow/patch-1/tensorflow/examples/how_tos/reading_data/convert_to_records.py |
+    curl -SL https://github.com/tensorflow/tensorflow/raw/master/tensorflow/examples/how_tos/reading_data/convert_to_records.py |
     python3 - --directory $shared_data_dir
   fi &&
 
