@@ -2,6 +2,10 @@ import qnd
 import tensorflow as tf
 
 
+def _preprocess_image(image):
+    return tf.to_float(image) / 255 - 0.5
+
+
 def read_file(filename_queue):
     _, serialized = tf.TFRecordReader().read(filename_queue)
 
@@ -15,7 +19,15 @@ def read_file(filename_queue):
     image = tf.decode_raw(features["image_raw"], tf.uint8)
     image.set_shape([28**2])
 
-    return tf.to_float(image) / 255 - 0.5, features["label"]
+    return _preprocess_image(image), features["label"]
+
+
+def serving_input_fn():
+    features = {
+        'image': _preprocess_image(tf.placeholder(tf.uint8, [None, 28**2])),
+    }
+
+    return tf.contrib.learn.InputFnOps(features, None, features)
 
 
 def minimize(loss):

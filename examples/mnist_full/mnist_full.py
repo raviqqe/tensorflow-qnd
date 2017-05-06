@@ -8,8 +8,8 @@ import mnist
 
 
 BATCH_SIZE = 64
-ENV_FLAGS = ["use_eval_input_fn", "use_dict_inputs", "use_model_fn_ops",
-             "self_batch", "self_filename_queue"]
+ENV_FLAGS = ['use_eval_input_fn', 'use_serving_input_fn', 'use_dict_inputs',
+             'use_model_fn_ops', 'self_batch', 'self_filename_queue']
 
 
 def env(name):
@@ -94,8 +94,9 @@ def main():
         model,
         def_input_fn(train_batch, lambda: filename_queue(train=True)),
         (def_input_fn(eval_batch, lambda: filename_queue())
-         if env("use_eval_input_fn") else
-         None))
+         if env('use_eval_input_fn') else
+         None),
+        (mnist.serving_input_fn if env('use_serving_input_fn') else None))
 
 
 if __name__ == "__main__":
