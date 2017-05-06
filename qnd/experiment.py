@@ -28,12 +28,18 @@ def def_def_experiment_fn(batch_inputs=True,
     def_eval_input_fn = def_def_eval_input_fn(batch_inputs,
                                               prepare_filename_queues)
 
-    def def_experiment_fn(model_fn, train_input_fn, eval_input_fn=None):
+    def def_experiment_fn(model_fn,
+                          train_input_fn,
+                          eval_input_fn=None,
+                          serving_input_fn=None):
         def experiment_fn(output_dir):
             return tf.contrib.learn.Experiment(
                 estimator(model_fn, output_dir),
                 def_train_input_fn(train_input_fn),
                 def_eval_input_fn(eval_input_fn or train_input_fn),
+                export_strategies=(serving_input_fn and [
+                    tf.contrib.learn.make_export_strategy(serving_input_fn),
+                ]),
                 **adder.flags)
 
         return experiment_fn

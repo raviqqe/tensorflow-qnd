@@ -29,7 +29,10 @@ def def_train_and_evaluate(batch_inputs=True,
                                               prepare_filename_queues,
                                               distributed)
 
-    def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
+    def train_and_evaluate(model_fn,
+                           train_input_fn,
+                           eval_input_fn=None,
+                           serving_input_fn=None):
         """Train and evaluate a model with features and targets fed by
         `input_fn`s.
 
@@ -58,8 +61,10 @@ def def_train_and_evaluate(batch_inputs=True,
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
         """
-        return run(
-            def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
-            FLAGS.output_dir)
+        return run(def_experiment_fn(model_fn,
+                                     train_input_fn,
+                                     eval_input_fn,
+                                     serving_input_fn),
+                   FLAGS.output_dir)
 
     return train_and_evaluate
