@@ -20,19 +20,17 @@ remove most of boilerplate code with this framework.
 All you need to do is to define a model constructor `model_fn` and input
 producer(s) `input_fn` to feed a dataset to the model.
 
-
 ## Features
 
-- Creation of commands
-  - To train and evaluate models
-  - To infer labels or regression values with trained models
-- Configuration of command line arguments to set hyperparameters of models etc.
-- [Distributed TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
-  - Just set an optional argument `distributed ` of `def_train_and_evaluate()`
-    as `True` (i.e. `def_train_and_evaluate(distributed=True)`) to enable it.
-  - Supports only data parallel training
-  - Only for training and evaluation but not for inference
-
+-   Creation of commands
+    -   To train and evaluate models
+    -   To infer labels or regression values with trained models
+-   Configuration of command line arguments to set hyperparameters of models etc.
+-   [Distributed TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
+    -   Just set an optional argument `distributed` of `def_train_and_evaluate()`
+        as `True` (i.e. `def_train_and_evaluate(distributed=True)`) to enable it.
+    -   Supports only data parallel training
+    -   Only for training and evaluation but not for inference
 
 ## Installation
 
@@ -42,18 +40,16 @@ Python 3.5+ and TensorFlow 0.12+ are required.
 pip3 install --user --upgrade tensorflow-qnd
 ```
 
-
 ## Usage
 
-1. Add command line arguments with `add_flag` and `add_required_flag` functions.
-2. Define a `train_and_evaluate` or `infer` function with
-   `def_train_and_evaluate` or `def_infer` function
-3. Pass `model_fn` (model constructor) and `input_fn` (input producer) functions
-   to that defined function.
-4. Run the script with appropriate command line arguments.
+1.  Add command line arguments with `add_flag` and `add_required_flag` functions.
+2.  Define a `train_and_evaluate` or `infer` function with
+    `def_train_and_evaluate` or `def_infer` function
+3.  Pass `model_fn` (model constructor) and `input_fn` (input producer) functions
+    to that defined function.
+4.  Run the script with appropriate command line arguments.
 
 For more information, see [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
-
 
 ## Examples
 
@@ -203,7 +199,6 @@ optional arguments:
 Explore [examples](examples) directory for more information and see how to run
 them.
 
-
 ## Caveats
 
 ### Necessary update of a global step variable
@@ -212,7 +207,6 @@ As done in [examples](examples), you must get a global step variable with
 `tf.contrib.framework.get_global_step()` and update (increment) it in each
 training step.
 
-
 ### Use streaming metrics for `eval_metric_ops`
 
 When non-streaming ones such as `tf.contrib.metrics.accuracy` are used in a
@@ -220,12 +214,10 @@ return value `eval_metric_ops` of your `model_fn` or as arguments of
 `ModelFnOps`, their values will be ones of the last batch in every evaluation
 step.
 
-
 ## Contributing
 
 Please send issues about any bugs, feature requests or questions, or pull
 requests.
-
 
 ## License
 
