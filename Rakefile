@@ -43,7 +43,7 @@ task_in_venv :mnist_full do |t|
   [
     nil,
     %i[use_eval_input_fn],
-    %i[use_serving_input_fn],
+    # %i[use_serving_input_fn], # TODO: Enable this test when tensorflow/tensorflow #9923 is merged.
     %i[use_dict_inputs],
     %i[use_model_fn_ops],
     %i[self_batch],
