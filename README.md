@@ -14,27 +14,27 @@ Quick and Dirty TensorFlow command framework
 tensorflow-qnd is a TensorFlow framework to create commands to train and
 evaluate models and make inference with them.
 The framework is built on top of
-[TF Learn](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn).
+[tf.contrib.learn module](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/contrib/learn/python/learn).
 Especially if you are working on research projects using TensorFlow, you can
-remove most of boilerplate code with this framework.
+remove most of boilerplate code with the framework.
 All you need to do is to define a model constructor `model_fn` and input
 producer(s) `input_fn` to feed a dataset to the model.
 
 ## Features
 
--   Creation of commands
-    -   To train and evaluate models
-    -   To infer labels or regression values with trained models
--   Configuration of command line arguments to set hyperparameters of models etc.
+-   Command creation for:
+    -   Training and evaluation of models
+    -   Inference of labels or regression values with trained models
+-   Configuration of command line options to set hyperparameters of models etc.
 -   [Distributed TensorFlow](https://www.tensorflow.org/how_tos/distributed/)
     -   Just set an optional argument `distributed` of `def_train_and_evaluate()`
         as `True` (i.e. `def_train_and_evaluate(distributed=True)`) to enable it.
     -   Supports only data parallel training
-    -   Only for training and evaluation but not for inference
+    -   Only for training but not for inference
 
 ## Installation
 
-Python 3.5+ and TensorFlow 0.12+ are required.
+Python 3.5+ and TensorFlow 1.1+ are required.
 
 ```
 pip3 install --user --upgrade tensorflow-qnd
@@ -46,7 +46,7 @@ pip3 install --user --upgrade tensorflow-qnd
 2.  Define a `train_and_evaluate` or `infer` function with
     `def_train_and_evaluate` or `def_infer` function
 3.  Pass `model_fn` (model constructor) and `input_fn` (input producer) functions
-    to that defined function.
+    to the defined function.
 4.  Run the script with appropriate command line arguments.
 
 For more information, see [documentation](https://raviqqe.github.io/tensorflow-qnd/qnd).
@@ -209,7 +209,7 @@ training step.
 
 ### Use streaming metrics for `eval_metric_ops`
 
-When non-streaming ones such as `tf.contrib.metrics.accuracy` are used in a
+When non-streaming metrics such as `tf.contrib.metrics.accuracy` are used in a
 return value `eval_metric_ops` of your `model_fn` or as arguments of
 `ModelFnOps`, their values will be ones of the last batch in every evaluation
 step.
