@@ -56,7 +56,7 @@ def def_def_def_input_fn(mode):
                     if prepare_filename_queues else
                     user_input_fn())
 
-                inputs = ((inputs,)
+                inputs = ([inputs]
                           if type(inputs) in {dict, tf.Tensor} else
                           inputs)
 
@@ -72,13 +72,25 @@ def def_def_def_input_fn(mode):
 
 
 def _batch_inputs(inputs, mode):
-    tensor_input = isinstance(inputs[0], tf.Tensor)
+    input_is_dict = isinstance(inputs[0], dict)
+
+    batched_inputs = _batch_merged_inputs(
+        _merge_dicts(*inputs) if input_is_dict else inputs,
+        mode)
+
+    return ([{key: batched_inputs[key] for key in input_.keys()}
+             for input_ in inputs]
+            if input_is_dict else
+            batched_inputs)
+
+
+def _batch_merged_inputs(inputs, mode):
     infer_mode = mode == tf.contrib.learn.ModeKeys.INFER
 
-    batched_inputs = (tf.train.batch
-                      if infer_mode else
-                      tf.train.shuffle_batch)(
-        [*inputs] if tensor_input else _merge_dicts(*inputs),
+    return (tf.train.batch
+            if infer_mode else
+            tf.train.shuffle_batch)(
+        inputs,
         batch_size=FLAGS.batch_size,
         capacity=FLAGS.batch_queue_capacity,
         num_threads=FLAGS.num_batch_threads,
@@ -86,10 +98,6 @@ def _batch_inputs(inputs, mode):
         **({}
            if infer_mode else
            {"min_after_dequeue": FLAGS.batch_queue_capacity // 2}))
-
-    def restore_dict(x): return {key: batched_inputs[key] for key in x.keys()}
-
-    return batched_inputs if tensor_input else [*map(restore_dict, inputs)]
 
 
 def _merge_dicts(*dicts):
