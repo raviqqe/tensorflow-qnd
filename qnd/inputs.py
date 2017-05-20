@@ -85,19 +85,46 @@ def _batch_inputs(inputs, mode):
 
 
 def _batch_merged_inputs(inputs, mode):
-    infer_mode = mode == tf.contrib.learn.ModeKeys.INFER
+    if mode != tf.contrib.learn.ModeKeys.INFER:
+        inputs = _shuffle(inputs,
+                          capacity=FLAGS.batch_queue_capacity,
+                          num_threads=FLAGS.num_batch_threads,
+                          min_after_dequeue=FLAGS.batch_queue_capacity // 2)
 
-    return (tf.train.batch
-            if infer_mode else
-            tf.train.shuffle_batch)(
+    return tf.train.batch(
         inputs,
         batch_size=FLAGS.batch_size,
+        dynamic_pad=True,
         capacity=FLAGS.batch_queue_capacity,
         num_threads=FLAGS.num_batch_threads,
-        allow_smaller_final_batch=(mode != tf.contrib.learn.ModeKeys.TRAIN),
-        **({}
-           if infer_mode else
-           {"min_after_dequeue": FLAGS.batch_queue_capacity // 2}))
+        allow_smaller_final_batch=(mode != tf.contrib.learn.ModeKeys.TRAIN))
+
+
+def _shuffle(inputs, capacity, min_after_dequeue, num_threads):
+    if isinstance(inputs, dict):
+        names, dtypes = zip(*[(key, input_.dtype)
+                              for key, input_ in inputs.items()])
+    else:
+        dtypes = [input_.dtype for input_ in inputs]
+
+    queue = tf.RandomShuffleQueue(
+        capacity,
+        min_after_dequeue,
+        dtypes,
+        **({'names': names} if isinstance(inputs, dict) else {}))
+
+    tf.train.add_queue_runner(tf.train.QueueRunner(
+        queue,
+        [queue.enqueue(inputs)] * num_threads))
+
+    shuffled_inputs = queue.dequeue()
+
+    for key, input_ in (inputs.items()
+                        if isinstance(inputs, dict) else
+                        enumerate(inputs)):
+        shuffled_inputs[key].set_shape(input_.get_shape())
+
+    return shuffled_inputs
 
 
 def _merge_dicts(*dicts):
