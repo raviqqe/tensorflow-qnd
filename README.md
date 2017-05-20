@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="img/logo.png">
+</div>
+
 # tensorflow-qnd
 
 [![PyPI version](https://badge.fury.io/py/tensorflow-qnd.svg)](https://badge.fury.io/py/tensorflow-qnd)
