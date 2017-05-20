@@ -6,6 +6,7 @@ from . import util
 from .flag import FLAGS, add_flag, add_required_flag
 
 
+DEFAULT_BATCH_SIZE = 64
 MODES = [tf.contrib.learn.ModeKeys.TRAIN,
          tf.contrib.learn.ModeKeys.EVAL,
          tf.contrib.learn.ModeKeys.INFER]
@@ -25,13 +26,13 @@ def _add_file_flag(mode):
 def def_def_def_input_fn(mode):
     assert mode in MODES
 
-    BATCH_SIZE = 64
-
     def def_def_input_fn(batch_inputs=True, prepare_filename_queues=True):
         if batch_inputs:
-            add_flag("batch_size", type=int, default=BATCH_SIZE,
+            add_flag("batch_size", type=int, default=DEFAULT_BATCH_SIZE,
                      help="Mini-batch size")
-            add_flag("batch_queue_capacity", type=int, default=BATCH_SIZE * 16,
+            add_flag("batch_queue_capacity",
+                     type=int,
+                     default=DEFAULT_BATCH_SIZE * 16,
                      help="Batch queue capacity")
             add_flag("num_batch_threads", type=int, default=os.cpu_count(),
                      help="Number of threads used to create batches")
