@@ -32,6 +32,7 @@ def def_def_def_input_fn(mode):
                      help="Mini-batch size")
             add_flag("batch_queue_capacity",
                      type=int,
+                     # TODO: Set a value for predictable behavior
                      default=DEFAULT_BATCH_SIZE * 16,
                      help="Batch queue capacity")
             add_flag("num_batch_threads", type=int, default=os.cpu_count(),
@@ -89,6 +90,7 @@ def _batch_merged_inputs(inputs, mode):
         inputs = _shuffle(inputs,
                           capacity=FLAGS.batch_queue_capacity,
                           num_threads=FLAGS.num_batch_threads,
+                          # TODO: Set a proper value for predictable behavior
                           min_after_dequeue=FLAGS.batch_queue_capacity // 2)
 
     return tf.train.batch(
