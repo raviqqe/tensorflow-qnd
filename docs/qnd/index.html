@@ -984,6 +984,7 @@ table {
     <li class="mono"><a href="#qnd.add_required_flag">add_required_flag</a></li>
     <li class="mono"><a href="#qnd.def_evaluate">def_evaluate</a></li>
     <li class="mono"><a href="#qnd.def_infer">def_infer</a></li>
+    <li class="mono"><a href="#qnd.def_serve">def_serve</a></li>
     <li class="mono"><a href="#qnd.def_train_and_evaluate">def_train_and_evaluate</a></li>
   </ul>
 
@@ -1027,10 +1028,11 @@ from .flag import *
 from .infer import def_infer
 from .train_and_evaluate import def_train_and_evaluate
 from .evaluate import def_evaluate
+from .serve import def_serve
 
 __all__ = ["FLAGS", "add_flag", "add_required_flag", "FlagAdder",
-           "def_train_and_evaluate", "def_evaluate", "def_infer"]
-__version__ = "0.1.0"
+           "def_train_and_evaluate", "def_evaluate", "def_infer", "def_serve"]
+__version__ = "0.1.3"
 </code></pre>
   </div>
 
@@ -1264,6 +1266,74 @@ default.</p></div>
   
       
   <div class="item">
+    <div class="name def" id="qnd.def_serve">
+    <p>def <span class="ident">def_serve</span>(</p><p>)</p>
+    </div>
+    
+
+    
+  
+    <div class="desc"><p>Define <code>serve()</code> function.</p>
+<p>See also <code>help(def_serve())</code>.</p>
+<ul>
+<li>Returns<ul>
+<li><code>serve()</code> function.</li>
+</ul>
+</li>
+</ul></div>
+  <div class="source_cont">
+  <p class="source_link"><a href="javascript:void(0);" onclick="toggle('source-qnd.def_serve', this);">Show source &equiv;</a></p>
+  <div id="source-qnd.def_serve" class="source">
+    <pre><code>def def_serve():
+    """Define `serve()` function.
+
+    See also `help(def_serve())`.
+
+    - Returns
+        - `serve()` function.
+    """
+    add_output_dir_flag()
+
+    create_estimator = def_estimator(distributed=False)
+
+    def serve(model_fn, preprocess_fn, port=80):
+        """Serve as a HTTP server.
+
+        - Args
+            - `model_fn`: Same as `train_and_evaluate()`'s.
+            - `preprocess_fn`: A function to preprocess server request bodies
+                in JSON.
+        """
+        estimator = create_estimator(model_fn, FLAGS.output_dir)
+
+        class Handler(http.server.BaseHTTPRequestHandler):
+            def do_POST(self):
+                self.send_response(200)
+                self.send_header('Content-type', 'application/json')
+                self.end_headers()
+
+                inputs = json.loads(self.rfile.read(
+                    int(self.headers['Content-Length'])))
+
+                predictions = _make_json_serializable(
+                    estimator.predict(input_fn=lambda: preprocess_fn(inputs),
+                                      as_iterable=False))
+
+                logging.info('Prediction results: {}'.format(predictions))
+
+                self.wfile.write(json.dumps(predictions).encode())
+
+        http.server.HTTPServer(('', port), Handler).serve_forever()
+
+    return serve
+</code></pre>
+  </div>
+</div>
+
+  </div>
+  
+      
+  <div class="item">
     <div class="name def" id="qnd.def_train_and_evaluate">
     <p>def <span class="ident">def_train_and_evaluate</span>(</p><p>batch_inputs=True, prepare_filename_queues=True, distributed=False)</p>
     </div>
@@ -1321,7 +1391,10 @@ default.</p></div>
                                               prepare_filename_queues,
                                               distributed)
 
-    def train_and_evaluate(model_fn, train_input_fn, eval_input_fn=None):
+    def train_and_evaluate(model_fn,
+                           train_input_fn,
+                           eval_input_fn=None,
+                           serving_input_fn=None):
         """Train and evaluate a model with features and targets fed by
         `input_fn`s.
 
@@ -1350,9 +1423,11 @@ default.</p></div>
         - Returns
             - Return value of `tf.contrib.learn.python.learn.learn_runner.run()`.
         """
-        return run(
-            def_experiment_fn(model_fn, train_input_fn, eval_input_fn),
-            FLAGS.output_dir)
+        return run(def_experiment_fn(model_fn,
+                                     train_input_fn,
+                                     eval_input_fn,
+                                     serving_input_fn),
+                   FLAGS.output_dir)
 
     return train_and_evaluate
 </code></pre>
