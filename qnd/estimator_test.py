@@ -10,6 +10,7 @@ def test_def_estimator():
                       tf.contrib.learn.Estimator)
     assert isinstance(
         def_estimator()(
-            tf.contrib.learn.ModelFnOps(test.oracle_model),
+            lambda x, y: tf.contrib.learn.ModelFnOps(
+                "train", *test.oracle_model(x, y)),
             "output"),
         tf.contrib.learn.Estimator)
