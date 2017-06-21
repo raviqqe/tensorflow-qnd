@@ -55,7 +55,8 @@ def _make_json_serializable(x):
     if isinstance(x, np.ndarray):
         return x.tolist()
     elif isinstance(x, dict):
-        return {key: _make_json_serializable(value) for key, value in x.items()}
+        return {key: _make_json_serializable(value)
+                for key, value in x.items()}
     elif isinstance(x, list):
         return [_make_json_serializable(value) for value in x]
 
