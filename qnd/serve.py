@@ -21,13 +21,15 @@ def def_serve():
 
     create_estimator = def_estimator(distributed=False)
 
-    def serve(model_fn, preprocess_fn):
+    def serve(model_fn, preprocess_fn, postprocess_fn):
         """Serve as a HTTP server.
 
         - Args
             - `model_fn`: Same as `train_and_evaluate()`'s.
             - `preprocess_fn`: A function to preprocess server request bodies
                 in JSON.
+            - `preprocess_fn`: A function to postprocess server responses of
+                JSON serializable objects.
         """
         estimator = create_estimator(model_fn, FLAGS.output_dir)
 
@@ -40,9 +42,9 @@ def def_serve():
                 inputs = json.loads(self.rfile.read(
                     int(self.headers['Content-Length'])))
 
-                predictions = _make_json_serializable(
+                predictions = postprocess_fn(_make_json_serializable(
                     estimator.predict(input_fn=lambda: preprocess_fn(inputs),
-                                      as_iterable=False))
+                                      as_iterable=False)))
 
                 logging.info('Prediction results: {}'.format(predictions))
 
