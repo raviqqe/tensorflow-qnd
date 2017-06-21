@@ -4,7 +4,7 @@ import logging
 import numpy as np
 
 from .estimator import def_estimator
-from .flag import FLAGS, add_output_dir_flag
+from .flag import FLAGS, add_flag, add_output_dir_flag
 
 
 def def_serve():
@@ -16,10 +16,12 @@ def def_serve():
         - `serve()` function.
     """
     add_output_dir_flag()
+    add_flag('ip_address', default='')
+    add_flag('port', type=int, default=80)
 
     create_estimator = def_estimator(distributed=False)
 
-    def serve(model_fn, preprocess_fn, port=80):
+    def serve(model_fn, preprocess_fn):
         """Serve as a HTTP server.
 
         - Args
@@ -46,7 +48,8 @@ def def_serve():
 
                 self.wfile.write(json.dumps(predictions).encode())
 
-        http.server.HTTPServer(('', port), Handler).serve_forever()
+        http.server.HTTPServer((FLAGS.ip_address, FLAGS.port), Handler) \
+            .serve_forever()
 
     return serve
 
