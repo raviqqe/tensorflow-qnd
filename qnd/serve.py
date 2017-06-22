@@ -21,7 +21,7 @@ def def_serve():
 
     create_estimator = def_estimator(distributed=False)
 
-    def serve(model_fn, preprocess_fn, postprocess_fn):
+    def serve(model_fn, preprocess_fn=None, postprocess_fn=None):
         """Serve as a HTTP server.
 
         - Args
@@ -42,9 +42,16 @@ def def_serve():
                 inputs = json.loads(self.rfile.read(
                     int(self.headers['Content-Length'])))
 
-                predictions = postprocess_fn(_make_json_serializable(
-                    estimator.predict(input_fn=lambda: preprocess_fn(inputs),
-                                      as_iterable=False)))
+                def input_fn():
+                    return (inputs
+                            if preprocess_fn is None else
+                            preprocess_fn(inputs))
+
+                predictions = _make_json_serializable(
+                    estimator.predict(input_fn=input_fn, as_iterable=False))
+
+                if postprocess_fn is not None:
+                    predictions = postprocess_fn(predictions)
 
                 logging.info('Prediction results: {}'.format(predictions))
 
