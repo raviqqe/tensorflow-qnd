@@ -85,8 +85,7 @@ class EstimatorServer:
                     input_fn=self._input_queue.get):
                 self._output_queue.put(output)
 
-        thread = threading.Thread(target=target)
-        thread.daemon = True
+        thread = threading.Thread(target=target, daemon=True)
         thread.start()
 
     def predict(self, inputs):
