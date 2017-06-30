@@ -1,6 +1,9 @@
 import http.server
 import json
 import logging
+import queue
+import threading
+
 import numpy as np
 
 from .estimator import def_estimator
@@ -31,7 +34,8 @@ def def_serve():
             - `preprocess_fn`: A function to postprocess server responses of
                 JSON serializable objects.
         """
-        estimator = create_estimator(model_fn, FLAGS.output_dir)
+        thread = EstimatorThread(create_estimator(model_fn, FLAGS.output_dir))
+        thread.start()
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_POST(self):
@@ -42,20 +46,17 @@ def def_serve():
                 inputs = json.loads(self.rfile.read(
                     int(self.headers['Content-Length'])))
 
-                def input_fn():
-                    return (inputs
-                            if preprocess_fn is None else
-                            preprocess_fn(inputs))
+                if preprocess_fn:
+                    inputs = preprocess_fn(inputs)
 
-                predictions = _make_json_serializable(
-                    estimator.predict(input_fn=input_fn, as_iterable=False))
+                outputs = thread.predict(inputs)
 
-                if postprocess_fn is not None:
-                    predictions = postprocess_fn(predictions)
+                if postprocess_fn:
+                    outputs = postprocess_fn(outputs)
 
-                logging.info('Prediction results: {}'.format(predictions))
+                logging.info('Prediction results: {}'.format(outputs))
 
-                self.wfile.write(json.dumps(predictions).encode())
+                self.wfile.write(json.dumps(outputs).encode())
 
         http.server.HTTPServer((FLAGS.ip_address, FLAGS.port), Handler) \
             .serve_forever()
@@ -73,3 +74,19 @@ def _make_json_serializable(x):
         return [_make_json_serializable(value) for value in x]
 
     return x
+
+
+class EstimatorThread(threading.Thread):
+    def __init__(self, estimator):
+        self._input_queue = queue.Queue()
+        self._output_queue = queue.Queue()
+        self._estimator = estimator
+        self.daemon = True
+
+    def run(self):
+        for output in self._estimator.predict(input_fn=self._input_queue.get):
+            self._output_queue.put(output)
+
+    def predict(self, inputs):
+        self._input_queue.put(inputs)
+        return self._output_queue.get()
