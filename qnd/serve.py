@@ -5,6 +5,7 @@ import queue
 import threading
 
 import numpy as np
+import tensorflow as tf
 
 from .estimator import def_estimator
 from .flag import FLAGS, add_flag, add_output_dir_flag
@@ -30,11 +31,15 @@ def def_serve():
         - Args
             - `model_fn`: Same as `train_and_evaluate()`'s.
             - `preprocess_fn`: A function to preprocess server request bodies
-                in JSON.
+                in JSON. Its first argument is a function which returns the
+                JSON input.
             - `preprocess_fn`: A function to postprocess server responses of
                 JSON serializable objects.
         """
-        server = EstimatorServer(estimator(model_fn, FLAGS.output_dir))
+        server = EstimatorServer(
+            estimator(model_fn, FLAGS.output_dir),
+            preprocess_fn,
+            postprocess_fn)
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_POST(self):
@@ -45,13 +50,7 @@ def def_serve():
                 inputs = json.loads(self.rfile.read(
                     int(self.headers['Content-Length'])))
 
-                if preprocess_fn:
-                    inputs = preprocess_fn(inputs)
-
                 outputs = server.predict(inputs)
-
-                if postprocess_fn:
-                    outputs = postprocess_fn(outputs)
 
                 logging.info('Prediction results: {}'.format(outputs))
 
@@ -76,14 +75,14 @@ def _make_json_serializable(x):
 
 
 class EstimatorServer:
-    def __init__(self, estimator):
+    def __init__(self, estimator, preprocess_fn=None, postprocess_fn=None):
         self._input_queue = queue.Queue()
         self._output_queue = queue.Queue()
 
         def target():
             for output in estimator.predict(
-                    input_fn=self._input_queue.get):
-                self._output_queue.put(output)
+                    input_fn=lambda: preprocess_fn(self._input_queue.get)):
+                self._output_queue.put(postprocess_fn(output))
 
         thread = threading.Thread(target=target, daemon=True)
         thread.start()
