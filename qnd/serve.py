@@ -34,8 +34,7 @@ def def_serve():
             - `preprocess_fn`: A function to postprocess server responses of
                 JSON serializable objects.
         """
-        thread = EstimatorThread(create_estimator(model_fn, FLAGS.output_dir))
-        thread.start()
+        server = EstimatorServer(create_estimator(model_fn, FLAGS.output_dir))
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_POST(self):
@@ -49,7 +48,7 @@ def def_serve():
                 if preprocess_fn:
                     inputs = preprocess_fn(inputs)
 
-                outputs = thread.predict(inputs)
+                outputs = server.predict(inputs)
 
                 if postprocess_fn:
                     outputs = postprocess_fn(outputs)
@@ -76,16 +75,19 @@ def _make_json_serializable(x):
     return x
 
 
-class EstimatorThread(threading.Thread):
+class EstimatorServer:
     def __init__(self, estimator):
         self._input_queue = queue.Queue()
         self._output_queue = queue.Queue()
-        self._estimator = estimator
-        self.daemon = True
 
-    def run(self):
-        for output in self._estimator.predict(input_fn=self._input_queue.get):
-            self._output_queue.put(output)
+        def target():
+            for output in estimator.predict(
+                    input_fn=self._input_queue.get):
+                self._output_queue.put(output)
+
+        thread = threading.Thread(target=target)
+        thread.daemon = True
+        thread.start()
 
     def predict(self, inputs):
         self._input_queue.put(inputs)
