@@ -79,9 +79,12 @@ class EstimatorServer:
         self._input_queue = queue.Queue()
         self._output_queue = queue.Queue()
 
+        def input_fn():
+            return (tf.train.batch(preprocess_fn(self._input_queue.get), 1),
+                    None)
+
         def target():
-            for output in estimator.predict(
-                    input_fn=lambda: preprocess_fn(self._input_queue.get)):
+            for output in estimator.predict(input_fn=input_fn):
                 self._output_queue.put(postprocess_fn(output))
 
         thread = threading.Thread(target=target, daemon=True)
