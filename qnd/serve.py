@@ -22,7 +22,7 @@ def def_serve():
     add_flag('ip_address', default='')
     add_flag('port', type=int, default=80)
 
-    create_estimator = def_estimator(distributed=False)
+    estimator = def_estimator(distributed=False)
 
     def serve(model_fn, preprocess_fn=None, postprocess_fn=None):
         """Serve as a HTTP server.
@@ -34,7 +34,7 @@ def def_serve():
             - `preprocess_fn`: A function to postprocess server responses of
                 JSON serializable objects.
         """
-        server = EstimatorServer(create_estimator(model_fn, FLAGS.output_dir))
+        server = EstimatorServer(estimator(model_fn, FLAGS.output_dir))
 
         class Handler(http.server.BaseHTTPRequestHandler):
             def do_POST(self):
