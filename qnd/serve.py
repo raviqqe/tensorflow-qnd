@@ -80,7 +80,9 @@ class EstimatorServer:
         self._output_queue = queue.Queue()
 
         def input_fn():
-            return (tf.train.batch(preprocess_fn(self._input_queue.get), 1),
+            return (tf.train.batch(preprocess_fn(self._input_queue.get),
+                                   1,
+                                   dynamic_pad=True),
                     None)
 
         def target():
