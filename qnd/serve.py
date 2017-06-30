@@ -32,7 +32,8 @@ def def_serve():
             - `model_fn`: Same as `train_and_evaluate()`'s.
             - `preprocess_fn`: A function to preprocess server request bodies
                 in JSON. Its first argument is a function which returns the
-                JSON input.
+                JSON input. You may need to use `tf.py_func` to create this
+                function.
             - `preprocess_fn`: A function to postprocess server responses of
                 JSON serializable objects.
         """
